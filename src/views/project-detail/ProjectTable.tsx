@@ -9,30 +9,12 @@ import TableContainer from '@mui/material/TableContainer'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 
+// ** Custom Components Imports
+import CategoryTag, { Category } from 'src/views/project-detail/CategoryTag'
+import StatusTag, { Status } from 'src/views/project-detail/StatusTag'
+
 const createData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ChangeItem[], status: Status, creationDate: string) => {
   return { releaseNoteId, version, releaseTitle, changeItems, status, creationDate }
-}
-
-const Category = {
-  Feature: 'Feature',
-  Changed: 'Changed',
-  Deprecated: 'Deprecated',
-  Fixed: 'Fixed'
-} as const;
-type Category = typeof Category[keyof typeof Category]
-
-const categoryColors = {
-  [Category.Feature]: '#C7E3FE',
-  [Category.Changed]: '#FFF8B6',
-  [Category.Deprecated]: '#FFC7C7',
-  [Category.Fixed]: '#BBFFF3',
-}
-
-const categoryTextColors = {
-  [Category.Feature]: '#41A3FF',
-  [Category.Changed]: '#ECD200',
-  [Category.Deprecated]: '#FF5454',
-  [Category.Fixed]: '#05D7B1',
 }
 
 
@@ -41,24 +23,6 @@ interface ChangeItem {
   releaseContent: string
 }
 
-const Status = {
-  NotStarted: '미시작',
-  InProgress: '진행중',
-  Completed: '완료'
-} as const;
-type Status = typeof Status[keyof typeof Status]
-
-const statusColors = {
-  [Status.NotStarted]: '#f44336',
-  [Status.InProgress]: '#BBFFF3',
-  [Status.Completed]: '#C7E3FE',
-}
-
-const statusTextColors = {
-  [Status.NotStarted]: '#41A3FF',
-  [Status.InProgress]: '#05D7B1',
-  [Status.Completed]: '#41A3FF',
-}
 
 const rows = [
   createData(4, 'v 1.2.1', 'BB 기능 추가 및 변경', [{ category: Category.Feature, releaseContent: 'bb 기능 - 기능 설명' }, { category: Category.Changed, releaseContent: '타입 변경' }], Status.InProgress, '2023.06.30'),
@@ -100,21 +64,13 @@ const ProjectTable = () => {
                 <Typography variant="subtitle2" sx={{marginBottom: 1}}><strong>{row.releaseTitle}</strong></Typography>
                 {row.changeItems.map((item, index) => (
                   <Box key={index} sx={{marginBottom: 1}}>
-                    <Box sx={{ borderRadius: 1, paddingTop: 0.1, paddingBottom: 0.1, paddingLeft: 1, paddingRight: 1, background: categoryColors[item.category], display: 'inline-block', marginRight: 1 }}>
-                      <Typography variant="caption" component="span" sx={{color: categoryTextColors[item.category]}}>
-                        <b>{Category[item.category]}</b>
-                      </Typography>
-                    </Box>
+                    <CategoryTag category={item.category} />
                     {item.releaseContent}
                   </Box>
                 ))}
               </TableCell>
               <TableCell align='left'>
-                <Box sx={{ borderRadius: 1, paddingTop: 0.1, paddingBottom: 0.1, paddingLeft: 1, paddingRight: 1, background: statusColors[row.status], display: 'inline-block' }}>
-                  <Typography variant="caption" component="span" sx={{color: statusTextColors[row.status]}}>
-                    <b>{row.status}</b>
-                  </Typography>
-                </Box>
+                <StatusTag status={row.status} />
               </TableCell>
               <TableCell align='left'>{row.creationDate}</TableCell>
             </TableRow>
