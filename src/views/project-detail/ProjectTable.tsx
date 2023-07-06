@@ -20,6 +20,21 @@ enum Category {
   Fixed = 'Fixed'
 }
 
+const categoryColors = {
+  [Category.Feature]: '#C7E3FE',
+  [Category.Changed]: '#FFF8B6',
+  [Category.Deprecated]: '#FFC7C7',
+  [Category.Fixed]: '#BBFFF3',
+}
+
+const categoryTextColors = {
+  [Category.Feature]: '#41A3FF',
+  [Category.Changed]: '#ECD200',
+  [Category.Deprecated]: '#FF5454',
+  [Category.Fixed]: '#05D7B1',
+}
+
+
 interface ChangeItem {
   category: Category,
   releaseContent: string
@@ -29,6 +44,18 @@ enum Status {
   NotStarted = '미시작',
   InProgress = '진행중',
   Completed = '완료'
+}
+
+const statusColors = {
+  [Status.NotStarted]: '#f44336',
+  [Status.InProgress]: '#BBFFF3',
+  [Status.Completed]: '#C7E3FE',
+}
+
+const statusTextColors = {
+  [Status.NotStarted]: '#41A3FF',
+  [Status.InProgress]: '#05D7B1',
+  [Status.Completed]: '#41A3FF',
 }
 
 const rows = [
@@ -71,9 +98,9 @@ const ProjectTable = () => {
                 <Typography variant="subtitle2" sx={{marginBottom: 1}}><strong>{row.releaseTitle}</strong></Typography>
                 {row.changeItems.map((item, index) => (
                   <Box key={index} sx={{marginBottom: 1}}>
-                    <Box sx={{ borderRadius: 1, paddingTop: 0.1, paddingBottom: 0.1, paddingLeft: 1, paddingRight: 1, background: '#e0e0e0', display: 'inline-block' }}>
-                      <Typography variant="caption" component="span">
-                        {Category[item.category]}
+                    <Box sx={{ borderRadius: 1, paddingTop: 0.1, paddingBottom: 0.1, paddingLeft: 1, paddingRight: 1, background: categoryColors[item.category], display: 'inline-block', marginRight: 1 }}>
+                      <Typography variant="caption" component="span" sx={{color: categoryTextColors[item.category]}}>
+                        <b>{Category[item.category]}</b>
                       </Typography>
                     </Box>
                     {item.releaseContent}
@@ -81,9 +108,9 @@ const ProjectTable = () => {
                 ))}
               </TableCell>
               <TableCell align='left'>
-                <Box sx={{ borderRadius: 1, paddingTop: 0.1, paddingBottom: 0.1, paddingLeft: 1, paddingRight: 1, background: '#e0e0e0', display: 'inline-block' }}>
-                  <Typography variant="caption" component="span">
-                    {row.status}
+                <Box sx={{ borderRadius: 1, paddingTop: 0.1, paddingBottom: 0.1, paddingLeft: 1, paddingRight: 1, background: statusColors[row.status], display: 'inline-block' }}>
+                  <Typography variant="caption" component="span" sx={{color: statusTextColors[row.status]}}>
+                    <b>{row.status}</b>
                   </Typography>
                 </Box>
               </TableCell>
