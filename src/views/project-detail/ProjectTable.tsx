@@ -7,6 +7,7 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 
 const createData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ChangeItem[], status: Status, creationDate: string) => {
   return { releaseNoteId, version, releaseTitle, changeItems, status, creationDate }
@@ -67,14 +68,25 @@ const ProjectTable = () => {
               </TableCell>
               <TableCell align='left'>{row.version}</TableCell>
               <TableCell align='left'>
-                <Box><strong>{row.releaseTitle}</strong></Box>
+                <Typography variant="subtitle2" sx={{marginBottom: 1}}><strong>{row.releaseTitle}</strong></Typography>
                 {row.changeItems.map((item, index) => (
-                  <Box key={index}>
-                    {Category[item.category]}: {item.releaseContent}
+                  <Box key={index} sx={{marginBottom: 1}}>
+                    <Box sx={{ borderRadius: 1, paddingTop: 0.1, paddingBottom: 0.1, paddingLeft: 1, paddingRight: 1, background: '#e0e0e0', display: 'inline-block' }}>
+                      <Typography variant="caption" component="span">
+                        {Category[item.category]}
+                      </Typography>
+                    </Box>
+                    {item.releaseContent}
                   </Box>
                 ))}
               </TableCell>
-              <TableCell align='left'>{row.status}</TableCell>
+              <TableCell align='left'>
+                <Box sx={{ borderRadius: 1, paddingTop: 0.1, paddingBottom: 0.1, paddingLeft: 1, paddingRight: 1, background: '#e0e0e0', display: 'inline-block' }}>
+                  <Typography variant="caption" component="span">
+                    {row.status}
+                  </Typography>
+                </Box>
+              </TableCell>
               <TableCell align='left'>{row.creationDate}</TableCell>
             </TableRow>
           ))}
