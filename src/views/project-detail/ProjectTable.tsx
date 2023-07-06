@@ -13,12 +13,13 @@ const createData = (releaseNoteId: number, version: string, releaseTitle: string
   return { releaseNoteId, version, releaseTitle, changeItems, status, creationDate }
 }
 
-enum Category {
-  Feature = 'Feature',
-  Changed = 'Changed',
-  Deprecated = 'Deprecated',
-  Fixed = 'Fixed'
-}
+const Category = {
+  Feature: 'Feature',
+  Changed: 'Changed',
+  Deprecated: 'Deprecated',
+  Fixed: 'Fixed'
+} as const;
+type Category = typeof Category[keyof typeof Category]
 
 const categoryColors = {
   [Category.Feature]: '#C7E3FE',
@@ -40,11 +41,12 @@ interface ChangeItem {
   releaseContent: string
 }
 
-enum Status {
-  NotStarted = '미시작',
-  InProgress = '진행중',
-  Completed = '완료'
-}
+const Status = {
+  NotStarted: '미시작',
+  InProgress: '진행중',
+  Completed: '완료'
+} as const;
+type Status = typeof Status[keyof typeof Status]
 
 const statusColors = {
   [Status.NotStarted]: '#f44336',
