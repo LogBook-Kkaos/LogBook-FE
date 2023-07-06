@@ -9,9 +9,11 @@ import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
+import TimelineText from 'mdi-material-ui/TimelineText'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
+import { Timeline } from 'mdi-material-ui'
 
 const navigation = (): VerticalNavItemsType => {
   return [
@@ -73,6 +75,14 @@ const navigation = (): VerticalNavItemsType => {
       icon: CubeOutline,
       title: 'Form Layouts',
       path: '/form-layouts'
+    },
+    {
+      sectionTitle: 'Projects'
+    },
+    {
+      title: 'Project Detail',
+      icon: TimelineText,
+      path: '/project-detail'
     }
   ]
 }
