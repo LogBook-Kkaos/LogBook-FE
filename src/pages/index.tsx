@@ -21,6 +21,7 @@ import StatisticsCard from 'src/views/dashboard/StatisticsCard'
 import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
 import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
 import SalesByCountries from 'src/views/dashboard/SalesByCountries'
+import Project from 'src/views/dashboard/Project'
 
 const Dashboard = () => {
   return (
@@ -89,6 +90,9 @@ const Dashboard = () => {
         </Grid>
         <Grid item xs={12} md={12} lg={8}>
           <DepositWithdraw />
+        </Grid>
+        <Grid item xs={12}>
+          <Project/>
         </Grid>
         <Grid item xs={12}>
           <Table />
