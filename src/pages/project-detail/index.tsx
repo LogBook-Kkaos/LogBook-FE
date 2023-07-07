@@ -62,7 +62,6 @@ const ProjectDetail = () => {
       </Grid>
       <Grid item xs={12}>
         <Card>
-          <CardHeader title='Basic Table' titleTypographyProps={{ variant: 'h6' }} />
           <ProjectTable />
         </Card>
       </Grid>

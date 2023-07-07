@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 import Box from "@mui/material/Box";
 
 export const Status = {
-  NotStarted: '미시작',
+  NotStarted: '시작 전',
   InProgress: '진행중',
   Completed: '완료'
 } as const;
