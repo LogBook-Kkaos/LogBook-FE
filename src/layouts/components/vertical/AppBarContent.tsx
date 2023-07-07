@@ -73,7 +73,7 @@ const AppBarContent = (props: Props) => {
           </Box>
         )}
         <ModeToggler settings={settings} saveSettings={saveSettings} />
-        <NotificationDropdown />
+        {/* <NotificationDropdown /> */}
         <UserDropdown />
       </Box>
     </Box>

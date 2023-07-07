@@ -79,6 +79,10 @@ const MenuItemSubtitle = styled(Typography)<TypographyProps>({
   textOverflow: 'ellipsis'
 })
 
+const IconWrapper = styled('div')({
+  padding: '10px 10px 5px 25px'
+})
+
 const NotificationDropdown = () => {
   // ** States
   const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(null)
@@ -106,15 +110,16 @@ const NotificationDropdown = () => {
 
   return (
     <Fragment>
-      <IconButton color='inherit' aria-haspopup='true' onClick={handleDropdownOpen} aria-controls='customized-menu'>
-        <BellOutline />
-      </IconButton>
+      <Box onClick={handleDropdownOpen} sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+      <IconWrapper><BellOutline /></IconWrapper>
+      <Typography>Notification</Typography>
+      </Box>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleDropdownClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: 'center', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'center', horizontal: 'left' }}
       >
         <MenuItem disableRipple>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
