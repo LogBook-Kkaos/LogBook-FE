@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import LatestRelease from './detail/LatestRelease';
 import MyIssue from './detail/MyIssue';
-// import Status from './detail/Status';
+import ProjectStatus from './detail/ProjectStatus';
 
 interface DataType {
   id: number;
@@ -32,7 +32,7 @@ const Project = () => {
       <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <LatestRelease />
         <MyIssue />
-        {/* <Status /> */}
+        <ProjectStatus/>
       </CardContent>
     </Card>
   );
