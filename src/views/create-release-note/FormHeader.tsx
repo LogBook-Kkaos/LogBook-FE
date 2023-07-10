@@ -19,6 +19,7 @@ const FormHeader: React.FC<FormHeaderProps> = ({ onSubmit, onDelete }) => {
     <CardHeader
       title={
         <TextField
+          id = "release_note_title"
           label="릴리즈 노트 제목"
           value={title}
           onChange={handleTitleChange}

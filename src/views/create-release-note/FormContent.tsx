@@ -72,6 +72,7 @@ const FormContent = () => {
                 <Grid container spacing={5}>
                     <Grid item xs={12}>
                         <TextField
+                            id = "creator_id"
                             fullWidth
                             label='작성자'
                             placeholder='작성자를 입력해주세요...'
@@ -85,7 +86,9 @@ const FormContent = () => {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <LocalizationProvider
+                        data-testid = "creation_date"
+                        dateAdapter={AdapterDateFns}>
                             <DesktopDatePicker
                                 label='작성날짜'
                                 inputFormat='yyyy-MM-dd'
@@ -130,6 +133,7 @@ const FormContent = () => {
                                 <FormControlLabel
                                     control={
                                         <Checkbox
+                                            id = "is_important"
                                             checked={isImportant}
                                             onChange={(e) => setIsImportant(e.target.checked)}
                                             color="primary"
@@ -142,6 +146,7 @@ const FormContent = () => {
                                 <FormControlLabel
                                     control={
                                         <Checkbox
+                                            id = "is_public"
                                             checked={isPublic}
                                             onChange={(e) => setIsPublic(e.target.checked)}
                                             color="primary"
@@ -163,6 +168,7 @@ const FormContent = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
+                            id='release_note_content'
                             fullWidth
                             multiline
                             minRows={3}
