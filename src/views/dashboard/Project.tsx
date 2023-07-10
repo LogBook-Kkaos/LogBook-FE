@@ -29,7 +29,7 @@ const Project = () => {
           sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' },
         }}
       />
-      <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <CardContent sx={{ display: 'flex', justifyContent: 'space-between', gap: '1rem'  }}>
         <LatestRelease />
         <MyIssue />
         <ProjectStatus/>
