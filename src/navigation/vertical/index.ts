@@ -10,9 +10,11 @@ import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 import BellOutline from 'mdi-material-ui/BellOutline'
+import TimelineTextOutline from 'mdi-material-ui/TimelineTextOutline'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
+import { Timeline } from 'mdi-material-ui'
 
 const navigation = (): VerticalNavItemsType => {
   return [
@@ -76,8 +78,16 @@ const navigation = (): VerticalNavItemsType => {
       path: '/form-layouts'
     },
     {
+      sectionTitle: 'Projects'
+    },
+    {
+      title: 'Project Detail',
+      icon: TimelineTextOutline,
+      path: '/project-detail'
+    },
+    {
       sectionTitle: 'Channer'
-    }
+    },
   ]
 }
 
