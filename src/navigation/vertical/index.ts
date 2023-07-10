@@ -9,7 +9,7 @@ import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
-import TimelineText from 'mdi-material-ui/TimelineText'
+import TimelineTextOutline from 'mdi-material-ui/TimelineTextOutline'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -81,7 +81,7 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'Project Detail',
-      icon: TimelineText,
+      icon: TimelineTextOutline,
       path: '/project-detail'
     }
   ]
