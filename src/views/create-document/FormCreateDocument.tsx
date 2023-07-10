@@ -16,6 +16,7 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import Box from '@mui/material/Box'
 
 // ** Icons Imports
 import Phone from 'mdi-material-ui/Phone'
@@ -24,23 +25,49 @@ import AccountOutline from 'mdi-material-ui/AccountOutline'
 import MessageOutline from 'mdi-material-ui/MessageOutline'
 
 // ** Custom Components
-import CategoryTag, { Category } from 'src/views/create-document/CategoryTag'
+import CategoryTag, { Category, CategoryType } from 'src/views/create-document/CategoryTag';
 import StatusTag, { Status } from 'src/views/create-document/StatusTag'
 
 
 
+const keywords = [
+  {
+    label: 'Feature',
+    keywords: ['Feature', '기능'],
+  },
+  {
+    label: 'Changed',
+    keywords: ['Changed', '변경'],
+  },
+  {
+    label: 'Deprecated',
+    keywords: ['Deprecated', '중단', '삭제'],
+  },
+  {
+    label: 'Fixed',
+    keywords: ['Fixed', '수정'],
+  },
+];
 
 const FormCreateDocument = () => {
   const [textfieldValue, setTextfieldValue] = useState('')
-  const [categoryTag, setCategoryTag] = useState('')
+  const [categoryTags, setCategoryTags] = useState<string[]>([]);
+
 
   useEffect(() => {
-    if (textfieldValue.toLowerCase().includes('feature')) {
-      setCategoryTag('Feature');
-    } else {
-      setCategoryTag('');
-    }
+    const matchedKeywords = keywords
+      .filter((keywordSet) =>
+        keywordSet.keywords.some(
+          (keyword) => textfieldValue.toLowerCase().indexOf(keyword.toLowerCase()) !== -1,
+        ),
+      )
+      .map((keywordSet) => keywordSet.label);
+
+    setCategoryTags(matchedKeywords);
   }, [textfieldValue]);
+
+
+
 
 
   return (
@@ -108,13 +135,21 @@ const FormCreateDocument = () => {
               </Button>
             </Grid> */}
 
+            <Grid item xs={12}>
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {categoryTags.map((category) => (
+                  <CategoryTag key={category} category={category as CategoryType} />
+                ))}
+              </Box>
+            </Grid>
+
             <Divider sx={{ margin: 0 }} />
             <Grid item xs={12}>
               <TextField
                 fullWidth
                 multiline
                 minRows={3}
-                label={categoryTag || '변경사항'}
+                label={'변경사항'}
                 value={textfieldValue}
                 onChange={(e) => setTextfieldValue(e.target.value)}
                 placeholder='변경사항을 작성해주세요...'
