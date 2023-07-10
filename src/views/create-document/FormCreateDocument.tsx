@@ -72,7 +72,17 @@ const FormCreateDocument = () => {
 
   return (
     <Card>
-      <CardHeader title='BB 기능 추가 및 변경' titleTypographyProps={{ variant: 'h6' }} />
+      <CardHeader title='BB 기능 추가 및 변경' titleTypographyProps={{ variant: 'h6' }}
+      action={
+        <>
+          <Button variant="outlined" type='submit' color="primary" sx={{ mr: 1 }}>
+            저장
+          </Button>
+          <Button variant="outlined" color="error">
+            삭제
+          </Button>
+        </>
+      } />
       <Divider sx={{ margin: 0 }} />
       <CardContent>
         <form onSubmit={e => e.preventDefault()}>
@@ -129,11 +139,8 @@ const FormCreateDocument = () => {
                 </Select>
               </FormControl>
             </Grid>
-            {/* <Grid item xs={12}>
-              <Button type='submit' variant='contained' size='large'>
-                Submit
-              </Button>
-            </Grid> */}
+
+            <Divider sx={{ margin: 0 }} />
 
             <Grid item xs={12}>
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
