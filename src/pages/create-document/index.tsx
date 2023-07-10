@@ -21,7 +21,7 @@ const CreateDocument = () => {
           alignItems: 'center',
         }}
       >
-        <Grid container sx={{ maxWidth: '60%' }}>
+        <Grid container sx={{ maxWidth: '70%' }}>
           <Grid item>
             <FormCreateDocument />
           </Grid>
