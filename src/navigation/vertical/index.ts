@@ -76,9 +76,7 @@ const navigation = (): VerticalNavItemsType => {
       path: '/form-layouts'
     },
     {
-      title: 'Notification',
-      icon: BellOutline,
-      // onClick: handleNotificationClick
+      sectionTitle: 'Channer'
     }
   ]
 }

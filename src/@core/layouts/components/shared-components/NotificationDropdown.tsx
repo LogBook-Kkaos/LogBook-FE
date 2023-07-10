@@ -79,8 +79,12 @@ const MenuItemSubtitle = styled(Typography)<TypographyProps>({
   textOverflow: 'ellipsis'
 })
 
+const MenuWrapper = styled('div')({
+  padding: '0px 18px 8px 0px'
+})
+
 const IconWrapper = styled('div')({
-  padding: '10px 10px 5px 25px'
+  padding: '0px 9px 0px 22px'
 })
 
 const NotificationDropdown = () => {
@@ -110,10 +114,10 @@ const NotificationDropdown = () => {
 
   return (
     <Fragment>
-      <Box onClick={handleDropdownOpen} sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+      <MenuWrapper onClick={handleDropdownOpen} sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
       <IconWrapper><BellOutline /></IconWrapper>
       <Typography>Notification</Typography>
-      </Box>
+      </MenuWrapper>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}

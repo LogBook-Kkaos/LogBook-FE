@@ -129,7 +129,7 @@ const Navigation = (props: Props) => {
               })}
         >
           {beforeVerticalNavMenuContent ? beforeVerticalNavMenuContent(props) : null}
-          <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             {userVerticalNavMenuContent ? (
               userVerticalNavMenuContent(props)
             ) : (
