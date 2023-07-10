@@ -9,6 +9,7 @@ import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
+import BellOutline from 'mdi-material-ui/BellOutline'
 import TimelineTextOutline from 'mdi-material-ui/TimelineTextOutline'
 
 // ** Type import
@@ -83,7 +84,10 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Project Detail',
       icon: TimelineTextOutline,
       path: '/project-detail'
-    }
+    },
+    {
+      sectionTitle: 'Channer'
+    },
   ]
 }
 
