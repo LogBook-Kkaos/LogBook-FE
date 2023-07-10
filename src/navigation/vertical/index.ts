@@ -80,8 +80,8 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       icon: FileDocumentEditOutline,
-      title: 'Create Document',
-      path: '/create-document'
+      title: 'Create Release Note',
+      path: '/create-release-note'
     }
   ]
 }

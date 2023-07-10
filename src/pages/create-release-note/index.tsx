@@ -6,7 +6,7 @@ import Box from '@mui/material/Box'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
 // ** Demo Components Imports
-import FormCreateDocument from 'src/views/create-document/FormCreateDocument'
+import FormReleaseNote from 'src/views/create-release-note/FormReleaseNote'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
@@ -21,9 +21,9 @@ const CreateDocument = () => {
           alignItems: 'center',
         }}
       >
-        <Grid container sx={{ maxWidth: '70%' }}>
+        <Grid container sx={{ maxWidth: '75%' }}>
           <Grid item>
-            <FormCreateDocument />
+            <FormReleaseNote />
           </Grid>
         </Grid>
       </Box>
