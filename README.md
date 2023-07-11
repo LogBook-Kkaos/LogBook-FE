@@ -55,3 +55,9 @@ pnpm start
 - 기술 문서에서 주요 내용을 추출하여 릴리즈 노트 작성
 - 릴리즈 노트 작성 규칙에 따라 문장을 자동 완성
 - 릴리즈 노트 공유 및 관리를 통한 쉬운 협업 가능
+
+## 문서
+- Logbook [Google Drive](https://drive.google.com/drive/folders/1_o-brVhdnHVWNCXrYy9JFwxZykRHrk8S?usp=drive_link)
+- K-Kaos [Notion](https://www.notion.so/seobinlee00/Daily-Scrum-07-07-dcbac130e1b64a58ad6b8160df767645?pvs=4)
+- K-Kaos [Slack](k-kaos.slack.com)
+- K-Kaos [Jira]([https://gachon-001021.atlassian.net/jira/your-work](https://leeseobin.atlassian.net/jira/software/projects/LB/boards/1)https://leeseobin.atlassian.net/jira/software/projects/LB/boards/1)
