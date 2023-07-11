@@ -17,6 +17,8 @@ import { VerticalNavItemsType } from 'src/@core/layouts/types'
 import Drawer from './Drawer'
 import VerticalNavItems from './VerticalNavItems'
 import VerticalNavHeader from './VerticalNavHeader'
+import NotificationDropdown from '../../shared-components/NotificationDropdown'
+import ChattingPopup from '../../shared-components/ChattingPopup'
 
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
@@ -128,7 +130,7 @@ const Navigation = (props: Props) => {
               })}
         >
           {beforeVerticalNavMenuContent ? beforeVerticalNavMenuContent(props) : null}
-          <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             {userVerticalNavMenuContent ? (
               userVerticalNavMenuContent(props)
             ) : (
@@ -142,6 +144,8 @@ const Navigation = (props: Props) => {
                 />
               </List>
             )}
+            <NotificationDropdown/>
+            <ChattingPopup/>
           </Box>
         </ScrollWrapper>
       </Box>
