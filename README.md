@@ -31,10 +31,10 @@ pnpm install
 ### 개발 서버 실행
 
 ```bash
-pnpm dev
+pnpm run dev
 ```
 
-이제 [http://localhost:3000](http://localhost:3000)로 웹 브라우저에서 접속하여 애플리케이션을 확인할 수 있습니다.
+[http://localhost:3000](http://localhost:3000)로 웹 브라우저에서 접속하여 애플리케이션을 확인할 수 있습니다.
 
 ### 프로덕션 빌드
 
