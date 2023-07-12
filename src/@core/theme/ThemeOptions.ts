@@ -2,6 +2,7 @@
 import { deepmerge } from '@mui/utils'
 import { ThemeOptions } from '@mui/material'
 
+
 // ** Type Import
 import { Settings } from 'src/@core/context/settingsContext'
 
@@ -19,6 +20,8 @@ const themeOptions = (settings: Settings): ThemeOptions => {
     palette: palette(mode, themeColor),
     typography: {
       fontFamily: [
+        'Pretendard-Regular',
+        'GothicA1',
         'Inter',
         'sans-serif',
         '-apple-system',
