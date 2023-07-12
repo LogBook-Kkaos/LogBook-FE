@@ -110,6 +110,16 @@ const RegisterPage = () => {
   const [password, setPassword] = useRecoilState(passwordState);
   const user = useRecoilValue(userState);
 
+  const handleSignUpSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post('/api/user/register', user);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const [values, setValues] = useState<State>({
     password: '',
     confirmPassword: '',
@@ -166,7 +176,7 @@ const RegisterPage = () => {
             </Typography>
             <Typography variant='body2'>릴리즈 노트를 쉽게 작성해보세요.</Typography>
           </Box>
-          <form noValidate autoComplete='off'>
+          <form noValidate autoComplete='off' onSubmit={handleSignUpSubmit}>
             <TextField autoFocus fullWidth id='username' label='이름' sx={{ marginBottom: 4 }} value={userName} onChange={(e) => setUserName(e.target.value)} />
             <TextField fullWidth type='email' label='이메일' sx={{ marginBottom: 4 }} value={email} onChange={(e) => setEmail(e.target.value)} />
             <FormControl fullWidth>
