@@ -58,6 +58,6 @@ pnpm start
 
 ## 문서
 - Logbook [Google Drive](https://drive.google.com/drive/folders/1_o-brVhdnHVWNCXrYy9JFwxZykRHrk8S?usp=drive_link)
-- K-Kaos [Notion](https://www.notion.so/seobinlee00/Daily-Scrum-07-07-dcbac130e1b64a58ad6b8160df767645?pvs=4)
-- K-Kaos [Slack](k-kaos.slack.com)
-- K-Kaos [Jira]([https://gachon-001021.atlassian.net/jira/your-work](https://leeseobin.atlassian.net/jira/software/projects/LB/boards/1)https://leeseobin.atlassian.net/jira/software/projects/LB/boards/1)
+- Logbook [Notion](https://www.notion.so/seobinlee00/4b04cde519094eda98f4dd37e9859894?v=be10c461e965420790b67272803c7f5d&pvs=4)
+- K-Kaos [Slack](https://app.slack.com/huddle/T056ESEE3K6/C05GTA3RFSM)
+- K-Kaos [Jira](https://leeseobin.atlassian.net/jira/software/projects/LB/boards/1)
