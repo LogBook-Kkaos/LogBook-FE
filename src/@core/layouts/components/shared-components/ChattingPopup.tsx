@@ -5,7 +5,6 @@ import { useState, SyntheticEvent, Fragment, ReactNode } from 'react'
 import Box from '@mui/material/Box'
 import Chip from '@mui/material/Chip'
 import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
 import { styled, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import MuiMenu, { MenuProps } from '@mui/material/Menu'
@@ -14,7 +13,7 @@ import MuiMenuItem, { MenuItemProps } from '@mui/material/MenuItem'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 
 // ** Icons Imports
-import BellOutline from 'mdi-material-ui/BellOutline'
+import ChatOutline from 'mdi-material-ui/MessageTextOutline'
 
 // ** Third Party Components
 import PerfectScrollbarComponent from 'react-perfect-scrollbar'
@@ -80,14 +79,15 @@ const MenuItemSubtitle = styled(Typography)<TypographyProps>({
 })
 
 const MenuWrapper = styled('div')({
-  padding: '0px 18px 8px 0px'
+  padding: '8px 18px 8px 0px',
+  cursor: 'pointer',
 })
 
 const IconWrapper = styled('div')({
   padding: '0px 9px 0px 22px'
 })
 
-const NotificationDropdown = () => {
+const ChattingPopup = () => {
   // ** States
   const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(null)
 
@@ -115,8 +115,8 @@ const NotificationDropdown = () => {
   return (
     <Fragment>
       <MenuWrapper onClick={handleDropdownOpen} sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-      <IconWrapper><BellOutline /></IconWrapper>
-      <Typography>Notification</Typography>
+      <IconWrapper><ChatOutline /></IconWrapper>
+      <Typography>Chat</Typography>
       </MenuWrapper>
       <Menu
         anchorEl={anchorEl}
@@ -223,4 +223,4 @@ const NotificationDropdown = () => {
   )
 }
 
-export default NotificationDropdown
+export default ChattingPopup
