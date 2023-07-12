@@ -15,8 +15,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
 
-import Phone from 'mdi-material-ui/Phone';
+// import Add from 'mdi-material-ui/Add';
 import Update from 'mdi-material-ui/Update';
 import AccountOutline from 'mdi-material-ui/AccountOutline';
 import MessageOutline from 'mdi-material-ui/MessageOutline';
@@ -45,24 +46,41 @@ const keywords = [
 
 const FormContent = () => {
     const [textfieldValue, setTextfieldValue] = useState('')
-    const [categoryTags, setCategoryTags] = useState<string[]>([]);
+    const [categoryTags, setCategoryTags] = useState<string[][]>([]);
     const [isImportant, setIsImportant] = useState(false);
     const [isPublic, setIsPublic] = useState(false);
 
 
+
+
+    const [textfieldValues, setTextfieldValues] = useState<string[]>(['']);
+
     useEffect(() => {
-        const matchedKeywords = keywords
-            .filter((keywordSet) =>
-                keywordSet.keywords.some(
-                    (keyword) => textfieldValue.toLowerCase().indexOf(keyword.toLowerCase()) !== -1,
-                ),
-            )
-            .map((keywordSet) => keywordSet.label);
+        const newCategoryTags = textfieldValues.map(textfieldValue => {
+            const matchedKeywords = keywords
+                .filter(keywordSet =>
+                    keywordSet.keywords.some(
+                        keyword => textfieldValue.toLowerCase().indexOf(keyword.toLowerCase()) !== -1,
+                    ),
+                )
+                .map(keywordSet => keywordSet.label);
+    
+            return matchedKeywords.length > 0 ? [matchedKeywords[0]] : ['General'];
+        });
+    
+        setCategoryTags(newCategoryTags);
+    }, [textfieldValues]);
+    
 
-        setCategoryTags(matchedKeywords);
-    }, [textfieldValue]);
+    const handleAddTextField = () => {
+        setTextfieldValues([...textfieldValues, '']);
+    };
 
-
+    const handleTextfieldChange = (index: number, value: string) => {
+        setTextfieldValues(
+            textfieldValues.map((textfieldValue, i) => (i === index ? value : textfieldValue))
+        );
+    };
 
 
 
@@ -72,7 +90,7 @@ const FormContent = () => {
                 <Grid container spacing={5}>
                     <Grid item xs={12}>
                         <TextField
-                            id = "creator_id"
+                            id="creator_id"
                             fullWidth
                             label='작성자'
                             placeholder='작성자를 입력해주세요...'
@@ -87,8 +105,8 @@ const FormContent = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <LocalizationProvider
-                        data-testid = "creation_date"
-                        dateAdapter={AdapterDateFns}>
+                            data-testid="creation_date"
+                            dateAdapter={AdapterDateFns}>
                             <DesktopDatePicker
                                 label='작성날짜'
                                 inputFormat='yyyy-MM-dd'
@@ -126,14 +144,14 @@ const FormContent = () => {
                         </FormControl>
                     </Grid>
 
-            
+
                     <Grid item xs={12}>
                         <Grid container>
                             <Grid item xs={6}>
                                 <FormControlLabel
                                     control={
                                         <Checkbox
-                                            id = "is_important"
+                                            id="is_important"
                                             checked={isImportant}
                                             onChange={(e) => setIsImportant(e.target.checked)}
                                             color="primary"
@@ -146,7 +164,7 @@ const FormContent = () => {
                                 <FormControlLabel
                                     control={
                                         <Checkbox
-                                            id = "is_public"
+                                            id="is_public"
                                             checked={isPublic}
                                             onChange={(e) => setIsPublic(e.target.checked)}
                                             color="primary"
@@ -159,32 +177,48 @@ const FormContent = () => {
                     </Grid>
 
                     {/* 이 아래로 ReleaseContent를 여러 개 쓸 수 있도록 수정해야함 */}
+                    {textfieldValues.map((textfieldValue, index) => (
                     <Grid item xs={12}>
-                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                            {categoryTags.map((category) => (
-                                <CategoryTag key={category} category={category as CategoryType} />
-                            ))}
-                        </Box>
-                    </Grid>
+                        <Grid item xs={12} key={index}>
+                            
+                            </Grid>
+                            <Grid item xs={12}>
+                            <TextField
+                                id={`release_note_content_${index}`}
+                                fullWidth
+                                multiline
+                                minRows={2}
+                                label={`변경사항 ${index + 1}`}
+                                value={textfieldValue}
+                                onChange={(e) => handleTextfieldChange(index, e.target.value)}
+                                placeholder="변경사항을 작성해주세요..."
+                                sx={{ '& .MuiOutlinedInput-root': { alignItems: 'baseline' } }}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position='start'>
+                                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                                {categoryTags[index]?.map(category => (
+                                    <CategoryTag key={category} category={category as CategoryType} />
+                                ))}
+                            </Box>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+
+                        </Grid>
+                        </Grid>
+                    ))}
+
                     <Grid item xs={12}>
-                        <TextField
-                            id='release_note_content'
-                            fullWidth
-                            multiline
-                            minRows={3}
-                            label={'변경사항'}
-                            value={textfieldValue}
-                            onChange={(e) => setTextfieldValue(e.target.value)}
-                            placeholder='변경사항을 작성해주세요...'
-                            sx={{ '& .MuiOutlinedInput-root': { alignItems: 'baseline' } }}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position='start'>
-                                        <MessageOutline />
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={handleAddTextField}
+                        // startIcon={<Add />}
+                        >
+                            변경사항 추가
+                        </Button>
                     </Grid>
                 </Grid>
             </form>
