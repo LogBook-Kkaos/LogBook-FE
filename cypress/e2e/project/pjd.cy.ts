@@ -1,4 +1,5 @@
-// cypress/integration/project_table_spec.js
+/// <reference types="Cypress" />
+
 describe('ProjectTable', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000/project-detail'); // 프로젝트에서 설정한 페이지 URL
