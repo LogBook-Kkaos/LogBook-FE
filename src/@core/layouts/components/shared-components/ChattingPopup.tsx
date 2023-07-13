@@ -83,6 +83,12 @@ const MenuWrapper = styled('div')({
   cursor: 'pointer',
 })
 
+const MenuItemWrapper = styled(Box)({
+  width: '100%',
+  display: 'flex',
+  alignItems: 'center'
+})
+
 const IconWrapper = styled('div')({
   padding: '0px 9px 0px 22px'
 })
@@ -94,11 +100,11 @@ const ChattingPopup = () => {
   // ** Hook
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
 
-  const handleDropdownOpen = (event: SyntheticEvent) => {
+  const handleOpenChat = (event: SyntheticEvent) => {
     setAnchorEl(event.currentTarget)
   }
 
-  const handleDropdownClose = () => {
+  const handleCloseChat = () => {
     setAnchorEl(null)
   }
 
@@ -114,19 +120,19 @@ const ChattingPopup = () => {
 
   return (
     <Fragment>
-      <MenuWrapper onClick={handleDropdownOpen} sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+      <MenuWrapper onClick={handleOpenChat} sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
       <IconWrapper><ChatOutline /></IconWrapper>
       <Typography>Chat</Typography>
       </MenuWrapper>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
-        onClose={handleDropdownClose}
+        onClose={handleCloseChat}
         anchorOrigin={{ vertical: 'center', horizontal: 'right' }}
         transformOrigin={{ vertical: 'center', horizontal: 'left' }}
       >
         <MenuItem disableRipple>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          <MenuItemWrapper sx={{ justifyContent: 'space-between' }}>
             <Typography sx={{ fontWeight: 600 }}>Notifications</Typography>
             <Chip
               size='small'
@@ -134,11 +140,11 @@ const ChattingPopup = () => {
               color='primary'
               sx={{ height: 20, fontSize: '0.75rem', fontWeight: 500, borderRadius: '10px' }}
             />
-          </Box>
+          </MenuItemWrapper>
         </MenuItem>
         <ScrollWrapper>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+          <MenuItem onClick={handleCloseChat}>
+            <MenuItemWrapper>
               <Avatar alt='Flora' src='/images/avatars/4.png' />
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
                 <MenuItemTitle>Congratulation Flora! 🎉</MenuItemTitle>
@@ -147,10 +153,10 @@ const ChattingPopup = () => {
               <Typography variant='caption' sx={{ color: 'text.disabled' }}>
                 Today
               </Typography>
-            </Box>
+            </MenuItemWrapper>
           </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+          <MenuItem onClick={handleCloseChat}>
+            <MenuItemWrapper>
               <Avatar sx={{ color: 'common.white', backgroundColor: 'primary.main' }}>VU</Avatar>
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
                 <MenuItemTitle>New user registered.</MenuItemTitle>
@@ -159,10 +165,10 @@ const ChattingPopup = () => {
               <Typography variant='caption' sx={{ color: 'text.disabled' }}>
                 Yesterday
               </Typography>
-            </Box>
+            </MenuItemWrapper>
           </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+          <MenuItem onClick={handleCloseChat}>
+            <MenuItemWrapper>
               <Avatar alt='message' src='/images/avatars/5.png' />
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
                 <MenuItemTitle>New message received 👋🏻</MenuItemTitle>
@@ -171,10 +177,10 @@ const ChattingPopup = () => {
               <Typography variant='caption' sx={{ color: 'text.disabled' }}>
                 11 Aug
               </Typography>
-            </Box>
+            </MenuItemWrapper>
           </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+          <MenuItem onClick={handleCloseChat}>
+            <MenuItemWrapper>
               <img width={38} height={38} alt='paypal' src='/images/misc/paypal.png' />
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
                 <MenuItemTitle>Paypal</MenuItemTitle>
@@ -183,10 +189,10 @@ const ChattingPopup = () => {
               <Typography variant='caption' sx={{ color: 'text.disabled' }}>
                 25 May
               </Typography>
-            </Box>
+            </MenuItemWrapper>
           </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+          <MenuItem onClick={handleCloseChat}>
+            <MenuItemWrapper>
               <Avatar alt='order' src='/images/avatars/3.png' />
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
                 <MenuItemTitle>Revised Order 📦</MenuItemTitle>
@@ -195,10 +201,10 @@ const ChattingPopup = () => {
               <Typography variant='caption' sx={{ color: 'text.disabled' }}>
                 19 Mar
               </Typography>
-            </Box>
+            </MenuItemWrapper>
           </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+          <MenuItem onClick={handleCloseChat}>
+            <MenuItemWrapper>
               <img width={38} height={38} alt='chart' src='/images/misc/chart.png' />
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
                 <MenuItemTitle>Finance report has been generated</MenuItemTitle>
@@ -207,14 +213,14 @@ const ChattingPopup = () => {
               <Typography variant='caption' sx={{ color: 'text.disabled' }}>
                 27 Dec
               </Typography>
-            </Box>
+            </MenuItemWrapper>
           </MenuItem>
         </ScrollWrapper>
         <MenuItem
           disableRipple
           sx={{ py: 3.5, borderBottom: 0, borderTop: theme => `1px solid ${theme.palette.divider}` }}
         >
-          <Button fullWidth variant='contained' onClick={handleDropdownClose}>
+          <Button fullWidth variant='contained' onClick={handleCloseChat}>
             Read All Notifications
           </Button>
         </MenuItem>
