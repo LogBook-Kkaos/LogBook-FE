@@ -14,11 +14,8 @@ interface DataType {
   start_date: Date
   end_date: Date
   status: string
-
-
 }
 
-//나중에 서버에서 내가 당담인 issue data받아서 넣기
 const issueData = [
   {
     title: "할일1",
@@ -92,7 +89,7 @@ const MyIssue = () => {
               </Box>
             )
           })}
-          <Divider flexItem />
+          <Divider flexItem/>
           <Box sx={{ marginTop:2, minWidth: 85, display: 'flex', flexDirection: 'column' }}>
                     <Typography variant='body2' sx={{ mb: 2, fontWeight: 700, color: 'text.primary' }}>
                         진행률({`${(issueData.filter(item => item.status === "완료").length / issueData.length * 100).toFixed(0)}%`})

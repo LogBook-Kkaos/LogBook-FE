@@ -13,8 +13,6 @@ import themeConfig from 'src/configs/themeConfig'
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
-// ** Demo Imports
-import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 
 interface State {
   password: string
@@ -31,7 +29,6 @@ const ButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
 
 
 const homePage = () => {
-  //Work on your project efficiently with the release note sharing system!
 
   return (
     <Box className='content-center' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -68,7 +65,6 @@ const homePage = () => {
                   />
                 </ButtonStyled>
                 </Box>
-          
         </Box>
   )
 }

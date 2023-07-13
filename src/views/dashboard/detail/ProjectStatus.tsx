@@ -8,8 +8,6 @@ import CardContent from '@mui/material/CardContent'
 import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Legend } from 'recharts';
 
-//npm install react-apexcharts apexcharts
-
 
 
 
