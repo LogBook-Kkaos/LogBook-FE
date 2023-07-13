@@ -24,7 +24,7 @@ const ProjectStatus = () => {
   
 
   return (
-    <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'] }}>
+    <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'], height: '100%' }}>
       <Box sx={{ width: '100%' }}>
         <CardHeader
           title='프로젝트 진행률'

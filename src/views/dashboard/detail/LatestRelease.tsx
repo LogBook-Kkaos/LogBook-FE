@@ -30,7 +30,8 @@ const releaseData = [
 
 const LatestRelease = () => {
   return (
-    <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'] }}>
+    <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'], height:'100%'
+     }}>
       <Box sx={{ width: '100%' }}>
         <CardHeader
           title='최근 릴리즈'
@@ -53,7 +54,7 @@ const LatestRelease = () => {
                 </Box>
                 <Box
                   sx={{
-                    ml: 1,
+                    ml: 4,
                     width: '100%',
                     display: 'flex',
                     flexWrap: 'wrap',

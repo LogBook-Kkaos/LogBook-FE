@@ -53,7 +53,7 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
 
 const MyIssue = () => {
   return (
-    <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'] }}>
+    <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'], height:'100%' }}>
       <Box sx={{ width: '100%' }}>
         <CardHeader
           title='내 할일'

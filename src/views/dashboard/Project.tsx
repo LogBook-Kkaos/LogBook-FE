@@ -19,7 +19,7 @@ const projectData: DataType = {
 
 const Project = () => {
   return (
-    <Card>
+    <Card sx={{ display: 'flex', flexDirection: 'column' }}>
       <CardHeader
         title={projectData.title}
         sx={{ pt: 5.5, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.6 } }}
@@ -29,10 +29,16 @@ const Project = () => {
           sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' },
         }}
       />
-      <CardContent sx={{ display: 'flex', justifyContent: 'space-between', gap: '1rem'  }}>
-        <LatestRelease />
-        <MyIssue />
-        <ProjectStatus/>
+      <CardContent sx={{ display: 'flex', justifyContent: 'space-between', gap: '0rem', alignItems: 'stretch' }}>
+      <Box sx={{ width: '33%' , height:500}}>
+          <LatestRelease />
+        </Box>
+        <Box sx={{ width: '33%', height:500 }}>
+          <MyIssue />
+        </Box>
+        <Box sx={{ width: '33%', height:500 }}>
+          <ProjectStatus/>
+        </Box>
       </CardContent>
     </Card>
   );
