@@ -1,5 +1,5 @@
 // FormContent.tsx
-import { useEffect, useState } from 'react';
+import { useEffect, useState, forwardRef } from 'react';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import CardContent from '@mui/material/CardContent';
@@ -50,7 +50,12 @@ const FormContent = () => {
     const [isImportant, setIsImportant] = useState(false);
     const [isPublic, setIsPublic] = useState(false);
 
+    const today = new Date().toISOString().substr(0, 10);
 
+    const release_note = {
+        creator_name: "윤주은",
+        creation_date: today,
+    }
 
 
     const [textfieldValues, setTextfieldValues] = useState<string[]>(['']);
@@ -64,13 +69,16 @@ const FormContent = () => {
                     ),
                 )
                 .map(keywordSet => keywordSet.label);
-    
+
             return matchedKeywords.length > 0 ? [matchedKeywords[0]] : ['General'];
         });
-    
+
         setCategoryTags(newCategoryTags);
     }, [textfieldValues]);
-    
+
+
+
+
 
     const handleAddTextField = () => {
         setTextfieldValues([...textfieldValues, '']);
@@ -93,7 +101,7 @@ const FormContent = () => {
                             id="creator_id"
                             fullWidth
                             label='작성자'
-                            placeholder='작성자를 입력해주세요...'
+                            value={release_note.creator_}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position='start'>
@@ -101,6 +109,7 @@ const FormContent = () => {
                                     </InputAdornment>
                                 )
                             }}
+                            disabled={true}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -111,9 +120,13 @@ const FormContent = () => {
                                 label='작성날짜'
                                 inputFormat='yyyy-MM-dd'
                                 mask='____-__-__'
-                                value='2023.06.30'
+                                value={release_note.creation_date}
                                 onChange={() => { }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
                                 renderInput={params => <TextField {...params} />}
+                                disabled={true}
                             />
                         </LocalizationProvider>
                     </Grid>
@@ -136,7 +149,7 @@ const FormContent = () => {
                     <Grid item xs={12}>
                         <FormControl fullWidth>
                             <InputLabel>Status</InputLabel>
-                            <Select label='Status' defaultValue="시작 전">
+                            <Select label='Status'>
                                 <MenuItem value='NotStarted'><StatusTag status="시작 전" /></MenuItem>
                                 <MenuItem value='InProgress'><StatusTag status="진행중" /></MenuItem>
                                 <MenuItem value='Done'><StatusTag status="완료" /></MenuItem>
@@ -176,37 +189,36 @@ const FormContent = () => {
                         </Grid>
                     </Grid>
 
-                    {/* 이 아래로 ReleaseContent를 여러 개 쓸 수 있도록 수정해야함 */}
                     {textfieldValues.map((textfieldValue, index) => (
-                    <Grid item xs={12}>
-                        <Grid item xs={12} key={index}>
-                            
+                        <Grid item xs={12}>
+                            <Grid item xs={12} key={index}>
+
                             </Grid>
                             <Grid item xs={12}>
-                            <TextField
-                                id={`release_note_content_${index}`}
-                                fullWidth
-                                multiline
-                                minRows={2}
-                                label={`변경사항 ${index + 1}`}
-                                value={textfieldValue}
-                                onChange={(e) => handleTextfieldChange(index, e.target.value)}
-                                placeholder="변경사항을 작성해주세요..."
-                                sx={{ '& .MuiOutlinedInput-root': { alignItems: 'baseline' } }}
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position='start'>
-                                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                                {categoryTags[index]?.map(category => (
-                                    <CategoryTag key={category} category={category as CategoryType} />
-                                ))}
-                            </Box>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
+                                <TextField
+                                    id={`release_note_content_${index}`}
+                                    fullWidth
+                                    multiline
+                                    minRows={2}
+                                    label={`변경사항 ${index + 1}`}
+                                    value={textfieldValue}
+                                    onChange={(e) => handleTextfieldChange(index, e.target.value)}
+                                    placeholder="변경사항을 작성해주세요..."
+                                    sx={{ '& .MuiOutlinedInput-root': { alignItems: 'baseline' } }}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position='start'>
+                                                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                                                    {categoryTags[index]?.map(category => (
+                                                        <CategoryTag key={category} category={category as CategoryType} />
+                                                    ))}
+                                                </Box>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
 
-                        </Grid>
+                            </Grid>
                         </Grid>
                     ))}
 
@@ -215,7 +227,6 @@ const FormContent = () => {
                             variant="outlined"
                             color="primary"
                             onClick={handleAddTextField}
-                        // startIcon={<Add />}
                         >
                             변경사항 추가
                         </Button>
