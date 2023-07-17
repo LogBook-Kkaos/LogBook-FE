@@ -9,6 +9,8 @@ import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
+import FileDocumentEditOutline from 'mdi-material-ui/FileDocumentEditOutline'
+import BellOutline from 'mdi-material-ui/BellOutline'
 import TimelineTextOutline from 'mdi-material-ui/TimelineTextOutline'
 
 // ** Type import
@@ -77,13 +79,24 @@ const navigation = (): VerticalNavItemsType => {
       path: '/form-layouts'
     },
     {
+      sectionTitle: 'Document'
+    },
+    {
+      icon: FileDocumentEditOutline,
+      title: 'Create Release Note',
+      path: '/create-release-note'
+    },
+    {
       sectionTitle: 'Projects'
     },
     {
       title: 'Project Detail',
       icon: TimelineTextOutline,
       path: '/project-detail'
-    }
+    },
+    {
+      sectionTitle: 'Channer'
+    },
   ]
 }
 

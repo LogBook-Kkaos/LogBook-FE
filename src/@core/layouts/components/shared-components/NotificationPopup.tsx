@@ -5,7 +5,6 @@ import { useState, SyntheticEvent, Fragment, ReactNode } from 'react'
 import Box from '@mui/material/Box'
 import Chip from '@mui/material/Chip'
 import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
 import { styled, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import MuiMenu, { MenuProps } from '@mui/material/Menu'
@@ -79,18 +78,33 @@ const MenuItemSubtitle = styled(Typography)<TypographyProps>({
   textOverflow: 'ellipsis'
 })
 
-const NotificationDropdown = () => {
+const MenuWrapper = styled('div')({
+  padding: '0px 18px 8px 0px',
+  cursor: 'pointer'
+})
+
+const MenuItemWrapper = styled(Box)({
+  width: '100%',
+  display: 'flex',
+  alignItems: 'center'
+})
+
+const IconWrapper = styled('div')({
+  padding: '0px 9px 0px 22px'
+})
+
+const NotificationPopup = () => {
   // ** States
   const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(null)
 
   // ** Hook
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
 
-  const handleDropdownOpen = (event: SyntheticEvent) => {
+  const handleOpenNotification = (event: SyntheticEvent) => {
     setAnchorEl(event.currentTarget)
   }
 
-  const handleDropdownClose = () => {
+  const handleCloseNotification = () => {
     setAnchorEl(null)
   }
 
@@ -106,18 +120,19 @@ const NotificationDropdown = () => {
 
   return (
     <Fragment>
-      <IconButton color='inherit' aria-haspopup='true' onClick={handleDropdownOpen} aria-controls='customized-menu'>
-        <BellOutline />
-      </IconButton>
+      <MenuWrapper onClick={handleOpenNotification} sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+      <IconWrapper><BellOutline /></IconWrapper>
+      <Typography>Notification</Typography>
+      </MenuWrapper>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
-        onClose={handleDropdownClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: 'center', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'center', horizontal: 'left' }}
       >
         <MenuItem disableRipple>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          <MenuItemWrapper sx={{ justifyContent: 'space-between' }}>
             <Typography sx={{ fontWeight: 600 }}>Notifications</Typography>
             <Chip
               size='small'
@@ -125,11 +140,11 @@ const NotificationDropdown = () => {
               color='primary'
               sx={{ height: 20, fontSize: '0.75rem', fontWeight: 500, borderRadius: '10px' }}
             />
-          </Box>
+          </MenuItemWrapper>
         </MenuItem>
         <ScrollWrapper>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+          <MenuItem onClick={handleCloseNotification}>
+            <MenuItemWrapper>
               <Avatar alt='Flora' src='/images/avatars/4.png' />
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
                 <MenuItemTitle>Congratulation Flora! 🎉</MenuItemTitle>
@@ -138,10 +153,10 @@ const NotificationDropdown = () => {
               <Typography variant='caption' sx={{ color: 'text.disabled' }}>
                 Today
               </Typography>
-            </Box>
+            </MenuItemWrapper>
           </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+          <MenuItem onClick={handleCloseNotification}>
+            <MenuItemWrapper>
               <Avatar sx={{ color: 'common.white', backgroundColor: 'primary.main' }}>VU</Avatar>
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
                 <MenuItemTitle>New user registered.</MenuItemTitle>
@@ -150,10 +165,10 @@ const NotificationDropdown = () => {
               <Typography variant='caption' sx={{ color: 'text.disabled' }}>
                 Yesterday
               </Typography>
-            </Box>
+            </MenuItemWrapper>
           </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+          <MenuItem onClick={handleCloseNotification}>
+            <MenuItemWrapper>
               <Avatar alt='message' src='/images/avatars/5.png' />
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
                 <MenuItemTitle>New message received 👋🏻</MenuItemTitle>
@@ -162,10 +177,10 @@ const NotificationDropdown = () => {
               <Typography variant='caption' sx={{ color: 'text.disabled' }}>
                 11 Aug
               </Typography>
-            </Box>
+            </MenuItemWrapper>
           </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+          <MenuItem onClick={handleCloseNotification}>
+            <MenuItemWrapper>
               <img width={38} height={38} alt='paypal' src='/images/misc/paypal.png' />
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
                 <MenuItemTitle>Paypal</MenuItemTitle>
@@ -174,10 +189,10 @@ const NotificationDropdown = () => {
               <Typography variant='caption' sx={{ color: 'text.disabled' }}>
                 25 May
               </Typography>
-            </Box>
+            </MenuItemWrapper>
           </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+          <MenuItem onClick={handleCloseNotification}>
+            <MenuItemWrapper>
               <Avatar alt='order' src='/images/avatars/3.png' />
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
                 <MenuItemTitle>Revised Order 📦</MenuItemTitle>
@@ -186,10 +201,10 @@ const NotificationDropdown = () => {
               <Typography variant='caption' sx={{ color: 'text.disabled' }}>
                 19 Mar
               </Typography>
-            </Box>
+            </MenuItemWrapper>
           </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+          <MenuItem onClick={handleCloseNotification}>
+            <MenuItemWrapper>
               <img width={38} height={38} alt='chart' src='/images/misc/chart.png' />
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
                 <MenuItemTitle>Finance report has been generated</MenuItemTitle>
@@ -198,14 +213,14 @@ const NotificationDropdown = () => {
               <Typography variant='caption' sx={{ color: 'text.disabled' }}>
                 27 Dec
               </Typography>
-            </Box>
+            </MenuItemWrapper>
           </MenuItem>
         </ScrollWrapper>
         <MenuItem
           disableRipple
           sx={{ py: 3.5, borderBottom: 0, borderTop: theme => `1px solid ${theme.palette.divider}` }}
         >
-          <Button fullWidth variant='contained' onClick={handleDropdownClose}>
+          <Button fullWidth variant='contained' onClick={handleCloseNotification}>
             Read All Notifications
           </Button>
         </MenuItem>
@@ -214,4 +229,4 @@ const NotificationDropdown = () => {
   )
 }
 
-export default NotificationDropdown
+export default NotificationPopup
