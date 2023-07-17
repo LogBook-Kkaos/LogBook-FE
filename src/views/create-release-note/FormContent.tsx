@@ -62,20 +62,27 @@ const FormContent = () => {
 
     useEffect(() => {
         const newCategoryTags = textfieldValues.map(textfieldValue => {
-            const matchedKeywords = keywords
-                .filter(keywordSet =>
-                    keywordSet.keywords.some(
-                        keyword => textfieldValue.toLowerCase().indexOf(keyword.toLowerCase()) !== -1,
-                    ),
-                )
-                .map(keywordSet => keywordSet.label);
+            const foundKeywords: { keyword: string; label: string }[] = [];
 
-            return matchedKeywords.length > 0 ? [matchedKeywords[0]] : ['General'];
+            keywords.forEach(keywordSet => {
+                keywordSet.keywords.forEach(keyword => {
+                    const keywordIndex = textfieldValue.toLowerCase().indexOf(keyword.toLowerCase());
+                    if (keywordIndex !== -1) {
+                        foundKeywords.push({ keyword, label: keywordSet.label });
+                    }
+                });
+            });
+
+            foundKeywords.sort((a, b) => {
+                return textfieldValue.toLowerCase().indexOf(a.keyword.toLowerCase()) - textfieldValue.toLowerCase().indexOf(b.keyword.toLowerCase());
+            });
+
+            return foundKeywords.length > 0 ? [foundKeywords[0].label] : ['General'];
         });
 
         setCategoryTags(newCategoryTags);
+        console.log(newCategoryTags)
     }, [textfieldValues]);
-
 
 
 
@@ -101,7 +108,7 @@ const FormContent = () => {
                             id="creator_id"
                             fullWidth
                             label='작성자'
-                            value={release_note.creator_}
+                            value={release_note.creator_name}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position='start'>
