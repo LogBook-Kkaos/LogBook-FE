@@ -29,7 +29,7 @@ const FormReleaseNote = () => {
           <TextField
             id="release_note_title"
             label="릴리즈 노트 제목"
-            value={releaseNote.title}
+            value={releaseNote.releaseNoteTitle}
             onChange={handleTitleChange}
             variant="outlined"
             fullWidth
@@ -43,6 +43,7 @@ const FormReleaseNote = () => {
           <>
             <Button
               variant="outlined"
+              type='submit'
               onClick={() => handleSave(releaseNote)}
               color="primary"
               sx={{ mr: 1, ml: 5 }}
@@ -50,8 +51,9 @@ const FormReleaseNote = () => {
               저장
             </Button>
             <Button
+              data-testid="delete-button"
               variant="outlined"
-              onClick={() => handleDelete(releaseNote.release_note_id)}
+              onClick={() => handleDelete(releaseNote.releaseNoteId)}
               color="error"
             >
               삭제
