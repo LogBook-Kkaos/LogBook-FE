@@ -1,3 +1,6 @@
+
+import { useRouter } from 'next/router'
+
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
 import Link from '@mui/material/Link'
@@ -20,6 +23,13 @@ import ProjectTable from 'src/views/project-detail/ProjectTable'
 
 
 const ProjectDetail = () => {
+  const router = useRouter();
+
+  const handleCreateReleaseNote = () => {
+    console.log('create release note')
+    router.push('/create-release-note')
+  }
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
@@ -31,8 +41,8 @@ const ProjectDetail = () => {
       <Grid item xs={12}>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid>
-            <Button variant="contained" color="primary" style={{ marginRight: 16, borderRadius: 16 }}>
-              글 작성하기
+            <Button variant="contained" color="primary" style={{ marginRight: 16, borderRadius: 10 }} onClick={handleCreateReleaseNote}>
+              릴리즈 노트 작성하기
             </Button>
             <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8 }}>
               <Cog />
