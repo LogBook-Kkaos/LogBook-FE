@@ -1,7 +1,6 @@
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import { styled } from '@mui/material/styles'
 import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
@@ -35,42 +34,42 @@ const ProjectStatus = () => {
         />
         <CardContent sx={{ pb: theme => `${theme.spacing(2)} !important` }}>
           <Box
-                sx={{
-                    ml: 4,
-                    width: '100%',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}
-              >
+            sx={{
+                ml: 4,
+                width: '100%',
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+          >
            <div>
-           <PieChart width={400} height={400}>
-           <Pie
-              data={data}
-              dataKey="value"
-              cx="50%"
-              cy="50%"
-              outerRadius={80}
-              innerRadius={40}
-              fill="#8884d8"
-              label
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-              ))}
-            </Pie>
-            <Legend
-                  layout="horizontal"
-                  align="center"
-                  verticalAlign="bottom"
-                  iconType="circle"
-                  iconSize={12}
-                  formatter={(value, entry, index) => <span style={{ color: colors[index] }}>{value}</span>}
-                />
-            </PieChart>
+            <PieChart width={400} height={400}>
+              <Pie
+                  data={data}
+                  dataKey="value"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  innerRadius={40}
+                  fill="#8884d8"
+                  label
+                >
+                  {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                  ))}
+                </Pie>
+                <Legend
+                      layout="horizontal"
+                      align="center"
+                      verticalAlign="bottom"
+                      iconType="circle"
+                      iconSize={12}
+                      formatter={(value, entry, index) => <span style={{ color: colors[index] }}>{value}</span>}
+                    />
+              </PieChart>
             </div>
-            </Box>
+          </Box>
         </CardContent>
       </Box>
     </Card>

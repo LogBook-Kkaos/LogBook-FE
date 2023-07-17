@@ -30,7 +30,7 @@ const Project = () => {
         }}
       />
       <CardContent sx={{ display: 'flex', justifyContent: 'space-between', gap: '0rem', alignItems: 'stretch' }}>
-      <Box sx={{ width: '33%' , height:500}}>
+        <Box sx={{ width: '33%' , height:500}}>
           <LatestRelease />
         </Box>
         <Box sx={{ width: '33%', height:500 }}>

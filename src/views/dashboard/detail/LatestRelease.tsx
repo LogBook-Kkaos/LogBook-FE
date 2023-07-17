@@ -1,11 +1,9 @@
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import { styled } from '@mui/material/styles'
 import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
-import MuiDivider, { DividerProps } from '@mui/material/Divider'
 
 interface DataType {
   title: string
@@ -50,7 +48,7 @@ const LatestRelease = () => {
                 sx={{ display: 'flex', alignItems: 'center', mb: index !== releaseData.length - 1 ? 6 : 0 }}
               >
                 <Box sx={{ minWidth: 38, display: 'flex', justifyContent: 'center' }}>
-                <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{item.version}</Typography>
+                  <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{item.version}</Typography>
                 </Box>
                 <Box
                   sx={{
@@ -62,7 +60,7 @@ const LatestRelease = () => {
                     justifyContent: 'space-between'
                   }}
                 >
-                    <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{item.title}</Typography>
+                  <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{item.title}</Typography>
                 </Box>
               </Box>
             )

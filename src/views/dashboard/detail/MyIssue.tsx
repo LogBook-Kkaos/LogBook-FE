@@ -81,21 +81,21 @@ const MyIssue = () => {
                     justifyContent: 'space-between'
                   }}
                 >
-                    <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>
-                        {item.start_date.toLocaleDateString()}~{item.end_date.toLocaleDateString()}
-                    </Typography>
-                    <Typography variant='caption'>{item.status}</Typography>
+                  <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>
+                      {item.start_date.toLocaleDateString()}~{item.end_date.toLocaleDateString()}
+                  </Typography>
+                  <Typography variant='caption'>{item.status}</Typography>
                 </Box>
               </Box>
             )
           })}
           <Divider flexItem/>
           <Box sx={{ marginTop:2, minWidth: 85, display: 'flex', flexDirection: 'column' }}>
-                    <Typography variant='body2' sx={{ mb: 2, fontWeight: 700, color: 'text.primary' }}>
-                        진행률({`${(issueData.filter(item => item.status === "완료").length / issueData.length * 100).toFixed(0)}%`})
-                    </Typography>
-                  <LinearProgress color={'primary'} value={issueData.filter(item => item.status === "완료").length/issueData.length*100} variant='determinate' />
-                </Box>
+              <Typography variant='body2' sx={{ mb: 2, fontWeight: 700, color: 'text.primary' }}>
+                  진행률({`${(issueData.filter(item => item.status === "완료").length / issueData.length * 100).toFixed(0)}%`})
+              </Typography>
+            <LinearProgress color={'primary'} value={issueData.filter(item => item.status === "완료").length/issueData.length*100} variant='determinate' />
+          </Box>
         </CardContent>
       </Box>
     </Card>
