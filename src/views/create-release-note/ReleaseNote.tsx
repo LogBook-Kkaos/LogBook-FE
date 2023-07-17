@@ -5,7 +5,7 @@ export interface ReleaseNote {
   version: string;
   creation_date: string;
   status: string;
-  release_content: { content: string; category: string }[]; // 수정된 부분
+  release_content: { content: string; category: string }[];
   is_important: boolean;
   is_public: boolean;
 }

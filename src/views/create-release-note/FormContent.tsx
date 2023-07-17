@@ -80,30 +80,29 @@ const FormContent = () => {
 
 
     const handleAddTextField = () => {
-        setReleaseNote((prevReleaseNote) => ({
-          ...prevReleaseNote,
-          release_content: [
-            ...prevReleaseNote.release_content,
-            { content: "", category: "General" },
-          ],
-        }));
-      };
+        setTextfieldValues([...textfieldValues, '']);
+    };
 
     const handleTextfieldChange = (index: number, value: string) => {
         setTextfieldValues(
-            textfieldValues.map((textfieldValue, i) => (i === index ? value : textfieldValue))
-        );
-
-        setReleaseNote((prevReleaseNote) => {
+            textfieldValues.map((textfieldValue, i) =>
+              i === index ? value : textfieldValue
+            )
+          );
+      
+          setReleaseNote((prevReleaseNote) => {
             const newReleaseContent = prevReleaseNote.release_content.slice();
-        
-            if (newReleaseContent[index] !== undefined) {
-              newReleaseContent[index] = value;
-            } else {
-              newReleaseContent.push(value);
-            }
-        
-            return { ...prevReleaseNote, release_content: newReleaseContent };
+            newReleaseContent[index] = {
+              content: value,
+              category: categoryTags[index]
+                ? categoryTags[index][0]
+                : "General",
+            };
+      
+            return {
+              ...prevReleaseNote,
+              release_content: newReleaseContent,
+            };
           });
     };
 
@@ -208,7 +207,7 @@ const FormContent = () => {
                         </Grid>
                     </Grid>
 
-                    {textfieldValues.map((textfieldValue, index) => (
+                    {textfieldValues.map((value, index) => (
                         <Grid item xs={12}>
                             <Grid item xs={12} key={index}>
 
@@ -220,7 +219,7 @@ const FormContent = () => {
                                     multiline
                                     minRows={2}
                                     label={`변경사항 ${index + 1}`}
-                                    value={textfieldValue}
+                                    value={value}
                                     onChange={(e) => handleTextfieldChange(index, e.target.value)}
                                     placeholder="변경사항을 작성해주세요..."
                                     sx={{ '& .MuiOutlinedInput-root': { alignItems: 'baseline' } }}
