@@ -17,7 +17,7 @@ import { VerticalNavItemsType } from 'src/@core/layouts/types'
 import Drawer from './Drawer'
 import VerticalNavItems from './VerticalNavItems'
 import VerticalNavHeader from './VerticalNavHeader'
-import NotificationDropdown from '../../shared-components/NotificationDropdown'
+import NotificationPopup from '../../shared-components/NotificationPopup'
 import ChattingPopup from '../../shared-components/ChattingPopup'
 
 // ** Util Import
@@ -144,7 +144,7 @@ const Navigation = (props: Props) => {
                 />
               </List>
             )}
-            <NotificationDropdown/>
+            <NotificationPopup/>
             <ChattingPopup/>
           </Box>
         </ScrollWrapper>
