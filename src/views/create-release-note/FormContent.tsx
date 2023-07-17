@@ -4,7 +4,6 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import CardContent from '@mui/material/CardContent';
 import InputAdornment from '@mui/material/InputAdornment';
-import Divider from '@mui/material/Divider';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
@@ -20,10 +19,13 @@ import Button from '@mui/material/Button';
 // import Add from 'mdi-material-ui/Add';
 import Update from 'mdi-material-ui/Update';
 import AccountOutline from 'mdi-material-ui/AccountOutline';
-import MessageOutline from 'mdi-material-ui/MessageOutline';
 
 import CategoryTag, { CategoryType } from 'src/views/create-release-note/CategoryTag';
 import StatusTag, { Status } from 'src/views/create-release-note/StatusTag';
+
+// import recoil state
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { releaseNoteState } from 'src/views/create-release-note/recoil/atoms';
 
 const keywords = [
     {
@@ -45,18 +47,9 @@ const keywords = [
 ];
 
 const FormContent = () => {
-    const [textfieldValue, setTextfieldValue] = useState('')
     const [categoryTags, setCategoryTags] = useState<string[][]>([]);
-    const [isImportant, setIsImportant] = useState(false);
-    const [isPublic, setIsPublic] = useState(false);
 
-    const today = new Date().toISOString().substr(0, 10);
-
-    const release_note = {
-        creator_name: "윤주은",
-        creation_date: today,
-    }
-
+    const [releaseNote, setReleaseNote] = useRecoilState(releaseNoteState);
 
     const [textfieldValues, setTextfieldValues] = useState<string[]>(['']);
 
@@ -81,20 +74,37 @@ const FormContent = () => {
         });
 
         setCategoryTags(newCategoryTags);
-        console.log(newCategoryTags)
     }, [textfieldValues]);
 
 
 
 
     const handleAddTextField = () => {
-        setTextfieldValues([...textfieldValues, '']);
-    };
+        setReleaseNote((prevReleaseNote) => ({
+          ...prevReleaseNote,
+          release_content: [
+            ...prevReleaseNote.release_content,
+            { content: "", category: "General" },
+          ],
+        }));
+      };
 
     const handleTextfieldChange = (index: number, value: string) => {
         setTextfieldValues(
             textfieldValues.map((textfieldValue, i) => (i === index ? value : textfieldValue))
         );
+
+        setReleaseNote((prevReleaseNote) => {
+            const newReleaseContent = prevReleaseNote.release_content.slice();
+        
+            if (newReleaseContent[index] !== undefined) {
+              newReleaseContent[index] = value;
+            } else {
+              newReleaseContent.push(value);
+            }
+        
+            return { ...prevReleaseNote, release_content: newReleaseContent };
+          });
     };
 
 
@@ -108,7 +118,7 @@ const FormContent = () => {
                             id="creator_id"
                             fullWidth
                             label='작성자'
-                            value={release_note.creator_name}
+                            value={releaseNote.creator_id}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position='start'>
@@ -127,7 +137,7 @@ const FormContent = () => {
                                 label='작성날짜'
                                 inputFormat='yyyy-MM-dd'
                                 mask='____-__-__'
-                                value={release_note.creation_date}
+                                value={releaseNote.creation_date}
                                 onChange={() => { }}
                                 InputProps={{
                                     readOnly: true,
@@ -144,6 +154,8 @@ const FormContent = () => {
                             label='버전'
                             placeholder='v x.y.z'
                             helperText='Major 업데이트의 경우 x를, Minor 업데이트의 경우 y를, Patch 업데이트의 경우 z를 바꿔주세요.'
+                            value={releaseNote.version}
+                            onChange={(e) => setReleaseNote({ ...releaseNote, version: e.target.value })}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position='start'>
@@ -172,8 +184,8 @@ const FormContent = () => {
                                     control={
                                         <Checkbox
                                             id="is_important"
-                                            checked={isImportant}
-                                            onChange={(e) => setIsImportant(e.target.checked)}
+                                            checked={releaseNote.is_important}
+                                            onChange={(e) => setReleaseNote({ ...releaseNote, is_important: e.target.checked })}
                                             color="primary"
                                         />
                                     }
@@ -185,8 +197,8 @@ const FormContent = () => {
                                     control={
                                         <Checkbox
                                             id="is_public"
-                                            checked={isPublic}
-                                            onChange={(e) => setIsPublic(e.target.checked)}
+                                            checked={releaseNote.is_public}
+                                            onChange={(e) => setReleaseNote({ ...releaseNote, is_public: e.target.checked })}
                                             color="primary"
                                         />
                                     }
