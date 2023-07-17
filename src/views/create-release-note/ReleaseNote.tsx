@@ -1,11 +1,11 @@
 export interface ReleaseNote {
-  release_note_id: number;
-  title: string;
-  creator_id: number;
+  releaseNoteId: number;
+  releaseNoteTitle: string;
+  creatorId: number;
   version: string;
-  creation_date: string;
+  creationDate: string;
   status: string;
-  release_content: { content: string; category: string }[];
-  is_important: boolean;
-  is_public: boolean;
+  releaseContent: { content: string; category: string }[];
+  isImportant: boolean;
+  isPublic: boolean;
 }

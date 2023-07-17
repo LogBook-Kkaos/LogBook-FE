@@ -91,7 +91,7 @@ const FormContent = () => {
           );
       
           setReleaseNote((prevReleaseNote) => {
-            const newReleaseContent = prevReleaseNote.release_content.slice();
+            const newReleaseContent = prevReleaseNote.releaseContent.slice();
             newReleaseContent[index] = {
               content: value,
               category: categoryTags[index]
@@ -117,7 +117,7 @@ const FormContent = () => {
                             id="creator_id"
                             fullWidth
                             label='작성자'
-                            value={releaseNote.creator_id}
+                            value={releaseNote.creatorId}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position='start'>
@@ -136,7 +136,7 @@ const FormContent = () => {
                                 label='작성날짜'
                                 inputFormat='yyyy-MM-dd'
                                 mask='____-__-__'
-                                value={releaseNote.creation_date}
+                                value={releaseNote.creationDate}
                                 onChange={() => { }}
                                 InputProps={{
                                     readOnly: true,
@@ -183,8 +183,8 @@ const FormContent = () => {
                                     control={
                                         <Checkbox
                                             id="is_important"
-                                            checked={releaseNote.is_important}
-                                            onChange={(e) => setReleaseNote({ ...releaseNote, is_important: e.target.checked })}
+                                            checked={releaseNote.isImportant}
+                                            onChange={(e) => setReleaseNote({ ...releaseNote, isImportant: e.target.checked })}
                                             color="primary"
                                         />
                                     }
@@ -196,8 +196,8 @@ const FormContent = () => {
                                     control={
                                         <Checkbox
                                             id="is_public"
-                                            checked={releaseNote.is_public}
-                                            onChange={(e) => setReleaseNote({ ...releaseNote, is_public: e.target.checked })}
+                                            checked={releaseNote.isPublic}
+                                            onChange={(e) => setReleaseNote({ ...releaseNote, isPublic: e.target.checked })}
                                             color="primary"
                                         />
                                     }
@@ -242,6 +242,7 @@ const FormContent = () => {
 
                     <Grid item xs={12}>
                         <Button
+                            data-testid="add_textfield_button"
                             variant="outlined"
                             color="primary"
                             onClick={handleAddTextField}
