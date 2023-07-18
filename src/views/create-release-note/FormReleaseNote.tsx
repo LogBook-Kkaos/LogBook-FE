@@ -18,7 +18,7 @@ const FormReleaseNote = () => {
     const newTitle = event.target.value;
 
     setReleaseNote((prevReleaseNote) => {
-      return { ...prevReleaseNote, title: newTitle };
+      return { ...prevReleaseNote, releaseNoteTitle: newTitle };
     });
   };
 
