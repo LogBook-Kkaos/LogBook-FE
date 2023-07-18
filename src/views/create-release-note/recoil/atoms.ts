@@ -6,14 +6,14 @@ const today = new Date().toISOString().substring(0, 10);
 export const releaseNoteState = atom<ReleaseNote>({
     key: 'releaseNoteState',
     default: {
-        release_note_id: 0,
-        title: '',
-        creator_id: 0,
+        releaseNoteId: 0,
+        releaseNoteTitle: '',
+        creatorId: 0,
         version: '',
-        creation_date: today,
+        creationDate: today,
         status: '',
-        release_content: [],
-        is_important: false,
-        is_public: false,
+        releaseContent: [],
+        isImportant: false,
+        isPublic: false,
     },
 })
