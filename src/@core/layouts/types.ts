@@ -27,7 +27,6 @@ export type NavSectionTitle = {
 export type NavPopup = {
   popupTitle: string
   disabled?: boolean
-  content?: ReactNode
   icon?: string | string[] | ReactNode
   badgeContent?: string
   badgeColor?: 'default' | 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info'

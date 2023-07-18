@@ -17,9 +17,6 @@ import TimelineTextOutline from 'mdi-material-ui/TimelineTextOutline'
 // ** Type Imports
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
 
-// ** Component Imports
-import NotificationPopup from 'src/views/notification/NotificationPopup'
-
 const navigation = (): VerticalNavItemsType => {
   return [
     {
@@ -102,13 +99,11 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       popupTitle: 'Notification',
-      icon: BellOutline,
-      content: NotificationPopup
+      icon: BellOutline
     },
     {
       popupTitle: 'Chatting',
-      icon: ChatOutline,
-      // content: NotificationPopup
+      icon: ChatOutline
     },
   ]
 }
