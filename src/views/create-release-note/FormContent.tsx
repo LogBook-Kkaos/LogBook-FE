@@ -101,7 +101,7 @@ const FormContent = () => {
       
             return {
               ...prevReleaseNote,
-              release_content: newReleaseContent,
+              releaseContent: newReleaseContent,
             };
           });
     };
