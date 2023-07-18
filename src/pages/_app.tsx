@@ -4,6 +4,8 @@ import { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 
+import { RecoilRoot } from 'recoil'
+
 // ** Loader Import
 import NProgress from 'nprogress'
 
@@ -60,6 +62,7 @@ const App = (props: ExtendedAppProps) => {
 
   return (
     <CacheProvider value={emotionCache}>
+      <RecoilRoot>
       <Head>
         <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
         <meta
@@ -77,6 +80,7 @@ const App = (props: ExtendedAppProps) => {
           }}
         </SettingsConsumer>
       </SettingsProvider>
+      </RecoilRoot>
     </CacheProvider>
   )
 }

@@ -1,6 +1,15 @@
 const path = require('path')
 
 module.exports = {
+    async rewrites() {
+        return [
+            {
+                source: '/:path*',
+                destination: 'http://localhost:8080/:path*',
+            },
+        ]
+    },
+
   trailingSlash: true,
   reactStrictMode: false,
   experimental: {
