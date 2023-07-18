@@ -1,4 +1,4 @@
-// ** Icon imports
+// ** Icon Imports
 import Login from 'mdi-material-ui/Login'
 import Table from 'mdi-material-ui/Table'
 import CubeOutline from 'mdi-material-ui/CubeOutline'
@@ -11,18 +11,18 @@ import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 import FileDocumentEditOutline from 'mdi-material-ui/FileDocumentEditOutline'
 import BellOutline from 'mdi-material-ui/BellOutline'
+import ChatOutline from 'mdi-material-ui/MessageTextOutline'
 import TimelineTextOutline from 'mdi-material-ui/TimelineTextOutline'
 
-// ** Type import
+// ** Type Imports
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
-import { Timeline } from 'mdi-material-ui'
 
 const navigation = (): VerticalNavItemsType => {
   return [
     {
       title: 'Dashboard',
       icon: HomeOutline,
-      path: '/'
+      path: '/dashboard'
     },
     {
       title: 'Account Settings',
@@ -96,6 +96,14 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       sectionTitle: 'Channer'
+    },
+    {
+      popupTitle: 'Notification',
+      icon: BellOutline
+    },
+    {
+      popupTitle: 'Chatting',
+      icon: ChatOutline
     },
   ]
 }
