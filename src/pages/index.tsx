@@ -1,3 +1,5 @@
+// ** Next Imports
+import { useRouter } from 'next/router'
 import Image from 'next/image'
 
 // ** MUI Imports
@@ -14,12 +16,22 @@ const ButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
 
 const HomePage = () => {
 
+  const router = useRouter()
+
+  const handleClickRegister = () => {
+    router.push('pages/register')
+  }
+
+  const handleClickLogin = () => {
+    router.push('pages/login')
+  }
+
   return (
     <Box className='content-center' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Image src="/images/LogBook_Logo(1).svg" alt="Logo" width={400} height={200} />
       <Typography variant='body2'>Work on your project efficiently with the release note sharing system!</Typography>
       <Box>
-        <ButtonStyled variant='contained'>
+        <ButtonStyled variant='contained' onClick={handleClickRegister}>
           Sign up
           <input
             hidden
@@ -28,7 +40,7 @@ const HomePage = () => {
             id='account-settings-upload-image'
           />
         </ButtonStyled>
-        <ButtonStyled variant='contained'>
+        <ButtonStyled variant='contained' onClick={handleClickLogin}>
           Login
           <input
             hidden

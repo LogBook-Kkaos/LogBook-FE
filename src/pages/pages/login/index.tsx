@@ -144,7 +144,8 @@ const LoginPage = () => {
               size='large'
               variant='contained'
               sx={{ marginBottom: 7 }}
-              onClick={() => router.push('/')}
+              // 로그인 요청 api 추가 필요
+              onClick={() => router.push('/dashboard')}
             >
               Login
             </Button>
