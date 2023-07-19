@@ -28,7 +28,7 @@ const HomePage = () => {
 
   return (
     <Box className='content-center' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <Image src="/images/LogBook_Logo(1).svg" alt="Logo" width={400} height={200} />
+      <Image src="/images/LogBook_Logo_vertical.svg" alt="Logo" width={400} height={200} />
       <Typography variant='body2'>Work on your project efficiently with the release note sharing system!</Typography>
       <Box>
         <ButtonStyled variant='contained' onClick={handleClickRegister}>

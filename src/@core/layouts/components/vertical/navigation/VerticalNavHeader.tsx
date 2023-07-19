@@ -51,7 +51,7 @@ const VerticalNavHeader = (props: Props) => {
         // 로고 눌렀을때 로그인 여부 확인하여 이동
         <Link href='/' passHref>
           <LogoLinkStyled>
-          <Image src="/images/LogBook_Logo(2).svg" alt="Logo" width={150} height={75} />
+          <Image src="/images/LogBook_Logo_horizontal.svg" alt="Logo" width={150} height={75} />
           </LogoLinkStyled>
         </Link>
       )}
