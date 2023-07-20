@@ -9,6 +9,7 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 // ** Layout Imports
 // !Do not remove this Layout import
 import VerticalLayout from 'src/@core/layouts/VerticalLayout'
+import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Navigation Imports
 import VerticalNavItems from 'src/navigation/vertical'
@@ -19,6 +20,8 @@ import VerticalAppBarContent from './components/vertical/AppBarContent'
 
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
+
+import { useRouter } from 'next/router'
 
 interface Props {
   children: ReactNode
@@ -38,6 +41,10 @@ const UserLayout = ({ children }: Props) => {
    */
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
 
+  const router = useRouter()
+
+  const isHome = router.pathname === '/'
+
   const UpgradeToProImg = () => {
     return (
       <Box sx={{ mx: 'auto' }}>
@@ -53,26 +60,32 @@ const UserLayout = ({ children }: Props) => {
   }
 
   return (
-    <VerticalLayout
-      hidden={hidden}
-      settings={settings}
-      saveSettings={saveSettings}
-      verticalNavItems={VerticalNavItems()} // Navigation Items
-      afterVerticalNavMenuContent={UpgradeToProImg}
-      verticalAppBarContent={(
-        props // AppBar Content
-      ) => (
-        <VerticalAppBarContent
+    <>
+      {isHome ? (
+        <BlankLayout>{children}</BlankLayout>
+      ) : (
+        <VerticalLayout
           hidden={hidden}
           settings={settings}
           saveSettings={saveSettings}
-          toggleNavVisibility={props.toggleNavVisibility}
-        />
+          verticalNavItems={VerticalNavItems()} // Navigation Items
+          afterVerticalNavMenuContent={UpgradeToProImg}
+          verticalAppBarContent={(
+            props // AppBar Content
+          ) => (
+            <VerticalAppBarContent
+              hidden={hidden}
+              settings={settings}
+              saveSettings={saveSettings}
+              toggleNavVisibility={props.toggleNavVisibility}
+            />
+          )}
+        >
+          {children}
+          <UpgradeToProButton />
+        </VerticalLayout>
       )}
-    >
-      {children}
-      <UpgradeToProButton />
-    </VerticalLayout>
+    </>
   )
 }
 
