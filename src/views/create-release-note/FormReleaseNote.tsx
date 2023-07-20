@@ -15,10 +15,10 @@ const FormReleaseNote = () => {
   const [releaseNote, setReleaseNote] = useRecoilState(releaseNoteState);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = event.target.value;
+    const title = event.target.value;
 
     setReleaseNote((prevReleaseNote) => {
-      return { ...prevReleaseNote, releaseNoteTitle: newTitle };
+      return { ...prevReleaseNote, releaseNoteTitle: title };
     });
   };
 
