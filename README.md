@@ -4,15 +4,45 @@ Logbook은 기술 문서를 자동으로 요약하여 릴리즈 노트를 작성
 기술 문서를 요약해서 릴리즈 노트를 자동으로 작성할 수 있습니다.
 릴리즈 노트 작성 규칙에 따라 문장을 자동 완성해주는 차별점을 가지고 있습니다.
 
+
+## 문서
+
+- Logbook [Google Drive](https://drive.google.com/drive/folders/1_o-brVhdnHVWNCXrYy9JFwxZykRHrk8S?usp=drive_link)
+- Logbook [Notion](https://www.notion.so/seobinlee00/4b04cde519094eda98f4dd37e9859894?v=be10c461e965420790b67272803c7f5d&pvs=4)
+- K-Kaos [Slack](https://app.slack.com/huddle/T056ESEE3K6/C05GTA3RFSM)
+- K-Kaos [Jira](https://leeseobin.atlassian.net/jira/software/projects/LB/boards/1)
+
+
+## 기능
+
+- 기술 문서에서 주요 내용을 추출하여 릴리즈 노트 작성
+- 릴리즈 노트 작성 규칙에 따라 문장을 자동 완성
+- 릴리즈 노트 공유 및 관리를 통한 쉬운 협업 가능
+
+
 ## 프론트엔드 기술 스택
 
-- IDE: [Visual Studio Code (VSCode)](https://code.visualstudio.com/)
-- Front-end framework: [React with TypeScript](https://reactjs.org/docs/static-type-checking.html)
-- Server-side rendering and static site generation: [Next.js](https://nextjs.org/)
-- State management: [Recoil](https://recoiljs.org/)
-- HTTP client: [Axios](https://axios-http.com/)
-- Package manager: [PNPM](https://pnpm.io/)
-- End-to-end Testing: [Cypress](https://www.cypress.io/)
+![Static Badge](https://img.shields.io/badge/VSCode-blue?logo=visualstudiocode&logoColor=%230098FF&link=https%3A%2F%2Fcode.visualstudio.com%2F)
+
+
+![Static Badge](https://img.shields.io/badge/MUI-%23007FFF?logo=MUI&logoColor=white&link=https%3A%2F%2Fmui.com%2F)
+![Static Badge](https://img.shields.io/badge/React-%2361DAFB?logo=react&logoColor=black&link=https%3A%2F%2Freactjs.org%2Fdocs%2Fstatic-type-checking.html)
+![Static Badge](https://img.shields.io/badge/Typescript-%233178C6?logo=typescript&logoColor=white&link=https%3A%2F%2Freactjs.org%2Fdocs%2Fstatic-type-checking.html)
+
+
+![Static Badge](https://img.shields.io/badge/Next.js-%23000000?logo=nextdotjs&logoColor=white&link=https%3A%2F%2Fnextjs.org%2F)
+![Static Badge](https://img.shields.io/badge/Recoil-%233578E5?logo=recoil&logoColor=white&link=https%3A%2F%2Frecoiljs.org%2F)
+
+
+![Static Badge](https://img.shields.io/badge/Axios-%235A29E4?logo=axios&logoColor=white&link=https%3A%2F%2Faxios-http.com%2F)
+
+
+![Static Badge](https://img.shields.io/badge/PNPM-%23F69220?logo=pnpm&logoColor=white&link=https%3A%2F%2Fpnpm.io%2F)
+
+
+![Static Badge](https://img.shields.io/badge/cypress-%2317202C?logo=cypress&logoColor=white&link=https%3A%2F%2Fwww.cypress.io%2F)
+
+
 
 ## 시작하기
 
@@ -49,15 +79,3 @@ pnpm start
 ```
 
 생성된 빌드를 실행하며 이를 통해 애플리케이션을 확인합니다.
-
-## 기능
-
-- 기술 문서에서 주요 내용을 추출하여 릴리즈 노트 작성
-- 릴리즈 노트 작성 규칙에 따라 문장을 자동 완성
-- 릴리즈 노트 공유 및 관리를 통한 쉬운 협업 가능
-
-## 문서
-- Logbook [Google Drive](https://drive.google.com/drive/folders/1_o-brVhdnHVWNCXrYy9JFwxZykRHrk8S?usp=drive_link)
-- Logbook [Notion](https://www.notion.so/seobinlee00/4b04cde519094eda98f4dd37e9859894?v=be10c461e965420790b67272803c7f5d&pvs=4)
-- K-Kaos [Slack](https://app.slack.com/huddle/T056ESEE3K6/C05GTA3RFSM)
-- K-Kaos [Jira](https://leeseobin.atlassian.net/jira/software/projects/LB/boards/1)
