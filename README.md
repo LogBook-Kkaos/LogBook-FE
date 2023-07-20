@@ -7,6 +7,7 @@ Logbook은 기술 문서를 자동으로 요약하여 릴리즈 노트를 작성
 
 ## 문서
 
+- Logbook [API 명세서](https://logbook5.docs.apiary.io/#)
 - Logbook [Google Drive](https://drive.google.com/drive/folders/1_o-brVhdnHVWNCXrYy9JFwxZykRHrk8S?usp=drive_link)
 - Logbook [Notion](https://www.notion.so/seobinlee00/4b04cde519094eda98f4dd37e9859894?v=be10c461e965420790b67272803c7f5d&pvs=4)
 - K-Kaos [Slack](https://app.slack.com/huddle/T056ESEE3K6/C05GTA3RFSM)
