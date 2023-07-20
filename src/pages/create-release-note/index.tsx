@@ -11,7 +11,7 @@ import FormReleaseNote from 'src/views/create-release-note/FormReleaseNote'
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
 
-const CreateDocument = () => {
+const CreateReleaseNote = () => {
   return (
     <DatePickerWrapper>
       <Box
@@ -31,4 +31,4 @@ const CreateDocument = () => {
   )
 }
 
-export default CreateDocument
+export default CreateReleaseNote
