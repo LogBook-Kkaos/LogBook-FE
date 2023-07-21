@@ -21,7 +21,6 @@ import { Settings } from 'src/@core/context/settingsContext'
 import UserIcon from 'src/layouts/components/UserIcon'
 
 // ** Component Imports
-import BlankLayout from 'src/@core/layouts/BlankLayout'
 import NotificationPopup from 'src/views/notification/NotificationPopup'
 import ChattingPopup from 'src/views/chatting/ChattingPopup'
 import AddProjectPopup from 'src/views/add-project/AddProjectPopup'
@@ -86,7 +85,7 @@ const VerticalNavPopup = ({ item }: Props) => {
     }
 
     return (
-        <BlankLayout>
+        <>
         <ListItem
             disablePadding
             className='nav-link'
@@ -128,7 +127,7 @@ const VerticalNavPopup = ({ item }: Props) => {
         </MenuNavLink>
         </ListItem>
         {isOpen && contentMap[item.popupTitle]}
-        </BlankLayout>
+        </>
     )
 }
 
