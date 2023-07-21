@@ -13,6 +13,7 @@ import FileDocumentEditOutline from 'mdi-material-ui/FileDocumentEditOutline'
 import BellOutline from 'mdi-material-ui/BellOutline'
 import ChatOutline from 'mdi-material-ui/MessageTextOutline'
 import TimelineTextOutline from 'mdi-material-ui/TimelineTextOutline'
+import ControlPointOutlinedIcon from 'mdi-material-ui/PlusCircleOutline'
 
 // ** Type Imports
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -98,6 +99,10 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Project Detail',
       icon: TimelineTextOutline,
       path: '/project-detail'
+    },
+    {
+      popupTitle: 'Project Add',
+      icon: ControlPointOutlinedIcon
     },
     {
       sectionTitle: 'Channer'
