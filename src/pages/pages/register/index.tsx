@@ -1,5 +1,6 @@
 // ** React Imports
 import { useState, Fragment, ChangeEvent, MouseEvent, ReactNode, FormEvent } from 'react'
+import { useForm, SubmitHandler } from 'react-hook-form'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -11,6 +12,7 @@ import axios from 'axios'
 // ** Recoil Import
 import { useRecoilState } from 'recoil'
 import { userState } from 'src/recoil/user/atoms'
+
 
 // ** MUI Components
 import Box from '@mui/material/Box'
@@ -30,6 +32,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import FormHelperText from '@mui/material/FormHelperText'
 
 // ** Icons Imports
 import Google from 'mdi-material-ui/Google'
@@ -41,12 +44,19 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
-import { userInfo } from 'os'
 
 interface PasswordInputState {
   password: string
   confirmPassword: string
   showPassword: boolean
+}
+
+interface formData {
+  username: string
+  email: string
+  department: string
+  password: string
+  confirmPassword: string
 }
 
 // ** Styled Components
@@ -75,20 +85,35 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
   }
 }))
 
+
+
 const RegisterPage = () => {
 
   const [user, setUser] = useRecoilState(userState);
+  const [terms, setTerms] = useState<boolean>(false);
 
-  const handleSignUpSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    console.log(user);
-    e.preventDefault();
-    try {
-      const res = await axios.post('/api/user/register', userState);
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { register, watch, handleSubmit, formState: { errors } } = useForm<formData>();
+
+  const onSubmit: SubmitHandler<formData> = (data) => {
+    axios.post('/api/user/register', data)
+      .then((res) => {
+        console.log(res);
+        setUser({
+          ...user,
+          username: data.username,
+          email: data.email,
+          department: data.department,
+          password: data.password
+        })
+      }
+      )
+  }
+
+  const onError = (errors: any) => {
+    console.log(errors);
+  }
+
+
 
   const [passwordInputState, setPasswordInputState] = useState<PasswordInputState>({
     password: '',
@@ -120,7 +145,7 @@ const RegisterPage = () => {
             {/* 로고 눌렀을때 로그인 여부 확인하여 이동 */}
             <Link href='/' passHref>
               <LogoLinkStyled>
-              <Image src="/images/LogBook_Logo_horizontal.svg" alt="Logo" width={250} height={100} />
+                <Image src="/images/LogBook_Logo_horizontal.svg" alt="Logo" width={250} height={100} />
               </LogoLinkStyled>
             </Link>
           </Box>
@@ -130,9 +155,35 @@ const RegisterPage = () => {
             </Typography>
             <Typography variant='body2'>릴리즈 노트를 쉽게 작성해보세요.</Typography>
           </Box>
-          <form noValidate autoComplete='off' onSubmit={handleSignUpSubmit}>
-            <TextField autoFocus fullWidth id='username' label='이름' sx={{ marginBottom: 4 }} value={user.userName} onChange={(event) => setUser({...user, userName: event.target.value})} />
-            <TextField fullWidth type='email' label='이메일' sx={{ marginBottom: 4 }} value={user.email} onChange={(event) => setUser({...user, email: event.target.value})} />
+          <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit, onError)}>
+            <TextField autoFocus fullWidth id='username' label='이름' sx={{ marginBottom: 4 }}
+              {...register("username", {
+                required: '이름을 입력해주세요.',
+                minLength: {
+                  value: 2,
+                  message: "이름은 2글자 이상이어야 합니다.",
+                },
+                maxLength: {
+                  value: 10,
+                  message: "이름은 10글자 이하여야 합니다.",
+                },
+                pattern: {
+                  value: /^[가-힣a-zA-Z]+$/,
+                  message: "한글과 영문 대소문자를 사용하세요.",
+                },
+              })}
+              error={!!errors.username}
+              helperText={errors.username ? errors.username.message : ""} />
+            <TextField fullWidth type='email' label='이메일' sx={{ marginBottom: 4 }}
+              {...register("email", {
+                required: '이메일을 입력해주세요.',
+                pattern: {
+                  value: /^[a-zA-Z0-9]+(?:[-_.][a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[A-Za-z]+$/,
+                  message: "이메일 형식이 올바르지 않습니다.",
+                },
+              })}
+              error={!!errors.email}
+              helperText={errors.email ? errors.email.message : ""} />
             <FormControl fullWidth>
               <InputLabel id='form-layouts-separator-select-label'>소속 / 부서명</InputLabel>
               <Select
@@ -141,8 +192,7 @@ const RegisterPage = () => {
                 id='form-layouts-separator-select'
                 labelId='form-layouts-separator-select-label'
                 sx={{ marginBottom: 4 }}
-                value={user.department}
-                onChange={(event) => setUser({...user, department: event.target.value})}
+                {...register("department")}
               >
                 <MenuItem value='소프트웨어 개발'>소프트웨어 개발</MenuItem>
                 <MenuItem value='서버/인프라 기술'>서버/인프라 기술</MenuItem>
@@ -160,9 +210,22 @@ const RegisterPage = () => {
               <InputLabel htmlFor='auth-register-password'>비밀번호</InputLabel>
               <OutlinedInput
                 label='비밀번호'
-                value={passwordInputState.password}
                 id='auth-register-password'
-                onChange={handlePasswordChange('password')}
+                {...register("password", {
+                  required: '비밀번호를 입력해주세요.',
+                  minLength: {
+                    value: 8,
+                    message: "비밀번호는 8글자 이상이어야 합니다.",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "비밀번호는 20글자 이하여야 합니다.",
+                  },
+                  pattern: {
+                    value: /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/,
+                    message: "영문, 숫자, 특수문자를 포함하여 8~20자리로 입력하세요.",
+                  }
+                })}
                 type={passwordInputState.showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position='end'>
@@ -176,15 +239,25 @@ const RegisterPage = () => {
                     </IconButton>
                   </InputAdornment>
                 }
+                error={!!errors.password}
               />
+              {errors.password && <FormHelperText error>{errors.password.message}</FormHelperText>}
             </FormControl>
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-register-password'>비밀번호 확인</InputLabel>
               <OutlinedInput
                 label='비밀번호 확인'
-                value={passwordInputState.confirmPassword}
                 id='auth-register-password'
-                onChange={handlePasswordChange('confirmPassword')}
+                {...register("confirmPassword", {
+                  required: true,
+                  minLength: 8,
+                  maxLength: 20,
+                  validate: (value: string) => {
+                    if (watch("password") !== value) {
+                      return "비밀번호가 일치하지 않습니다.";
+                    }
+                  },
+                })}
                 type={passwordInputState.showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position='end'>
@@ -198,10 +271,12 @@ const RegisterPage = () => {
                     </IconButton>
                   </InputAdornment>
                 }
+                error={!!errors.confirmPassword}
               />
+              {errors.confirmPassword && <FormHelperText error>{errors.confirmPassword.message}</FormHelperText>}
             </FormControl>
             <FormControlLabel
-              control={<Checkbox />}
+              control={<Checkbox onChange={(event) => setTerms(event.target.checked)} checked={terms}/>}
               label={
                 <Fragment>
                   <Link href='/' passHref>
@@ -213,8 +288,8 @@ const RegisterPage = () => {
                 </Fragment>
               }
             />
-            <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}>
-              Sign up
+            <Button fullWidth size='large' type='submit' variant='contained' disabled={!terms} sx={{ marginBottom: 7 }}>
+              회원가입
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
               <Typography variant='body2' sx={{ marginRight: 2 }}>
