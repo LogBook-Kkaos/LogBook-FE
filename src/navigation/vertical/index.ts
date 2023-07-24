@@ -87,6 +87,11 @@ const navigation = (): VerticalNavItemsType => {
       path: '/create-release-note'
     },
     {
+      icon: FileDocumentEditOutline,
+      title: 'Create Document',
+      path: '/create-document'
+    },
+    {
       sectionTitle: 'Projects'
     },
     {
