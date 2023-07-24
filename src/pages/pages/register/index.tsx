@@ -45,18 +45,13 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
-interface PasswordInputState {
-  password: string
-  confirmPassword: string
-  showPassword: boolean
-}
-
 interface formData {
   username: string
   email: string
   department: string
   password: string
   confirmPassword: string
+
 }
 
 // ** Styled Components
@@ -103,8 +98,9 @@ const RegisterPage = () => {
 
   const [user, setUser] = useRecoilState(userState);
   const [terms, setTerms] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const { register, watch, handleSubmit, formState: { errors } } = useForm<formData>();
+  const { register, watch, handleSubmit, setValue, formState: { errors } } = useForm<formData>();
 
   const onSubmit: SubmitHandler<formData> = (data) => {
     axios.post('/api/user/register', data)
@@ -125,29 +121,9 @@ const RegisterPage = () => {
     console.log(errors);
   }
 
-
-
-  const [passwordInputState, setPasswordInputState] = useState<PasswordInputState>({
-    password: '',
-    confirmPassword: '',
-    showPassword: false
-  })
-
-
-  // ** Hook
-  const theme = useTheme()
-
-  const handlePasswordChange = (prop: keyof PasswordInputState) => (event: ChangeEvent<HTMLInputElement>) => {
-    setPasswordInputState({ ...passwordInputState, [prop]: event.target.value })
-    setUser({ ...user, password: event.target.value })
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
   }
-  const handleClickShowPassword = () => {
-    setPasswordInputState({ ...passwordInputState, showPassword: !passwordInputState.showPassword })
-  }
-  const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-  }
-
 
   return (
     <Box className='content-center'>
@@ -234,16 +210,15 @@ const RegisterPage = () => {
                     message: "영문, 숫자, 특수문자를 포함하여 8~20자리로 입력하세요.",
                   }
                 })}
-                type={passwordInputState.showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
                       edge='end'
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
+                      onClick={handleShowPassword}
                       aria-label='toggle password visibility'
                     >
-                      {passwordInputState.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
+                      {showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -266,16 +241,15 @@ const RegisterPage = () => {
                     }
                   },
                 })}
-                type={passwordInputState.showPassword ? 'text' : 'password'}
+                type={showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
                       edge='end'
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
+                      onClick={handleShowPassword}
                       aria-label='toggle password visibility'
                     >
-                      {passwordInputState.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
+                      {showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
                     </IconButton>
                   </InputAdornment>
                 }
