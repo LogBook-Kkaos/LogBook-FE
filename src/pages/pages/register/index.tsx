@@ -85,6 +85,18 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
   }
 }))
 
+const departments = [
+  "소프트웨어 개발",
+  "서버/인프라 기술",
+  "데이터베이스 관리",
+  "품질 보증/테스트",
+  "사용자 경험/사용자 인터페이스 디자인",
+  "IT 보안",
+  "네트워크 관리",
+  "프로젝트 관리",
+  "기술 지원",
+  "기술 마케팅",
+];
 
 
 const RegisterPage = () => {
@@ -194,16 +206,12 @@ const RegisterPage = () => {
                 sx={{ marginBottom: 4 }}
                 {...register("department")}
               >
-                <MenuItem value='소프트웨어 개발'>소프트웨어 개발</MenuItem>
-                <MenuItem value='서버/인프라 기술'>서버/인프라 기술</MenuItem>
-                <MenuItem value='데이터베이스 관리'>데이터베이스 관리</MenuItem>
-                <MenuItem value='품질 보증/테스트'>품질 보증/테스트</MenuItem>
-                <MenuItem value='사용자 경험/사용자 인터페이스 디자인'>사용자 경험/사용자 인터페이스 디자인</MenuItem>
-                <MenuItem value='IT 보안'>IT 보안</MenuItem>
-                <MenuItem value='네트워크 관리'>네트워크 관리</MenuItem>
-                <MenuItem value='프로젝트 관리'>프로젝트 관리</MenuItem>
-                <MenuItem value='기술 지원'>기술 지원</MenuItem>
-                <MenuItem value='기술 마케팅'>기술 마케팅</MenuItem>
+                {departments.map((department) => (
+                  <MenuItem key={department} value={department}>
+                    {department}
+                  </MenuItem>
+                ))}
+
               </Select>
             </FormControl>
             <FormControl fullWidth sx={{ marginBottom: 4 }}>
@@ -276,7 +284,7 @@ const RegisterPage = () => {
               {errors.confirmPassword && <FormHelperText error>{errors.confirmPassword.message}</FormHelperText>}
             </FormControl>
             <FormControlLabel
-              control={<Checkbox onChange={(event) => setTerms(event.target.checked)} checked={terms}/>}
+              control={<Checkbox onChange={(event) => setTerms(event.target.checked)} checked={terms} />}
               label={
                 <Fragment>
                   <Link href='/' passHref>
