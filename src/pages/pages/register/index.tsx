@@ -5,8 +5,12 @@ import { useState, Fragment, ChangeEvent, MouseEvent, ReactNode, FormEvent } fro
 import Link from 'next/link'
 import Image from 'next/image'
 
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
+// ** HTTP Client
 import axios from 'axios'
+
+// ** Recoil Import
+import { useRecoilState } from 'recoil'
+import { userState } from 'src/recoil/user/atoms'
 
 // ** MUI Components
 import Box from '@mui/material/Box'
@@ -37,6 +41,7 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
+import { userInfo } from 'os'
 
 interface PasswordInputState {
   password: string
@@ -70,49 +75,15 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
   }
 }))
 
-const userNameState = atom({
-  key: 'userName',
-  default: '',
-});
-
-const emailState = atom({
-  key: 'email',
-  default: '',
-});
-
-const departmentState = atom({
-  key: 'department',
-  default: '',
-});
-
-const passwordState = atom({
-  key: 'password',
-  default: '',
-});
-
-const userState = selector({
-  key: 'userState',
-  get: ({ get }) => {
-    const userName = get(userNameState);
-    const email = get(emailState);
-    const department = get(departmentState);
-    const password = get(passwordState);
-
-    return { userName, email, department, password };
-  }
-})
-
 const RegisterPage = () => {
-  const [userName, setUserName] = useRecoilState(userNameState);
-  const [email, setEmail] = useRecoilState(emailState);
-  const [department, setDepartment] = useRecoilState(departmentState);
-  const [password, setPassword] = useRecoilState(passwordState);
-  const user = useRecoilValue(userState);
+
+  const [user, setUser] = useRecoilState(userState);
 
   const handleSignUpSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    console.log(user);
     e.preventDefault();
     try {
-      const res = await axios.post('/api/user/register', user);
+      const res = await axios.post('/api/user/register', userState);
       console.log(res);
     } catch (error) {
       console.log(error);
@@ -131,7 +102,7 @@ const RegisterPage = () => {
 
   const handlePasswordChange = (prop: keyof PasswordInputState) => (event: ChangeEvent<HTMLInputElement>) => {
     setPasswordInputState({ ...passwordInputState, [prop]: event.target.value })
-    setPassword(event.target.value)
+    setUser({ ...user, password: event.target.value })
   }
   const handleClickShowPassword = () => {
     setPasswordInputState({ ...passwordInputState, showPassword: !passwordInputState.showPassword })
@@ -160,8 +131,8 @@ const RegisterPage = () => {
             <Typography variant='body2'>릴리즈 노트를 쉽게 작성해보세요.</Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={handleSignUpSubmit}>
-            <TextField autoFocus fullWidth id='username' label='이름' sx={{ marginBottom: 4 }} value={userName} onChange={(event) => setUserName(event.target.value)} />
-            <TextField fullWidth type='email' label='이메일' sx={{ marginBottom: 4 }} value={email} onChange={(event) => setEmail(event.target.value)} />
+            <TextField autoFocus fullWidth id='username' label='이름' sx={{ marginBottom: 4 }} value={user.userName} onChange={(event) => setUser({...user, userName: event.target.value})} />
+            <TextField fullWidth type='email' label='이메일' sx={{ marginBottom: 4 }} value={user.email} onChange={(event) => setUser({...user, email: event.target.value})} />
             <FormControl fullWidth>
               <InputLabel id='form-layouts-separator-select-label'>소속 / 부서명</InputLabel>
               <Select
@@ -170,8 +141,8 @@ const RegisterPage = () => {
                 id='form-layouts-separator-select'
                 labelId='form-layouts-separator-select-label'
                 sx={{ marginBottom: 4 }}
-                value={department}
-                onChange={(event) => setDepartment(event.target.value)}
+                value={user.department}
+                onChange={(event) => setUser({...user, department: event.target.value})}
               >
                 <MenuItem value='소프트웨어 개발'>소프트웨어 개발</MenuItem>
                 <MenuItem value='서버/인프라 기술'>서버/인프라 기술</MenuItem>
