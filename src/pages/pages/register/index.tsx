@@ -232,7 +232,7 @@ const RegisterPage = () => {
                 label='비밀번호 확인'
                 id='auth-register-password'
                 {...register("confirmPassword", {
-                  required: true,
+                  required: '비밀번호가 일치하지 않습니다.',
                   minLength: 8,
                   maxLength: 20,
                   validate: (value: string) => {
