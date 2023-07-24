@@ -139,7 +139,7 @@ const RegisterPage = () => {
           </Box>
           <Box sx={{ mb: 6 }}>
             <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-              처음 만나는 릴리즈 노트 시스템 👋
+              처음 만나는 릴리즈 노트 시스템 👋🏻
             </Typography>
             <Typography variant='body2'>릴리즈 노트를 쉽게 작성해보세요.</Typography>
           </Box>
