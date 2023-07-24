@@ -38,7 +38,7 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
-interface State {
+interface PasswordInputState {
   password: string
   confirmPassword: string
   showPassword: boolean
@@ -114,12 +114,12 @@ const RegisterPage = () => {
     try {
       const res = await axios.post('/api/user/register', user);
       console.log(res);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const [values, setValues] = useState<State>({
+  const [passwordInputState, setPasswordInputState] = useState<PasswordInputState>({
     password: '',
     confirmPassword: '',
     showPassword: false
@@ -129,12 +129,12 @@ const RegisterPage = () => {
   // ** Hook
   const theme = useTheme()
 
-  const handleChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [prop]: event.target.value })
+  const handlePasswordChange = (prop: keyof PasswordInputState) => (event: ChangeEvent<HTMLInputElement>) => {
+    setPasswordInputState({ ...passwordInputState, [prop]: event.target.value })
     setPassword(event.target.value)
   }
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
+    setPasswordInputState({ ...passwordInputState, showPassword: !passwordInputState.showPassword })
   }
   const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -160,8 +160,8 @@ const RegisterPage = () => {
             <Typography variant='body2'>릴리즈 노트를 쉽게 작성해보세요.</Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={handleSignUpSubmit}>
-            <TextField autoFocus fullWidth id='username' label='이름' sx={{ marginBottom: 4 }} value={userName} onChange={(e) => setUserName(e.target.value)} />
-            <TextField fullWidth type='email' label='이메일' sx={{ marginBottom: 4 }} value={email} onChange={(e) => setEmail(e.target.value)} />
+            <TextField autoFocus fullWidth id='username' label='이름' sx={{ marginBottom: 4 }} value={userName} onChange={(event) => setUserName(event.target.value)} />
+            <TextField fullWidth type='email' label='이메일' sx={{ marginBottom: 4 }} value={email} onChange={(event) => setEmail(event.target.value)} />
             <FormControl fullWidth>
               <InputLabel id='form-layouts-separator-select-label'>소속 / 부서명</InputLabel>
               <Select
@@ -171,7 +171,7 @@ const RegisterPage = () => {
                 labelId='form-layouts-separator-select-label'
                 sx={{ marginBottom: 4 }}
                 value={department}
-                onChange={(e) => setDepartment(e.target.value)}
+                onChange={(event) => setDepartment(event.target.value)}
               >
                 <MenuItem value='소프트웨어 개발'>소프트웨어 개발</MenuItem>
                 <MenuItem value='서버/인프라 기술'>서버/인프라 기술</MenuItem>
@@ -189,10 +189,10 @@ const RegisterPage = () => {
               <InputLabel htmlFor='auth-register-password'>비밀번호</InputLabel>
               <OutlinedInput
                 label='비밀번호'
-                value={values.password}
+                value={passwordInputState.password}
                 id='auth-register-password'
-                onChange={handleChange('password')}
-                type={values.showPassword ? 'text' : 'password'}
+                onChange={handlePasswordChange('password')}
+                type={passwordInputState.showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
@@ -201,7 +201,7 @@ const RegisterPage = () => {
                       onMouseDown={handleMouseDownPassword}
                       aria-label='toggle password visibility'
                     >
-                      {values.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
+                      {passwordInputState.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -211,10 +211,10 @@ const RegisterPage = () => {
               <InputLabel htmlFor='auth-register-password'>비밀번호 확인</InputLabel>
               <OutlinedInput
                 label='비밀번호 확인'
-                value={values.confirmPassword}
+                value={passwordInputState.confirmPassword}
                 id='auth-register-password'
-                onChange={handleChange('confirmPassword')}
-                type={values.showPassword ? 'text' : 'password'}
+                onChange={handlePasswordChange('confirmPassword')}
+                type={passwordInputState.showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
@@ -223,7 +223,7 @@ const RegisterPage = () => {
                       onMouseDown={handleMouseDownPassword}
                       aria-label='toggle password visibility'
                     >
-                      {values.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
+                      {passwordInputState.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -234,7 +234,7 @@ const RegisterPage = () => {
               label={
                 <Fragment>
                   <Link href='/' passHref>
-                    <LinkStyled onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}>
+                    <LinkStyled onClick={(event: MouseEvent<HTMLElement>) => event.preventDefault()}>
                       이용약관
                     </LinkStyled>
                   </Link>
