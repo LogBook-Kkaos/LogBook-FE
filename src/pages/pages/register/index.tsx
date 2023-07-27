@@ -5,9 +5,11 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 // ** Next Imports
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 // ** HTTP Client
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 // ** Recoil Import
 import { useRecoilState } from 'recoil'
@@ -51,7 +53,6 @@ interface formData {
   department: string
   password: string
   confirmPassword: string
-
 }
 
 // ** Styled Components
@@ -100,12 +101,21 @@ const RegisterPage = () => {
   const [terms, setTerms] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const router = useRouter()
+
   const { register, watch, handleSubmit, setValue, formState: { errors } } = useForm<formData>();
 
   const onSubmit: SubmitHandler<formData> = (data) => {
     axios.post('/api/user/register', data)
       .then((res) => {
-        console.log(res);
+        const { accessToken, refreshToken } = res.data.result;
+
+        // Store tokens in cookies and sessionStorage
+        Cookies.set('accessToken', accessToken);
+        sessionStorage.setItem('accessToken', accessToken);
+        Cookies.set('refreshToken', refreshToken);
+        sessionStorage.setItem('refreshToken', refreshToken);
+        
         setUser({
           ...user,
           username: data.username,
@@ -113,6 +123,7 @@ const RegisterPage = () => {
           department: data.department,
           password: data.password
         })
+        router.push('/pages/login');
       }
       )
   }
