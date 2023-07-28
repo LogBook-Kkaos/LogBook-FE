@@ -1,12 +1,20 @@
 // ** React Imports
 import { useState, Fragment, ChangeEvent, MouseEvent, ReactNode, FormEvent } from 'react'
+import { useForm, SubmitHandler } from 'react-hook-form'
 
 // ** Next Imports
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
+// ** HTTP Client
 import axios from 'axios'
+import Cookies from 'js-cookie'
+
+// ** Recoil Import
+import { useRecoilState } from 'recoil'
+import { userState } from 'src/recoil/user/atoms'
+
 
 // ** MUI Components
 import Box from '@mui/material/Box'
@@ -26,6 +34,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import FormHelperText from '@mui/material/FormHelperText'
 
 // ** Icons Imports
 import Google from 'mdi-material-ui/Google'
@@ -38,10 +47,12 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
-interface State {
+interface formData {
+  username: string
+  email: string
+  department: string
   password: string
   confirmPassword: string
-  showPassword: boolean
 }
 
 // ** Styled Components
@@ -70,76 +81,60 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
   }
 }))
 
-const userNameState = atom({
-  key: 'userName',
-  default: '',
-});
+const departments = [
+  "소프트웨어 개발",
+  "서버/인프라 기술",
+  "데이터베이스 관리",
+  "품질 보증/테스트",
+  "사용자 경험/사용자 인터페이스 디자인",
+  "IT 보안",
+  "네트워크 관리",
+  "프로젝트 관리",
+  "기술 지원",
+  "기술 마케팅",
+];
 
-const emailState = atom({
-  key: 'email',
-  default: '',
-});
-
-const departmentState = atom({
-  key: 'department',
-  default: '',
-});
-
-const passwordState = atom({
-  key: 'password',
-  default: '',
-});
-
-const userState = selector({
-  key: 'userState',
-  get: ({ get }) => {
-    const userName = get(userNameState);
-    const email = get(emailState);
-    const department = get(departmentState);
-    const password = get(passwordState);
-
-    return { userName, email, department, password };
-  }
-})
 
 const RegisterPage = () => {
-  const [userName, setUserName] = useRecoilState(userNameState);
-  const [email, setEmail] = useRecoilState(emailState);
-  const [department, setDepartment] = useRecoilState(departmentState);
-  const [password, setPassword] = useRecoilState(passwordState);
-  const user = useRecoilValue(userState);
 
-  const handleSignUpSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post('/api/user/register', user);
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const [user, setUser] = useRecoilState(userState);
+  const [terms, setTerms] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const [values, setValues] = useState<State>({
-    password: '',
-    confirmPassword: '',
-    showPassword: false
-  })
+  const router = useRouter()
 
+  const { register, watch, handleSubmit, setValue, formState: { errors } } = useForm<formData>();
 
-  // ** Hook
-  const theme = useTheme()
+  const onSubmit: SubmitHandler<formData> = (data) => {
+    axios.post('/api/user/register', data)
+      .then((res) => {
+        const { accessToken, refreshToken } = res.data.result;
 
-  const handleChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [prop]: event.target.value })
-    setPassword(event.target.value)
-  }
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
-  }
-  const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
+        // Store tokens in cookies and sessionStorage
+        Cookies.set('accessToken', accessToken);
+        sessionStorage.setItem('accessToken', accessToken);
+        Cookies.set('refreshToken', refreshToken);
+        sessionStorage.setItem('refreshToken', refreshToken);
+        
+        setUser({
+          ...user,
+          username: data.username,
+          email: data.email,
+          department: data.department,
+          password: data.password
+        })
+        router.push('/pages/login');
+      }
+      )
   }
 
+  const onError = (errors: any) => {
+    console.log(errors);
+  }
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  }
 
   return (
     <Box className='content-center'>
@@ -149,19 +144,45 @@ const RegisterPage = () => {
             {/* 로고 눌렀을때 로그인 여부 확인하여 이동 */}
             <Link href='/' passHref>
               <LogoLinkStyled>
-              <Image src="/images/LogBook_Logo_horizontal.svg" alt="Logo" width={250} height={100} />
+                <Image src="/images/LogBook_Logo_horizontal.svg" alt="Logo" width={250} height={100} />
               </LogoLinkStyled>
             </Link>
           </Box>
           <Box sx={{ mb: 6 }}>
             <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-              처음 만나는 릴리즈 노트 시스템 👋
+              처음 만나는 릴리즈 노트 시스템 👋🏻
             </Typography>
             <Typography variant='body2'>릴리즈 노트를 쉽게 작성해보세요.</Typography>
           </Box>
-          <form noValidate autoComplete='off' onSubmit={handleSignUpSubmit}>
-            <TextField autoFocus fullWidth id='username' label='이름' sx={{ marginBottom: 4 }} value={userName} onChange={(e) => setUserName(e.target.value)} />
-            <TextField fullWidth type='email' label='이메일' sx={{ marginBottom: 4 }} value={email} onChange={(e) => setEmail(e.target.value)} />
+          <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit, onError)}>
+            <TextField autoFocus fullWidth id='username' label='이름' sx={{ marginBottom: 4 }}
+              {...register("username", {
+                required: '이름을 입력해주세요.',
+                minLength: {
+                  value: 2,
+                  message: "이름은 2글자 이상이어야 합니다.",
+                },
+                maxLength: {
+                  value: 10,
+                  message: "이름은 10글자 이하여야 합니다.",
+                },
+                pattern: {
+                  value: /^[가-힣a-zA-Z]+$/,
+                  message: "한글과 영문 대소문자를 사용하세요.",
+                },
+              })}
+              error={!!errors.username}
+              helperText={errors.username ? errors.username.message : ""} />
+            <TextField fullWidth type='email' label='이메일' sx={{ marginBottom: 4 }}
+              {...register("email", {
+                required: '이메일을 입력해주세요.',
+                pattern: {
+                  value: /^[a-zA-Z0-9]+(?:[-_.][a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[A-Za-z]+$/,
+                  message: "이메일 형식이 올바르지 않습니다.",
+                },
+              })}
+              error={!!errors.email}
+              helperText={errors.email ? errors.email.message : ""} />
             <FormControl fullWidth>
               <InputLabel id='form-layouts-separator-select-label'>소속 / 부서명</InputLabel>
               <Select
@@ -170,71 +191,89 @@ const RegisterPage = () => {
                 id='form-layouts-separator-select'
                 labelId='form-layouts-separator-select-label'
                 sx={{ marginBottom: 4 }}
-                value={department}
-                onChange={(e) => setDepartment(e.target.value)}
+                {...register("department")}
               >
-                <MenuItem value='소프트웨어 개발'>소프트웨어 개발</MenuItem>
-                <MenuItem value='서버/인프라 기술'>서버/인프라 기술</MenuItem>
-                <MenuItem value='데이터베이스 관리'>데이터베이스 관리</MenuItem>
-                <MenuItem value='품질 보증/테스트'>품질 보증/테스트</MenuItem>
-                <MenuItem value='사용자 경험/사용자 인터페이스 디자인'>사용자 경험/사용자 인터페이스 디자인</MenuItem>
-                <MenuItem value='IT 보안'>IT 보안</MenuItem>
-                <MenuItem value='네트워크 관리'>네트워크 관리</MenuItem>
-                <MenuItem value='프로젝트 관리'>프로젝트 관리</MenuItem>
-                <MenuItem value='기술 지원'>기술 지원</MenuItem>
-                <MenuItem value='기술 마케팅'>기술 마케팅</MenuItem>
+                {departments.map((department) => (
+                  <MenuItem key={department} value={department}>
+                    {department}
+                  </MenuItem>
+                ))}
+
               </Select>
             </FormControl>
             <FormControl fullWidth sx={{ marginBottom: 4 }}>
               <InputLabel htmlFor='auth-register-password'>비밀번호</InputLabel>
               <OutlinedInput
                 label='비밀번호'
-                value={values.password}
                 id='auth-register-password'
-                onChange={handleChange('password')}
-                type={values.showPassword ? 'text' : 'password'}
+                {...register("password", {
+                  required: '비밀번호를 입력해주세요.',
+                  minLength: {
+                    value: 8,
+                    message: "비밀번호는 8글자 이상이어야 합니다.",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "비밀번호는 20글자 이하여야 합니다.",
+                  },
+                  pattern: {
+                    value: /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/,
+                    message: "영문, 숫자, 특수문자를 포함하여 8~20자리로 입력하세요.",
+                  }
+                })}
+                type={showPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
                       edge='end'
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
+                      onClick={handleShowPassword}
                       aria-label='toggle password visibility'
                     >
-                      {values.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
+                      {showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
                     </IconButton>
                   </InputAdornment>
                 }
+                error={!!errors.password}
               />
+              {errors.password && <FormHelperText error>{errors.password.message}</FormHelperText>}
             </FormControl>
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-register-password'>비밀번호 확인</InputLabel>
               <OutlinedInput
                 label='비밀번호 확인'
-                value={values.confirmPassword}
                 id='auth-register-password'
-                onChange={handleChange('confirmPassword')}
-                type={values.showPassword ? 'text' : 'password'}
+                {...register("confirmPassword", {
+                  required: '비밀번호가 일치하지 않습니다.',
+                  minLength: 8,
+                  maxLength: 20,
+                  validate: (value: string) => {
+                    if (watch("password") !== value) {
+                      return "비밀번호가 일치하지 않습니다.";
+                    }
+                  },
+                })}
+                type={showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
                       edge='end'
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
+                      onClick={handleShowPassword}
                       aria-label='toggle password visibility'
                     >
-                      {values.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
+                      {showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
                     </IconButton>
                   </InputAdornment>
                 }
+                error={!!errors.confirmPassword}
               />
+              {errors.confirmPassword && <FormHelperText error>{errors.confirmPassword.message}</FormHelperText>}
             </FormControl>
             <FormControlLabel
-              control={<Checkbox />}
+              control={<Checkbox onChange={(event) => setTerms(event.target.checked)} checked={terms} />}
               label={
                 <Fragment>
                   <Link href='/' passHref>
-                    <LinkStyled onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}>
+                    <LinkStyled onClick={(event: MouseEvent<HTMLElement>) => event.preventDefault()}>
                       이용약관
                     </LinkStyled>
                   </Link>
@@ -242,8 +281,8 @@ const RegisterPage = () => {
                 </Fragment>
               }
             />
-            <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}>
-              Sign up
+            <Button fullWidth size='large' type='submit' variant='contained' disabled={!terms} sx={{ marginBottom: 7 }}>
+              회원가입
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
               <Typography variant='body2' sx={{ marginRight: 2 }}>

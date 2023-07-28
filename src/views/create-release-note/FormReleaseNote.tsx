@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import Divider from '@mui/material/Divider';
 import FormContent from './FormContent';
 
-import { handleSave, handleDelete } from 'src/views/create-release-note/FormReleaseNoteActions';
+import { handleSave, handleDelete } from './FormReleaseNoteActions';
 
 import { releaseNoteState } from 'src/views/create-release-note/recoil/atoms';
 
