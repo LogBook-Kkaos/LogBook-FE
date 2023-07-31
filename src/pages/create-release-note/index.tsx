@@ -13,7 +13,6 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 const CreateReleaseNote = () => {
   return (
-    // <DatePickerWrapper>
       <Box
         sx={{
           display: 'flex',
@@ -27,7 +26,6 @@ const CreateReleaseNote = () => {
           </Grid>
         </Grid>
       </Box>
-    // </DatePickerWrapper>
   )
 }
 

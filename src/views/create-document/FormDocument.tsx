@@ -73,19 +73,18 @@ const FormDocument = () => {
         <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>Title</Typography>
       </Box>
       <Box sx={{ minWidth: 38, display: 'flex', justifyContent: 'left', p:'1.25rem'}}>
-      <TextField
-          id = "document_title"
-          label="기술 노트 제목"
-          value={title}
-          onChange={handleTitleChange}
-          variant="outlined"
-          fullWidth
-          InputProps={{ 
-            inputProps: { 'aria-label': '제목 입력창' }}
-        }
-        />
+        <TextField
+            id = "document_title"
+            label="기술 노트 제목"
+            value={title}
+            onChange={handleTitleChange}
+            variant="outlined"
+            fullWidth
+            InputProps={{ 
+              inputProps: { 'aria-label': '제목 입력창' }}
+          }
+          />
       </Box>
-
       <Divider flexItem/>
       <Box sx={{ minWidth: 38, display: 'flex', justifyContent: 'left', pl:'1.25rem' }}>
         <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>Content</Typography>

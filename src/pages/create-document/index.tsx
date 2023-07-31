@@ -23,13 +23,9 @@ const CreateDocument = () => {
           alignItems: 'center',
         }}
       >
-        <Grid container sx={{ maxWidth: '75%' }}>
-          <Grid item>
-            <Card>
-              <FormDocument/>
-            </Card>
-          </Grid>
-        </Grid>
+        <Card>
+          <FormDocument/>
+        </Card>
       </Box>
     </DatePickerWrapper>
   )
