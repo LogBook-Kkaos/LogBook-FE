@@ -29,4 +29,6 @@ const CreateReleaseNote = () => {
   )
 }
 
+
 export default CreateReleaseNote;
+

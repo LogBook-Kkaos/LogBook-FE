@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 export const Category = {
+  General: "General",
   Feature: "Feature",
   Changed: "Changed",
   Deprecated: "Deprecated",
@@ -11,6 +12,7 @@ export const Category = {
 export type CategoryType = typeof Category[keyof typeof Category];
 
 const categoryColors: Record<CategoryType, string> = {
+  [Category.General]: "#CECECE",
   [Category.Feature]: "#C7E3FE",
   [Category.Changed]: "#FFF8B6",
   [Category.Deprecated]: "#FFC7C7",
@@ -18,6 +20,7 @@ const categoryColors: Record<CategoryType, string> = {
 };
 
 const categoryTextColors: Record<CategoryType, string> = {
+  [Category.General]: "#797979",
   [Category.Feature]: "#41A3FF",
   [Category.Changed]: "#ECD200",
   [Category.Deprecated]: "#FF5454",

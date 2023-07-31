@@ -24,7 +24,15 @@ export type NavSectionTitle = {
   subject?: string
 }
 
-export type VerticalNavItemsType = (NavLink | NavSectionTitle)[]
+export type NavPopup = {
+  popupTitle: string
+  disabled?: boolean
+  icon?: string | string[] | ReactNode
+  badgeContent?: string
+  badgeColor?: 'default' | 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info'
+}
+
+export type VerticalNavItemsType = (NavLink | NavSectionTitle | NavPopup)[]
 
 export type LayoutProps = {
   hidden: boolean
