@@ -32,7 +32,7 @@ import FileRefreshOutline from 'mdi-material-ui/FileRefreshOutline'
 
 
 // ** Components Imports
-import ProjectTable from 'src/views/project-detail/ProjectTable'
+import ProjectTable from 'src/views/project-detail/TabReleaseNote'
 
 // ** Demo Tabs Imports
 import TabInfo from 'src/views/account-settings/TabInfo'
@@ -61,13 +61,6 @@ const TabName = styled('span')(({ theme }) => ({
 const ProjectDetail = () => {
 
 
-  const router = useRouter();
-
-  const handleCreateReleaseNote = () => {
-    console.log('create release note')
-    router.push('/create-release-note')
-  }
-
   const [value, setValue] = useState<string>('issue')
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
@@ -85,14 +78,11 @@ const ProjectDetail = () => {
       <Grid item xs={12}>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid>
-            <Button variant="contained" color="primary" style={{ marginRight: 16, borderRadius: 10 }} onClick={handleCreateReleaseNote}>
-              릴리즈 노트 작성하기
-            </Button>
-            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8 }}>
-              <Cog />
-            </IconButton>
           </Grid>
           <Grid>
+            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
+              <Cog />
+            </IconButton>
             <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
               <Sort />
             </IconButton>
