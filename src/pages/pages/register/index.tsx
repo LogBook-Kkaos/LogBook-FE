@@ -52,6 +52,7 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
+import { set } from 'nprogress'
 
 interface formData {
   userName: string
@@ -59,6 +60,13 @@ interface formData {
   department: string
   password: string
   confirmPassword: string
+}
+
+interface ModalInfo {
+  open: boolean;
+  message: string;
+  messageDesc: string;
+  color: string;
 }
 
 // ** Styled Components
@@ -106,7 +114,7 @@ const RegisterPage = () => {
   const [user, setUser] = useRecoilState(userState);
   const [terms, setTerms] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [modalInfo, setModalInfo] = useState<ModalInfo>({ open: false, message: '', messageDesc: '', color: '' });
 
   const router = useRouter()
 
@@ -130,10 +138,22 @@ const RegisterPage = () => {
           department: data.department,
           password: data.password
         })
-        setOpenModal(true);
+        setModalInfo({ open: true, message: `${user.userName}님, Logbook에 오신 것을 환영합니다!`, messageDesc: '로그인 페이지로 이동하여 로그인하세요.', color: 'success' });
         setTimeout(() => {
           router.push('/pages/login');
         }, 3000);
+      })
+      .catch((error) => {
+        if (error.response.status === 409) {
+          // 에러 메시지 1 (서버에서 반환된 문제로 유의미한 메시지 추가 필요)
+          setModalInfo({ open: true, message: '이미 존재하는 회원입니다.', messageDesc: '다른 이메일로 시도해주세요.', color: 'error' });
+        } else if (error.response.status === 500) {
+          // 에러 메시지 2
+          setModalInfo({ open: true, message: '잠시 후 다시 시도하세요.', messageDesc: '서버 내부 오류로 인해 회원가입에 실패했습니다. 잠시 후 다시 시도해주세요.', color: 'error' });
+        } else {
+          // 다른 에러 코드 발생 시
+          setModalInfo({ open: true, message: '잠시 후 다시 시도하세요.', messageDesc: '알 수 없는 오류로 인해 회원가입에 실패했습니다. 잠시 후 다시 시도해주세요.', color: 'error' });
+        }
       })
   }
 
@@ -333,15 +353,15 @@ const RegisterPage = () => {
       </Card>
 
       <Dialog
-        open={openModal}
+        open={modalInfo.open}
         onClose={() => { }}
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
       >
-        <DialogTitle id='alert-dialog-title'>{`${user.userName}님, Logbook에 오신 것을 환영합니다!`}</DialogTitle>
+        <DialogTitle id='alert-dialog-title'>{modalInfo.message}</DialogTitle>
         <DialogContent>
-          <DialogContentText id='alert-dialog-description'>
-            로그인 페이지로 이동하여 계정으로 로그인하세요.
+          <DialogContentText id='alert-dialog-description' style={{color: modalInfo.color }}>
+            {modalInfo.messageDesc}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
