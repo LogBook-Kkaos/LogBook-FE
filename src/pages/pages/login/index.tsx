@@ -50,7 +50,7 @@ import { set } from 'nprogress'
 
 // ** Recoil Import
 import { useRecoilState } from 'recoil'
-import { tokensState } from 'src/recoil/tokens/atoms'
+import { isAuthenticatedState, tokensState } from 'src/recoil/auth/atoms'
 
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
@@ -93,6 +93,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [modalInfo, setModalInfo] = useState<ModalInfo>({ open: false, message: '', messageDesc: '', color: '' });
   const [tokens, setTokens] = useRecoilState(tokensState);
+  const [isAuthenticated, setIsAuthenticated] = useRecoilState(isAuthenticatedState);
 
   // ** Hook
   const theme = useTheme()
@@ -133,8 +134,12 @@ const LoginPage = () => {
           color: 'success'
         });
 
-        router.push('/dashboard');
-  
+        setIsAuthenticated(true);
+
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 1000);
+
       }, (error) => {
         setModalInfo({
           open: true,
@@ -149,13 +154,21 @@ const LoginPage = () => {
     <Box className='content-center'>
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(7, 9, 7)} !important` }}>
-          <Box sx={{ mb:3, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {/* 로고 눌렀을때 로그인 여부 확인하여 이동 */}
-          <Link href='/' passHref>
-            <LogoLinkStyled>
-            <Image src="/images/LogBook_Logo_horizontal.svg" alt="Logo" width={250} height={100} />
-            </LogoLinkStyled>
-          </Link>
+          <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            onClick={
+              () => {
+                if (isAuthenticated) {
+                  router.push('/dashboard')
+                } else {
+                  router.push('/')
+                }
+              }
+            }>
+            <Link href='/' passHref>
+              <LogoLinkStyled>
+                <Image src="/images/LogBook_Logo_horizontal.svg" alt="Logo" width={250} height={100} />
+              </LogoLinkStyled>
+            </Link>
           </Box>
           <Box sx={{ mb: 6 }}>
             <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
@@ -249,7 +262,7 @@ const LoginPage = () => {
       >
         <DialogTitle id='alert-dialog-title'>{modalInfo.message}</DialogTitle>
         <DialogContent>
-          <DialogContentText id='alert-dialog-description' style={{color: modalInfo.color }}>
+          <DialogContentText id='alert-dialog-description' style={{ color: modalInfo.color }}>
             {modalInfo.messageDesc}
           </DialogContentText>
         </DialogContent>
