@@ -126,28 +126,12 @@ const LoginPage = () => {
         router.push('/dashboard');
   
       }, (error) => {
-        if (error.response.status === 404) {
-          setModalInfo({
-            open: true,
-            message: '로그인 실패',
-            messageDesc: '존재하지 않는 사용자입니다.',
-            color: 'error'
-          });
-        } else if (error.response.status === 400) {
-          setModalInfo({
-            open: true,
-            message: '로그인 실패',
-            messageDesc: '비밀번호가 일치하지 않습니다.',
-            color: 'error'
-          });
-        } else if (error.response.status === 500) {
-          setModalInfo({
-            open: true,
-            message: '로그인 실패',
-            messageDesc: '서버에 오류가 발생하였습니다.',
-            color: 'error'
-          });
-      }
+        setModalInfo({
+          open: true,
+          message: 'ERROR: ' + error.response.data.result.httpStatus + ' ' + error.response.data.result.code,
+          messageDesc: error.response.data.result.message,
+          color: 'error'
+        });
       })
   }
 
