@@ -9,6 +9,7 @@ import Autocomplete, { AutocompleteRenderOptionState, createFilterOptions } from
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import ListItem from '@mui/material/ListItem'
+import Switch from '@mui/material/Switch'
 import InputAdornment from '@mui/material/InputAdornment'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 
@@ -42,7 +43,6 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
   }
 }))
 
-// ** Styled component for the title in MenuItems
 const ListTitle = styled(Typography)<TypographyProps>(({ theme }) => ({
   fontWeight: 600,
   flex: '1 1 100%',
@@ -53,7 +53,6 @@ const ListTitle = styled(Typography)<TypographyProps>(({ theme }) => ({
   marginBottom: theme.spacing(0.75)
 }))
 
-// ** Styled component for the subtitle in MenuItems
 const ListSubtitle = styled(Typography)<TypographyProps>({
   flex: '1 1 100%',
   overflow: 'hidden',
@@ -61,12 +60,16 @@ const ListSubtitle = styled(Typography)<TypographyProps>({
   textOverflow: 'ellipsis'
 })
 
+const label = { inputProps: { 'aria-label': 'Switch demo' } };
+
 const AddProjectPopup = (props: AddProjectPopupProps) => {
   const { isOpen, onClose } = props
   
   const [projectName, setProjectName] = useState('')
   const [projectDescription, setProjectDescription] = useState('')
+  const [isPublic, setIsPublic] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
+  // members에 로그인한 유저(본인) default로 추가 필요
   const [members, setMembers] = useState<UserInfo[]>([])
   const [allUsers, setAllUsers] = useState<UserInfo[]>([])
 
@@ -77,6 +80,10 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
   const handleProjectDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProjectDescription(event.target.value)
   }
+
+  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsPublic(event.target.checked)
+  };
 
   const handleInvitation = (event: React.MouseEvent, option: UserInfo) => {
     event.stopPropagation()
@@ -244,7 +251,15 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
         </Grid> 
       </DialogContent>
 
-      <DialogActions sx={{pr:7, pb:7}}>
+      <DialogActions sx={{pr:7, pb:7, justifyContent: 'space-between'}}>
+        <Box sx={{display:'flex', alignItems:'center'}}>
+          <Switch
+            {...label}
+            checked={isPublic}
+            onChange={handleSwitchChange}
+          />
+          <Typography>공개 프로젝트</Typography>
+        </Box>
         <Button variant="contained" onClick={handleClickAddButton}>프로젝트 생성</Button>
       </DialogActions>
 
