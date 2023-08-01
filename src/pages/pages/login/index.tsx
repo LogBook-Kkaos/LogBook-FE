@@ -1,6 +1,6 @@
 // ** React Imports
 import { ChangeEvent, MouseEvent, ReactNode, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -27,6 +27,11 @@ import { styled, useTheme } from '@mui/material/styles'
 import MuiCard, { CardProps } from '@mui/material/Card'
 import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel'
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
 
 // ** Icons Imports
 import Google from 'mdi-material-ui/Google'
@@ -41,6 +46,7 @@ import themeConfig from 'src/configs/themeConfig'
 
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
+import { set } from 'nprogress'
 
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
@@ -66,16 +72,26 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
   }
 }))
 
+interface formData {
+  email: string
+  password: string
+}
+
+interface ModalInfo {
+  open: boolean
+  message: string
+  messageDesc: string
+  color: string
+}
 const LoginPage = () => {
   // ** State
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm()
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<formData>()
   const [showPassword, setShowPassword] = useState(false)
+  const [modalInfo, setModalInfo] = useState<ModalInfo>({ open: false, message: '', messageDesc: '', color: '' });
 
   // ** Hook
   const theme = useTheme()
   const router = useRouter()
-
-  const passwordValue = watch('password');
 
   useEffect(() => {
     register('email', { required: true })
@@ -90,25 +106,49 @@ const LoginPage = () => {
     event.preventDefault()
   }
 
-  const onSubmit = async (data: any) => {
-    try {
-      const response = await axios.post('/api/users/login', {
-        email: data.email,
-        password: data.password,
-      });
+  const onSubmit: SubmitHandler<formData> = (data) => {
+    axios.post('/api/users/login', data)
+      .then((response) => {
+        const { accessToken, refreshToken } = response.data.result;
 
-      const { accessToken, refreshToken } = response.data.result;
+        Cookies.set('accessToken', accessToken);
+        sessionStorage.setItem('accessToken', accessToken);
+        Cookies.set('refreshToken', refreshToken);
+        sessionStorage.setItem('refreshToken', refreshToken);
 
-      Cookies.set('accessToken', accessToken);
-      sessionStorage.setItem('accessToken', accessToken);
-      Cookies.set('refreshToken', refreshToken);
-      sessionStorage.setItem('refreshToken', refreshToken);
-      
+        setModalInfo({
+          open: true,
+          message: '로그인 성공',
+          messageDesc: '로그인에 성공하였습니다.',
+          color: 'success'
+        });
 
-    } catch (error) {
-      console.error(error);
-    }
-
+        router.push('/dashboard');
+  
+      }, (error) => {
+        if (error.response.status === 404) {
+          setModalInfo({
+            open: true,
+            message: '로그인 실패',
+            messageDesc: '존재하지 않는 사용자입니다.',
+            color: 'error'
+          });
+        } else if (error.response.status === 400) {
+          setModalInfo({
+            open: true,
+            message: '로그인 실패',
+            messageDesc: '비밀번호가 일치하지 않습니다.',
+            color: 'error'
+          });
+        } else if (error.response.status === 500) {
+          setModalInfo({
+            open: true,
+            message: '로그인 실패',
+            messageDesc: '서버에 오류가 발생하였습니다.',
+            color: 'error'
+          });
+      }
+      })
   }
 
   return (
@@ -207,6 +247,24 @@ const LoginPage = () => {
           </form>
         </CardContent>
       </Card>
+      <Dialog
+        open={modalInfo.open}
+        onClose={() => { }}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{modalInfo.message}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description' style={{color: modalInfo.color }}>
+            {modalInfo.messageDesc}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setModalInfo({ open: false, message: '', messageDesc: '', color: '' })} color='primary' autoFocus>
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }
