@@ -1,10 +1,15 @@
 // ** React Imports
-import { ChangeEvent, MouseEvent, ReactNode, useState } from 'react'
+import { ChangeEvent, MouseEvent, ReactNode, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 // ** Next Imports
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+
+// ** HTTP Client
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
 // ** MUI Components
 import Box from '@mui/material/Box'
@@ -37,11 +42,6 @@ import themeConfig from 'src/configs/themeConfig'
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
-interface State {
-  password: string
-  showPassword: boolean
-}
-
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
@@ -68,25 +68,47 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
 
 const LoginPage = () => {
   // ** State
-  const [values, setValues] = useState<State>({
-    password: '',
-    showPassword: false
-  })
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm()
+  const [showPassword, setShowPassword] = useState(false)
 
   // ** Hook
   const theme = useTheme()
   const router = useRouter()
 
-  const handleChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
+  const passwordValue = watch('password');
+
+  useEffect(() => {
+    register('email', { required: true })
+    register('password', { required: true })
+  }, [register])
 
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
+    setShowPassword(!showPassword)
   }
 
   const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
+  }
+
+  const onSubmit = async (data: any) => {
+    try {
+      const response = await axios.post('/api/users/login', {
+        email: data.email,
+        password: data.password,
+      });
+
+      const { accessToken, refreshToken } = response.data.result;
+
+      Cookies.set('accessToken', accessToken);
+      sessionStorage.setItem('accessToken', accessToken);
+      Cookies.set('refreshToken', refreshToken);
+      sessionStorage.setItem('refreshToken', refreshToken);
+      
+
+    } catch (error) {
+      console.error(error);
+    }
+
   }
 
   return (
@@ -107,16 +129,15 @@ const LoginPage = () => {
             </Typography>
             <Typography variant='body2'>릴리즈 노트 서비스를 이용하려면 로그인해주세요.</Typography>
           </Box>
-          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='email' label='이메일' sx={{ marginBottom: 4 }} />
+          <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+            <TextField autoFocus fullWidth id='email' label='이메일' sx={{ marginBottom: 4 }} {...register('email')} />
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-login-password'>비밀번호</InputLabel>
               <OutlinedInput
                 label='Password'
-                value={values.password}
                 id='auth-login-password'
-                onChange={handleChange('password')}
-                type={values.showPassword ? 'text' : 'password'}
+                type={showPassword ? 'text' : 'password'}
+                {...register('password')}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
@@ -125,7 +146,7 @@ const LoginPage = () => {
                       onMouseDown={handleMouseDownPassword}
                       aria-label='toggle password visibility'
                     >
-                      {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                      {showPassword ? <EyeOutline /> : <EyeOffOutline />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -144,8 +165,7 @@ const LoginPage = () => {
               size='large'
               variant='contained'
               sx={{ marginBottom: 7 }}
-              // 로그인 요청 api 추가 필요
-              onClick={() => router.push('/dashboard')}
+              type='submit'
             >
               로그인
             </Button>
