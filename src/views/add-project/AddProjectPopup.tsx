@@ -17,6 +17,7 @@ import Magnify from 'mdi-material-ui/Magnify'
 
 // ** HTTP Client
 import axios from 'axios'
+import MemberRoleButton, { MemberRole } from './MemberRoleButton'
 
 interface AddProjectPopupProps {
    isOpen: boolean
@@ -26,6 +27,12 @@ interface AddProjectPopupProps {
 interface UserInfo {
   userName: string
   email: string
+}
+
+interface MemberInfo {
+  userName: string
+  email: string
+  role: MemberRole
 }
 
 interface SearchResults {
@@ -70,7 +77,7 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
   const [isPublic, setIsPublic] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   // members에 로그인한 유저(본인) default로 추가 필요
-  const [members, setMembers] = useState<UserInfo[]>([])
+  const [members, setMembers] = useState<MemberInfo[]>([])
   const [allUsers, setAllUsers] = useState<UserInfo[]>([])
 
   const handleProjectNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +97,12 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
     setAllUsers((prevAllUsers) =>
       prevAllUsers.filter((user) => user.userName !== option.userName)
     )
-    setMembers((prevMembers) => [...prevMembers, option])
+    const newMember: MemberInfo = {
+      userName: option.userName,
+      email: option.email,
+      role: MemberRole.Editor,
+    }
+    setMembers((prevMembers) => [...prevMembers, newMember])
   }
 
   const handleDeleteButtonClick = (event: React.MouseEvent) => {
@@ -109,10 +121,19 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
     })
   }
 
-  // 권한 변경 handler로 변경필요
-  const handleSaveMember = () => {
-    
-  }
+  const handleMemberRole = (index: number) => {
+    setMembers((prevMembers) => {
+      const updatedMembers = [...prevMembers];
+      const currentRole = updatedMembers[index].role;
+  
+      updatedMembers[index].role =
+        currentRole === MemberRole.Editor
+          ? MemberRole.Viewer
+          : MemberRole.Editor;
+  
+      return updatedMembers;
+    });
+  };
   
   const handleClickAddButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     // 프로젝트 생성 api
@@ -223,18 +244,14 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
           
           {members.map((member, index) => (
           <>
-          <Grid item xs={8}>
+          <Grid item xs={7}>
             <Typography>{member.userName}</Typography>
           </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant="outlined"
-              // onClick={() => onSubmit(title)}
-              color="primary"
-              sx={{ mr: 3, ml: 12 }}
-            >
-            저장
-            </Button>
+          <Grid item xs={5}>
+            <MemberRoleButton
+              role={member.role}
+              onClick={() => handleMemberRole(index)}
+            />
             <Button
               variant="outlined"
               color="error"
