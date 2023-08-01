@@ -48,6 +48,10 @@ import themeConfig from 'src/configs/themeConfig'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 import { set } from 'nprogress'
 
+// ** Recoil Import
+import { useRecoilState } from 'recoil'
+import { tokensState } from 'src/recoil/tokens/atoms'
+
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
@@ -88,6 +92,7 @@ const LoginPage = () => {
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<formData>()
   const [showPassword, setShowPassword] = useState(false)
   const [modalInfo, setModalInfo] = useState<ModalInfo>({ open: false, message: '', messageDesc: '', color: '' });
+  const [tokens, setTokens] = useRecoilState(tokensState);
 
   // ** Hook
   const theme = useTheme()
@@ -109,12 +114,17 @@ const LoginPage = () => {
   const onSubmit: SubmitHandler<formData> = (data) => {
     axios.post('/api/users/login', data)
       .then((response) => {
-        const { accessToken, refreshToken } = response.data.result;
+        const receivedTokens = {
+          accessToken: response.data.result.accessToken,
+          refreshToken: response.data.result.refreshToken
+        }
 
-        Cookies.set('accessToken', accessToken);
-        sessionStorage.setItem('accessToken', accessToken);
-        Cookies.set('refreshToken', refreshToken);
-        sessionStorage.setItem('refreshToken', refreshToken);
+        setTokens(receivedTokens);
+
+        Cookies.set('accessToken', receivedTokens.accessToken);
+        sessionStorage.setItem('accessToken', receivedTokens.accessToken);
+        Cookies.set('refreshToken', receivedTokens.refreshToken);
+        sessionStorage.setItem('refreshToken', receivedTokens.refreshToken);
 
         setModalInfo({
           open: true,
