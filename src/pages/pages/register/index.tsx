@@ -365,7 +365,16 @@ const RegisterPage = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => router.push('/pages/login')} color='primary' autoFocus>
+          <Button onClick={
+            () => {
+              setModalInfo({
+                open: false,
+                message: '',
+                messageDesc: '',
+                color: ''
+              })
+            }
+          } color='primary' autoFocus>
             확인
           </Button>
         </DialogActions>
