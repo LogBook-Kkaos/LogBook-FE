@@ -138,7 +138,7 @@ const RegisterPage = () => {
           department: data.department,
           password: data.password
         })
-        setModalInfo({ open: true, message: `${user.userName}님, Logbook에 오신 것을 환영합니다!`, messageDesc: '로그인 페이지로 이동하여 로그인하세요.', color: 'success' });
+        setModalInfo({ open: true, message: `${data.userName}님, Logbook에 오신 것을 환영합니다!`, messageDesc: '로그인 페이지로 이동하여 로그인하세요.', color: 'success' });
         setTimeout(() => {
           router.push('/pages/login');
         }, 3000);
