@@ -17,8 +17,6 @@ import { VerticalNavItemsType } from 'src/@core/layouts/types'
 import Drawer from './Drawer'
 import VerticalNavItems from './VerticalNavItems'
 import VerticalNavHeader from './VerticalNavHeader'
-import NotificationPopup from '../../shared-components/NotificationPopup'
-import ChattingPopup from '../../shared-components/ChattingPopup'
 
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
@@ -144,8 +142,7 @@ const Navigation = (props: Props) => {
                 />
               </List>
             )}
-            <NotificationPopup/>
-            <ChattingPopup/>
+            
           </Box>
         </ScrollWrapper>
       </Box>

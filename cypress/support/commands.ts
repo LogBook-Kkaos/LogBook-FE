@@ -37,8 +37,3 @@ import '@testing-library/cypress/add-commands';
 //     }
 //   }
 // }
-<<<<<<< HEAD
-
-import '@testing-library/cypress/add-commands';
-=======
->>>>>>> develop
