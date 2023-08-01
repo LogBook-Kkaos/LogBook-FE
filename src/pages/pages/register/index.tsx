@@ -35,6 +35,12 @@ import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormCo
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import FormHelperText from '@mui/material/FormHelperText'
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+
 
 // ** Icons Imports
 import Google from 'mdi-material-ui/Google'
@@ -48,7 +54,7 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 interface formData {
-  username: string
+  userName: string
   email: string
   department: string
   password: string
@@ -100,13 +106,14 @@ const RegisterPage = () => {
   const [user, setUser] = useRecoilState(userState);
   const [terms, setTerms] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const router = useRouter()
 
   const { register, watch, handleSubmit, setValue, formState: { errors } } = useForm<formData>();
 
   const onSubmit: SubmitHandler<formData> = (data) => {
-    axios.post('/api/user/register', data)
+    axios.post('/api/users/register', data)
       .then((res) => {
         const { accessToken, refreshToken } = res.data.result;
 
@@ -115,17 +122,19 @@ const RegisterPage = () => {
         sessionStorage.setItem('accessToken', accessToken);
         Cookies.set('refreshToken', refreshToken);
         sessionStorage.setItem('refreshToken', refreshToken);
-        
+
         setUser({
           ...user,
-          username: data.username,
+          userName: data.userName,
           email: data.email,
           department: data.department,
           password: data.password
         })
-        router.push('/pages/login');
-      }
-      )
+        setOpenModal(true);
+        setTimeout(() => {
+          router.push('/pages/login');
+        }, 3000);
+      })
   }
 
   const onError = (errors: any) => {
@@ -155,8 +164,8 @@ const RegisterPage = () => {
             <Typography variant='body2'>릴리즈 노트를 쉽게 작성해보세요.</Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit, onError)}>
-            <TextField autoFocus fullWidth id='username' label='이름' sx={{ marginBottom: 4 }}
-              {...register("username", {
+            <TextField autoFocus fullWidth id='userName' label='이름' sx={{ marginBottom: 4 }}
+              {...register("userName", {
                 required: '이름을 입력해주세요.',
                 minLength: {
                   value: 2,
@@ -171,8 +180,8 @@ const RegisterPage = () => {
                   message: "한글과 영문 대소문자를 사용하세요.",
                 },
               })}
-              error={!!errors.username}
-              helperText={errors.username ? errors.username.message : ""} />
+              error={!!errors.userName}
+              helperText={errors.userName ? errors.userName.message : ""} />
             <TextField fullWidth type='email' label='이메일' sx={{ marginBottom: 4 }}
               {...register("email", {
                 required: '이메일을 입력해주세요.',
@@ -322,7 +331,29 @@ const RegisterPage = () => {
           </form>
         </CardContent>
       </Card>
+
+      <Dialog
+        open={openModal}
+        onClose={() => { }}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{`${user.userName}님, Logbook에 오신 것을 환영합니다!`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            로그인 페이지로 이동하여 계정으로 로그인하세요.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => router.push('/pages/login')} color='primary' autoFocus>
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </Box>
+
+
   )
 }
 
