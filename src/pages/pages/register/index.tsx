@@ -9,7 +9,6 @@ import { useRouter } from 'next/router'
 
 // ** HTTP Client
 import axios from 'axios'
-import Cookies from 'js-cookie'
 
 // ** Recoil Import
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -109,14 +108,12 @@ const RegisterPage = () => {
   const { register, watch, handleSubmit, setValue, formState: { errors } } = useForm<formData>();
 
   const onSubmit: SubmitHandler<formData> = (data) => {
-    axios.post('/api/user/register', data)
+    axios.post('/api/users/register', data)
       .then((res) => {
         const { accessToken, refreshToken } = res.data.result;
 
-        // Store tokens in cookies and sessionStorage
-        Cookies.set('accessToken', accessToken);
+        // Store tokens in sessionStorage
         sessionStorage.setItem('accessToken', accessToken);
-        Cookies.set('refreshToken', refreshToken);
         sessionStorage.setItem('refreshToken', refreshToken);
         
         setUser({
