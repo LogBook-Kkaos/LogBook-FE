@@ -1,18 +1,21 @@
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
+import Card from '@mui/material/Card';
 
 // ** Styled Component
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
 // ** Demo Components Imports
-import FormReleaseNote from 'src/views/create-release-note/FormReleaseNote'
+import FormDocument from 'src/views/create-document/FormDocument'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
 
-const CreateReleaseNote = () => {
+
+const CreateDocument = () => {
   return (
+    <DatePickerWrapper>
       <Box
         sx={{
           display: 'flex',
@@ -20,15 +23,12 @@ const CreateReleaseNote = () => {
           alignItems: 'center',
         }}
       >
-        <Grid container sx={{ maxWidth: '75%' }}>
-          <Grid item>
-            <FormReleaseNote />
-          </Grid>
-        </Grid>
+        <Card>
+          <FormDocument/>
+        </Card>
       </Box>
+    </DatePickerWrapper>
   )
 }
 
-
-export default CreateReleaseNote;
-
+export default CreateDocument;
