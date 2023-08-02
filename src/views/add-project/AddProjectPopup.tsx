@@ -136,8 +136,21 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
   };
   
   const handleClickAddButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-    // 프로젝트 생성 api
-    onClose();
+    axios.post('/api/projects',
+    {
+        projectName: projectName,
+        projectDescription: projectDescription,
+        isPublic: isPublic,
+        memberCount: members.length
+    })
+    .then(function(response) {
+      console.log(response);
+      onClose();
+    })
+    .catch(function (error) {
+      console.error('프로젝트 생성 실패:', error);
+      //프로젝트 생성 실패 Dialog
+    });
   }
 
   const searchResults = (props: React.HTMLAttributes<HTMLLIElement>, option: UserInfo, state: AutocompleteRenderOptionState) => (
