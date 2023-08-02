@@ -32,7 +32,7 @@ import FileRefreshOutline from 'mdi-material-ui/FileRefreshOutline'
 
 
 // ** Components Imports
-import ProjectTable from 'src/views/project-detail/TabReleaseNote'
+import TabReleaseNote from 'src/views/project-detail/TabReleaseNote'
 
 // ** Demo Tabs Imports
 import TabInfo from 'src/views/account-settings/TabInfo'
