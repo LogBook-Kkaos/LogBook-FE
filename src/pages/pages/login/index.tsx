@@ -83,14 +83,14 @@ interface formData {
 interface ModalInfo {
   open: boolean
   message: string
-  messageDesc: string
+  messageDescription: string
   color: string
 }
 const LoginPage = () => {
   // ** State
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<formData>()
   const [showPassword, setShowPassword] = useState(false)
-  const [modalInfo, setModalInfo] = useState<ModalInfo>({ open: false, message: '', messageDesc: '', color: '' });
+  const [modalInfo, setModalInfo] = useState<ModalInfo>({ open: false, message: '', messageDescription: '', color: '' });
   const [tokens, setTokens] = useRecoilState(tokensState);
   const [isAuthenticated, setIsAuthenticated] = useRecoilState(isAuthenticatedState);
 
@@ -127,7 +127,7 @@ const LoginPage = () => {
         setModalInfo({
           open: true,
           message: '로그인 성공',
-          messageDesc: '로그인에 성공하였습니다.',
+          messageDescription: '로그인에 성공하였습니다.',
           color: 'success'
         });
 
@@ -141,7 +141,7 @@ const LoginPage = () => {
         setModalInfo({
           open: true,
           message: 'ERROR: ' + error.response.data.result.httpStatus + ' ' + error.response.data.result.code,
-          messageDesc: error.response.data.result.message,
+          messageDescription: error.response.data.result.message,
           color: 'error'
         });
       })
@@ -260,11 +260,11 @@ const LoginPage = () => {
         <DialogTitle id='alert-dialog-title'>{modalInfo.message}</DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description' style={{ color: modalInfo.color }}>
-            {modalInfo.messageDesc}
+            {modalInfo.messageDescription}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setModalInfo({ open: false, message: '', messageDesc: '', color: '' })} color='primary' autoFocus>
+          <Button onClick={() => setModalInfo({ open: false, message: '', messageDescription: '', color: '' })} color='primary' autoFocus>
             확인
           </Button>
         </DialogActions>
