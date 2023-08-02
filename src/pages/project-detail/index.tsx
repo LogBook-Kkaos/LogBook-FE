@@ -58,7 +58,15 @@ const TabName = styled('span')(({ theme }) => ({
 }))
 
 
+
 const ProjectDetail = () => {
+
+  const router = useRouter();
+
+  const handleCreateReleaseNote = () => {
+    console.log('create release note')
+    router.push('/create-release-note')
+  }
 
 
   const [value, setValue] = useState<string>('issue')
@@ -106,49 +114,65 @@ const ProjectDetail = () => {
       </Grid>
       <Grid item xs={12}>
         <TabContext value={value}>
-          <TabList
-            onChange={handleChange}
-            aria-label='project-detail tabs'
-            sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
-          >
-            <Tab
-              value='issue'
-              label={
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <LightbulbOnOutline />
-                  <TabName>이슈</TabName>
-                </Box>
-              }
-            />
-            <Tab
-              value='release-note'
-              label={
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <NoteAlertOutline />
-                  <TabName>릴리즈 노트</TabName>
-                </Box>
-              }
-            />
-            <Tab
-              value='document'
-              label={
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <FileRefreshOutline />
-                  <TabName>기술 문서</TabName>
-                </Box>
-              }
-            />
-          </TabList>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+              <TabList
+                onChange={handleChange}
+                aria-label='project-detail tabs'
+                sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}`, flexGrow: 1 }}
+              >
+                <Tab
+                  value='issue'
+                  label={
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <LightbulbOnOutline />
+                      <TabName>이슈</TabName>
+                    </Box>
+                  }
+                />
+                <Tab
+                  value='release-note'
+                  label={
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <NoteAlertOutline />
+                      <TabName>릴리즈 노트</TabName>
+                    </Box>
+                  }
+                />
+                <Tab
+                  value='document'
+                  label={
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <FileRefreshOutline />
+                      <TabName>기술 문서</TabName>
+                    </Box>
+                  }
+                />
+              </TabList>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{
+                  mt: 1,
+                  mb: 1,
+                  borderRadius: 1,
+                  marginLeft: 'auto'
+                }}
+                onClick={handleCreateReleaseNote}
+              >
+                릴리즈 노트 작성하기
+              </Button>
+            </Box>
 
-          <TabPanel sx={{ p: 0 }} value='issue'>
-            <TabAccount />
-          </TabPanel>
-          <TabPanel sx={{ p: 0 }} value='release-note'>
-            <ProjectTable />
-          </TabPanel>
-          <TabPanel sx={{ p: 0 }} value='document'>
-            <TabInfo />
-          </TabPanel>
+
+            <TabPanel sx={{ p: 0 }} value='issue'>
+              <TabAccount />
+            </TabPanel>
+            <TabPanel sx={{ p: 0 }} value='release-note'>
+              <TabReleaseNote />
+            </TabPanel>
+            <TabPanel sx={{ p: 0 }} value='document'>
+              <TabInfo />
+            </TabPanel>
         </TabContext>
       </Grid>
     </Grid>

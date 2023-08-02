@@ -39,22 +39,13 @@ const rows = [
 
 const TabReleaseNote = () => {
 
-  const router = useRouter();
 
-  const handleCreateReleaseNote = () => {
-    console.log('create release note')
-    router.push('/create-release-note')
-  }
 
   return (
     <Grid container justifyContent="space-between" alignItems="center">
-      <Grid item xs={12} container justifyContent='flex-end'>
-        <Button variant="contained" color="primary" style={{ marginTop: 16, marginBottom: 16, borderRadius: 10 }} onClick={handleCreateReleaseNote}>
-          릴리즈 노트 작성하기
-        </Button>
-      </Grid>
+
       <Grid item xs={12}>
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{ maxHeight: 'calc(100vh - 400px)', position: 'relative', marginTop: '10px' }}>
           <Table sx={{ minWidth: 650 }} aria-label='project detail table'>
             <TableHead>
               <TableRow>
