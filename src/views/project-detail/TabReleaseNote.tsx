@@ -18,12 +18,12 @@ import Grid from '@mui/material/Grid'
 import CategoryTag, { Category } from 'src/views/project-detail/CategoryTag'
 import StatusTag, { Status } from 'src/views/project-detail/StatusTag'
 
-const createReleaseNoteData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ChangeItem[], creatorId: string, creationDate: string) => {
+const createReleaseNoteData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ReleaseContent[], creatorId: string, creationDate: string) => {
   return { releaseNoteId, version, releaseTitle, changeItems, creatorId, creationDate }
 }
 
 
-interface ChangeItem {
+interface ReleaseContent {
   category: Category,
   releaseContent: string
 }
