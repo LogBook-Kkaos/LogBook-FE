@@ -4,6 +4,7 @@ import { ReactNode } from 'react'
 // ** Next Import
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 // ** MUI Imports
 import Box, { BoxProps } from '@mui/material/Box'
@@ -11,6 +12,10 @@ import { styled, useTheme } from '@mui/material/styles'
 
 // ** Type Import
 import { Settings } from 'src/@core/context/settingsContext'
+
+// ** Recoil Import
+import { useRecoilValue } from 'recoil'
+import { isAuthenticatedState } from 'src/recoil/auth/atoms'
 
 interface Props {
   hidden: boolean
@@ -33,7 +38,8 @@ const MenuHeaderWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 const LogoLinkStyled = styled('a')({
   display: 'flex',
   alignItems: 'center',
-  textDecoration: 'none'
+  textDecoration: 'none',
+  cursor: 'pointer'
 })
 
 const VerticalNavHeader = (props: Props) => {
@@ -42,19 +48,29 @@ const VerticalNavHeader = (props: Props) => {
 
   // ** Hooks
   const theme = useTheme()
+  const router = useRouter()
+
+  // ** State
+  const isAuthenticated = useRecoilValue(isAuthenticatedState)
 
   return (
     <MenuHeaderWrapper className='nav-header' sx={{ pl: 6 }}>
       {userVerticalNavMenuBranding ? (
         userVerticalNavMenuBranding(props)
       ) : (
-        // 로고 눌렀을때 로그인 여부 확인하여 이동
-        <Link href='/' passHref>
-          <LogoLinkStyled>
-          <Image src="/images/LogBook_Logo_horizontal.svg" alt="Logo" width={150} height={75} />
+          <LogoLinkStyled onClick={
+            () => {
+              if (isAuthenticated) {
+                router.push('/dashboard')
+              } else {
+                router.push('/')
+              }
+            }
+          }>
+            <Image src="/images/LogBook_Logo_horizontal.svg" alt="Logo" width={150} height={75} />
           </LogoLinkStyled>
-        </Link>
       )}
+
     </MenuHeaderWrapper>
   )
 }
