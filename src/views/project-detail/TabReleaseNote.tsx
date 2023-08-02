@@ -11,12 +11,10 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 
 // ** Custom Components Imports
 import CategoryTag, { Category } from 'src/views/project-detail/CategoryTag'
-import StatusTag, { Status } from 'src/views/project-detail/StatusTag'
 
 const createReleaseNoteData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ReleaseContent[], creatorId: string, creationDate: string) => {
   return { releaseNoteId, version, releaseTitle, changeItems, creatorId, creationDate }
