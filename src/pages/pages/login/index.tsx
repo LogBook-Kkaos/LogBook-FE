@@ -9,7 +9,6 @@ import { useRouter } from 'next/router'
 
 // ** HTTP Client
 import axios from 'axios'
-import Cookies from 'js-cookie'
 
 // ** MUI Components
 import Box from '@mui/material/Box'
@@ -122,9 +121,7 @@ const LoginPage = () => {
 
         setTokens(receivedTokens);
 
-        Cookies.set('accessToken', receivedTokens.accessToken);
         sessionStorage.setItem('accessToken', receivedTokens.accessToken);
-        Cookies.set('refreshToken', receivedTokens.refreshToken);
         sessionStorage.setItem('refreshToken', receivedTokens.refreshToken);
 
         setModalInfo({
