@@ -48,8 +48,9 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import { set } from 'nprogress'
 
 // ** Recoil Import
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { isAuthenticatedState, tokensState } from 'src/recoil/auth/atoms'
+import { loginUserState } from 'src/recoil/user/atoms'
 
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
@@ -93,6 +94,7 @@ const LoginPage = () => {
   const [modalInfo, setModalInfo] = useState<ModalInfo>({ open: false, message: '', messageDescription: '', color: '' });
   const [tokens, setTokens] = useRecoilState(tokensState);
   const [isAuthenticated, setIsAuthenticated] = useRecoilState(isAuthenticatedState);
+  const setLoginUser = useSetRecoilState(loginUserState);
 
   // ** Hook
   const theme = useTheme()
@@ -114,15 +116,22 @@ const LoginPage = () => {
   const onSubmit: SubmitHandler<formData> = (data) => {
     axios.post('/api/users/login', data)
       .then((response) => {
+        console.log(response.data.result)
         const receivedTokens = {
-          accessToken: response.data.result.accessToken,
-          refreshToken: response.data.result.refreshToken
+          accessToken: response.data.result.jwt.accessToken,
+          refreshToken: response.data.result.jwt.refreshToken
         }
 
         setTokens(receivedTokens);
 
         sessionStorage.setItem('accessToken', receivedTokens.accessToken);
         sessionStorage.setItem('refreshToken', receivedTokens.refreshToken);
+
+        const userEmail = response.data.result.email;
+        const userName = response.data.result.userName;
+        const userDepartment = response.data.result.department;
+
+        setLoginUser({email: userEmail, userName: userName, department: userDepartment})
 
         setModalInfo({
           open: true,
