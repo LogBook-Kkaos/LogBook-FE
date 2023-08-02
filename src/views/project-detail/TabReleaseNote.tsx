@@ -18,7 +18,7 @@ import Grid from '@mui/material/Grid'
 import CategoryTag, { Category } from 'src/views/project-detail/CategoryTag'
 import StatusTag, { Status } from 'src/views/project-detail/StatusTag'
 
-const createData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ChangeItem[], creatorId: string, creationDate: string) => {
+const createReleaseNoteData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ChangeItem[], creatorId: string, creationDate: string) => {
   return { releaseNoteId, version, releaseTitle, changeItems, creatorId, creationDate }
 }
 
@@ -30,10 +30,10 @@ interface ChangeItem {
 
 
 const rows = [
-  createData(4, 'v 1.2.1', 'BB 기능 추가 및 변경', [{ category: Category.Feature, releaseContent: 'bb 기능 - 기능 설명' }, { category: Category.Changed, releaseContent: '타입 변경' }], '유소연', '2023.06.30'),
-  createData(3, 'v 1.1.2', 'OO 서비스 중단', [{ category: Category.Deprecated, releaseContent: '~API 중단' }], '이소현', '2023.06.29'),
-  createData(2, 'v 1.1.1', 'AA 기능 수정 및 버그 해결', [{ category: Category.Fixed, releaseContent: '~ 연동 안되는 버그 수정' }, { category: Category.Changed, releaseContent: '~ 성능 개선' }], '이서빈', '2023.06.26'),
-  createData(1, 'v 1.0.0', '문서 최초 생성', [{ category: Category.Feature, releaseContent: '신규 기능 추가 / AA 기능 제공' }], '장예경', '2023.06.20')
+  createReleaseNoteData(4, 'v 1.2.1', 'BB 기능 추가 및 변경', [{ category: Category.Feature, releaseContent: 'bb 기능 - 기능 설명' }, { category: Category.Changed, releaseContent: '타입 변경' }], '유소연', '2023.06.30'),
+  createReleaseNoteData(3, 'v 1.1.2', 'OO 서비스 중단', [{ category: Category.Deprecated, releaseContent: '~API 중단' }], '이소현', '2023.06.29'),
+  createReleaseNoteData(2, 'v 1.1.1', 'AA 기능 수정 및 버그 해결', [{ category: Category.Fixed, releaseContent: '~ 연동 안되는 버그 수정' }, { category: Category.Changed, releaseContent: '~ 성능 개선' }], '이서빈', '2023.06.26'),
+  createReleaseNoteData(1, 'v 1.0.0', '문서 최초 생성', [{ category: Category.Feature, releaseContent: '신규 기능 추가 / AA 기능 제공' }], '장예경', '2023.06.20')
 ]
 
 
