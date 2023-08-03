@@ -9,7 +9,6 @@ import { useRouter } from 'next/router'
 
 // ** HTTP Client
 import axios from 'axios'
-import Cookies from 'js-cookie'
 
 // ** Recoil Import
 import { useRecoilState } from 'recoil'
@@ -126,9 +125,7 @@ const RegisterPage = () => {
         const { accessToken, refreshToken } = res.data.result;
 
         // Store tokens in cookies and sessionStorage
-        Cookies.set('accessToken', accessToken);
         sessionStorage.setItem('accessToken', accessToken);
-        Cookies.set('refreshToken', refreshToken);
         sessionStorage.setItem('refreshToken', refreshToken);
 
         setUser({
@@ -138,6 +135,7 @@ const RegisterPage = () => {
           department: data.department,
           password: data.password
         })
+        
         setModalInfo({ open: true, message: `${data.userName}님, Logbook에 오신 것을 환영합니다!`, messageDesc: '로그인 페이지로 이동하여 로그인하세요.', color: 'success' });
         setTimeout(() => {
           router.push('/pages/login');
