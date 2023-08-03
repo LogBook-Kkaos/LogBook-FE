@@ -136,6 +136,7 @@ const RegisterPage = () => {
     setShowPassword(!showPassword);
   }
 
+
   return (
     <Box className='content-center'>
       <Card sx={{ zIndex: 1 }}>

@@ -79,4 +79,5 @@ pnpm build
 pnpm start
 ```
 
-생성된 빌드를 실행하며 이를 통해 애플리케이션을 확인합니다.
+## Commit Convention
+- [Udacity Convention](http://udacity.github.io/git-styleguide/)
