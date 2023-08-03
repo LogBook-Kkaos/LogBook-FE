@@ -12,8 +12,9 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 
 // ** Recoil Import
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { userState } from 'src/recoil/user/atoms'
+import { isAuthenticatedState } from 'src/recoil/auth/atoms'
 
 
 // ** MUI Components
@@ -103,6 +104,8 @@ const RegisterPage = () => {
 
   const router = useRouter()
 
+  const isAuthenticated = useRecoilValue(isAuthenticatedState)
+
   const { register, watch, handleSubmit, setValue, formState: { errors } } = useForm<formData>();
 
   const onSubmit: SubmitHandler<formData> = (data) => {
@@ -141,13 +144,19 @@ const RegisterPage = () => {
     <Box className='content-center'>
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 30, 7)} !important` }}>
-          <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {/* 로고 눌렀을때 로그인 여부 확인하여 이동 */}
-            <Link href='/' passHref>
+          <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
+          onClick={
+            () => {
+              if (isAuthenticated) {
+                router.push('/dashboard')
+              } else {
+                router.push('/')
+              }
+            }
+          }>
               <LogoLinkStyled>
                 <Image src="/images/LogBook_Logo_horizontal.svg" alt="Logo" width={250} height={100} />
               </LogoLinkStyled>
-            </Link>
           </Box>
           <Box sx={{ mb: 6 }}>
             <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
