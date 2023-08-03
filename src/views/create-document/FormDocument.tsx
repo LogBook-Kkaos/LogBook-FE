@@ -42,14 +42,16 @@ const FormDocument = () => {
     )
   );
 
+  const [htmlContent, setHtmlContent] = useState('');
 
-    
-
-  const onEditorStateChange = (state:any) => {
-    setEditorState(state); 
+  const onEditorStateChange = (state: EditorState) => {
+    setEditorState(state);
     const htmlContent = stateToHTML(state.getCurrentContent());
-    console.log(htmlContent); 
+    console.log(htmlContent);
+    setHtmlContent(htmlContent);
   };
+
+
 
   // Styled Divider component
   const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
@@ -117,6 +119,10 @@ const FormDocument = () => {
             id='account-settings-upload-image'
           />
         </ButtonStyled>
+      </Box>
+      <Box sx={{ p: '1.25rem', backgroundColor: '#f0f0f0' }}>
+        <Typography variant='h6' sx={{ fontWeight: 600, marginBottom: 1.5 }}>변환된 HTML 내용</Typography>
+        <pre>{htmlContent}</pre>
       </Box>
     </div>
   );
