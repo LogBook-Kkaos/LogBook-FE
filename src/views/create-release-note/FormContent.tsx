@@ -20,8 +20,6 @@ import Button from '@mui/material/Button';
 import Update from 'mdi-material-ui/Update';
 import AccountOutline from 'mdi-material-ui/AccountOutline';
 
-import StatusTag, { Status } from 'src/views/create-release-note/StatusTag';
-
 // import recoil state
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { releaseNoteState } from 'src/recoil/release-note/atoms';
@@ -91,16 +89,6 @@ const FormContent = () => {
                                 )
                             }}
                         />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormControl fullWidth>
-                            <InputLabel>Status</InputLabel>
-                            <Select label='Status'>
-                                <MenuItem value='NotStarted'><StatusTag status="시작 전" /></MenuItem>
-                                <MenuItem value='InProgress'><StatusTag status="진행중" /></MenuItem>
-                                <MenuItem value='Done'><StatusTag status="완료" /></MenuItem>
-                            </Select>
-                        </FormControl>
                     </Grid>
 
                     <Grid item xs={12}>
