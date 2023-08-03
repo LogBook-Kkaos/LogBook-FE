@@ -20,7 +20,6 @@ import Button from '@mui/material/Button';
 import Update from 'mdi-material-ui/Update';
 import AccountOutline from 'mdi-material-ui/AccountOutline';
 
-import CategoryTag, { CategoryType } from 'src/views/create-release-note/CategoryTag';
 import StatusTag, { Status } from 'src/views/create-release-note/StatusTag';
 
 // import recoil state
@@ -28,87 +27,14 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { releaseNoteState } from 'src/recoil/release-note/atoms';
 import FormReleaseContent from './FormReleaseContent';
 
-const keywords = [
-    {
-        label: 'Feature',
-        keywords: ['Feature', '기능'],
-    },
-    {
-        label: 'Changed',
-        keywords: ['Changed', '변경'],
-    },
-    {
-        label: 'Deprecated',
-        keywords: ['Deprecated', '중단', '삭제'],
-    },
-    {
-        label: 'Fixed',
-        keywords: ['Fixed', '수정'],
-    },
-];
-
 const FormContent = () => {
-    const [categoryTags, setCategoryTags] = useState<string[][]>([]);
 
     const [releaseNote, setReleaseNote] = useRecoilState(releaseNoteState);
-
-    const [textfieldValues, setTextfieldValues] = useState<string[]>(['']);
-
-    useEffect(() => {
-        const newCategoryTags = textfieldValues.map(textfieldValue => {
-            const foundKeywords: { keyword: string; label: string }[] = [];
-
-            keywords.forEach(keywordSet => {
-                keywordSet.keywords.forEach(keyword => {
-                    const keywordIndex = textfieldValue.toLowerCase().indexOf(keyword.toLowerCase());
-                    if (keywordIndex !== -1) {
-                        foundKeywords.push({ keyword, label: keywordSet.label });
-                    }
-                });
-            });
-
-            foundKeywords.sort((a, b) => {
-                return textfieldValue.toLowerCase().indexOf(a.keyword.toLowerCase()) - textfieldValue.toLowerCase().indexOf(b.keyword.toLowerCase());
-            });
-
-            return foundKeywords.length > 0 ? [foundKeywords[0].label] : ['General'];
-        });
-
-        setCategoryTags(newCategoryTags);
-    }, [textfieldValues]);
-
-
-
+    const [releaseContents, setTextfieldValues] = useState<string[]>(['']);
 
     const handleAddTextField = () => {
-        setTextfieldValues([...textfieldValues, '']);
+        setTextfieldValues([...releaseContents, '']);
     };
-
-    const handleTextfieldChange = (index: number, value: string, documentLink: string) => {
-        setTextfieldValues(
-            textfieldValues.map((textfieldValue, i) =>
-                i === index ? value : textfieldValue
-            )
-        );
-
-        setReleaseNote((prevReleaseNote) => {
-            const newReleaseContent = prevReleaseNote.releaseContent.slice();
-            newReleaseContent[index] = {
-                content: value,
-                category: categoryTags[index]
-                    ? categoryTags[index][0]
-                    : "General",
-                documentLink: documentLink,
-            };
-
-            return {
-                ...prevReleaseNote,
-                releaseContent: newReleaseContent,
-            };
-        });
-    };
-
-
 
     return (
         <CardContent>
@@ -208,8 +134,8 @@ const FormContent = () => {
                         </Grid>
                     </Grid>
 
-                    {textfieldValues.map((value, index) => (
-                        <FormReleaseContent key={index} index={index} categoryTags={categoryTags}/>
+                    {releaseContents.map((value, index) => (
+                        <FormReleaseContent key={index} index={index} />
                     ))}
 
                     <Grid item xs={12}>
