@@ -26,6 +26,7 @@ import StatusTag, { Status } from 'src/views/create-release-note/StatusTag';
 // import recoil state
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { releaseNoteState } from 'src/recoil/release-note/atoms';
+import FormReleaseContent from './FormReleaseContent';
 
 const keywords = [
     {
@@ -208,46 +209,7 @@ const FormContent = () => {
                     </Grid>
 
                     {textfieldValues.map((value, index) => (
-                        <Grid item xs={12}>
-                            <Grid item xs={12} key={index}>
-
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    id={`release_note_content_${index}`}
-                                    fullWidth
-                                    multiline
-                                    minRows={2}
-                                    label={`변경사항 ${index + 1}`}
-                                    value={value}
-                                    onChange={(e) => handleTextfieldChange(index, e.target.value, releaseNote.releaseContent[index]?.documentLink || "")}
-                                    placeholder="변경사항을 작성해주세요..."
-                                    sx={{ '& .MuiOutlinedInput-root': { alignItems: 'baseline' } }}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position='start'>
-                                                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                                                    {categoryTags[index]?.map(category => (
-                                                        <CategoryTag key={category} category={category as CategoryType} />
-                                                    ))}
-                                                </Box>
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    id={`release_note_link_${index}`}
-                                    fullWidth
-                                    aria-placeholder='연관된 기술문서 링크를 입력해주세요'
-                                    value={releaseNote.releaseContent[index]?.documentLink || ''}
-                                    onChange={(e) => handleTextfieldChange(index, value, e.target.value)}
-                                    placeholder="연관된 기술문서 링크를 입력해주세요"
-                                />
-                            </Grid>
-                        </Grid>
+                        <FormReleaseContent key={index} index={index} categoryTags={categoryTags}/>
                     ))}
 
                     <Grid item xs={12}>
