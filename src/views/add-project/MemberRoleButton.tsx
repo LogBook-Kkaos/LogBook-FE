@@ -11,15 +11,17 @@ export type MemberRole = typeof MemberRole[keyof typeof MemberRole]
 
 interface MemberRoleButtonProps {
   role: MemberRole;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const MemberRoleButton: React.FC<MemberRoleButtonProps> = ({
   role,
   onClick,
 }) => {
+  const isDisabled = role === '관리자';
+
   return (
-    <Button variant="outlined" color="primary" sx={{ mr: 3, ml: 20, width: "85px" }} onClick={onClick}>
+    <Button variant="outlined" color="primary" sx={{ mr: 3, ml: 20, width: "85px" }} onClick={onClick} disabled={isDisabled}>
       {role}
     </Button>
   );

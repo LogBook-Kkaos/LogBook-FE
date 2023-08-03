@@ -19,6 +19,10 @@ import Magnify from 'mdi-material-ui/Magnify'
 import axios from 'axios'
 import MemberRoleButton, { MemberRole } from './MemberRoleButton'
 
+// ** Recoil Imports
+import { useRecoilValue } from 'recoil'
+import { loginUserState } from 'src/recoil/user/atoms'
+
 interface AddProjectPopupProps {
    isOpen: boolean
    onClose: () => void
@@ -71,12 +75,12 @@ const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 const AddProjectPopup = (props: AddProjectPopupProps) => {
   const { isOpen, onClose } = props
-  
+
+  const loginUser = useRecoilValue(loginUserState)
   const [projectName, setProjectName] = useState('')
   const [projectDescription, setProjectDescription] = useState('')
   const [isPublic, setIsPublic] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
-  // members에 로그인한 유저(본인) default로 추가 필요
   const [members, setMembers] = useState<MemberInfo[]>([])
   const [allUsers, setAllUsers] = useState<UserInfo[]>([])
 
@@ -90,7 +94,7 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
 
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsPublic(event.target.checked)
-  };
+  }
 
   const handleInvitation = (event: React.MouseEvent, option: UserInfo) => {
     event.stopPropagation()
@@ -174,7 +178,14 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
       try {
         const response = await axios.get<SearchResults>('/api/users');
         const sortingResult = sortUsersByName(response.data.result);
-        setAllUsers(sortingResult);
+        const filteredUsers = sortingResult.filter(user => user.userName !== loginUser.userName);
+        setAllUsers(filteredUsers);
+        const defaultMember: MemberInfo = {
+          userName: loginUser.userName || '',
+          email: loginUser.email || '',
+          role: MemberRole.Leader
+        };
+        setMembers([defaultMember]);
       } catch (error) {
         console.error('Error fetching all users:', error);
         setAllUsers([]);
@@ -256,25 +267,25 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
           </Grid>
           
           {members.map((member, index) => (
-          <>
+          <React.Fragment key={index}>
           <Grid item xs={7}>
             <Typography>{member.userName}</Typography>
           </Grid>
           <Grid item xs={5}>
-            <MemberRoleButton
-              role={member.role}
-              onClick={() => handleMemberRole(index)}
-            />
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={handleDeleteButtonClick}
-              data-index={index}
-            >
-              삭제
-            </Button>
+            {index === 0 ? ( // Check if it's the default member (index 0)
+              <>
+                <MemberRoleButton role={member.role}/>
+              </>
+            ) : (
+              <>
+                <MemberRoleButton role={member.role} onClick={() => handleMemberRole(index)} />
+                <Button variant="outlined" color="error" onClick={handleDeleteButtonClick} data-index={index}>
+                  삭제
+                </Button>
+              </>
+            )}
           </Grid>
-          </>
+          </React.Fragment>
           ))}
 
           
