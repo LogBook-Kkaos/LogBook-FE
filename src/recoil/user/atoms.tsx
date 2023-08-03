@@ -15,8 +15,8 @@ export const userState = atom<User>({
 export const loginUserState = atom({
     key: 'loginUserState',
     default: {
-        userName: '',
-        email: '',
-        department: '',
+        userName: typeof window !== 'undefined' ? sessionStorage.getItem('userName') : null,
+        email: typeof window !== 'undefined' ? sessionStorage.getItem('email') : null,
+        department: typeof window !== 'undefined' ? sessionStorage.getItem('department') : null,
     }
 })

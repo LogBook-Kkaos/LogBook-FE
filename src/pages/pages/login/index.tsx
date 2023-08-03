@@ -131,6 +131,10 @@ const LoginPage = () => {
         const userName = response.data.result.userName;
         const userDepartment = response.data.result.department;
 
+        sessionStorage.setItem('email', userEmail);
+        sessionStorage.setItem('userName', userName);
+        sessionStorage.setItem('department', userDepartment);
+
         setLoginUser({email: userEmail, userName: userName, department: userDepartment})
 
         setModalInfo({
