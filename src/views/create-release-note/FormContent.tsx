@@ -24,6 +24,7 @@ import AccountOutline from 'mdi-material-ui/AccountOutline';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { releaseNoteState } from 'src/recoil/release-note/atoms';
 import FormReleaseContent from './FormReleaseContent';
+import { useForm } from 'react-hook-form';
 
 const FormContent = () => {
 
