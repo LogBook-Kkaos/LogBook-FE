@@ -9,7 +9,7 @@ import FormContent from './FormContent';
 
 import { handleSave, handleDelete } from './FormReleaseNoteActions';
 
-import { releaseNoteState } from 'src/views/create-release-note/recoil/atoms';
+import { releaseNoteState } from 'src/recoil/release-note/atoms';
 
 const FormReleaseNote = () => {
   const [releaseNote, setReleaseNote] = useRecoilState(releaseNoteState);
