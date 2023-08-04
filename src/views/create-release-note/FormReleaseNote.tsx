@@ -1,6 +1,6 @@
 // ** react Imports
 import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller, useFieldArray } from 'react-hook-form';
 
 // ** MUI Imports
 import Card from '@mui/material/Card';
@@ -29,11 +29,27 @@ import FormReleaseContent from './FormReleaseContent';
 import { handleSave, handleDelete } from 'src/views/create-release-note/FormReleaseNoteActions';
 
 const FormReleaseNote = () => {
+  
   const [releaseNote, setReleaseNote] = useRecoilState(releaseNoteState);
   const [releaseContents, setReleaseContents] = useState<string[]>(['']);
 
+  const methods = useForm(
+    {
+      defaultValues: {
+        creationDate: releaseNote.creationDate,
+        creatorName: typeof window !== 'undefined' ? sessionStorage.getItem('userName') : null,
+        releaseNoteTitle: releaseNote.releaseNoteTitle,
+        releaseNoteVersion: releaseNote.version,
+        releaseNoteIsImportant: releaseNote.isImportant,
+        releaseNoteIsPublic: releaseNote.isPublic,
+      },
+    },
+  );
+  const { register, control, handleSubmit, setValue } = methods;
+
+
   const handleReleaseContents = () => {
-      setReleaseContents([...releaseContents, '']);
+    setReleaseContents([...releaseContents, '']);
   };
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,148 +62,170 @@ const FormReleaseNote = () => {
 
   return (
     <Card>
-      <CardHeader
-        title={
-          <TextField
-            id="release_note_title"
-            label="릴리즈 노트 제목"
-            value={releaseNote.releaseNoteTitle}
-            onChange={handleTitleChange}
-            variant="outlined"
-            fullWidth
-            InputProps={{
-              inputProps: { 'aria-label': '제목 입력창' },
-            }}
-          />
-        }
-        titleTypographyProps={{ variant: 'h6' }}
-        action={
-          <>
-            <Button
+      <form onSubmit={
+        handleSubmit((data) => {
+          console.log(data);
+        })
+      }>
+        <CardHeader
+          title={
+            <TextField
+              id="release_note_title"
+              label="릴리즈 노트 제목"
+              {...register('releaseNoteTitle')}
+              onChange={handleTitleChange}
               variant="outlined"
-              type='submit'
-              onClick={() => handleSave(releaseNote)}
-              color="primary"
-              sx={{ mr: 1, ml: 5 }}
-            >
-              저장
-            </Button>
-            <Button
-              data-testid="delete-button"
-              variant="outlined"
-              onClick={() => handleDelete(releaseNote.releaseNoteId)}
-              color="error"
-            >
-              삭제
-            </Button>
-          </>
-        }
-      />
-      <Divider sx={{ margin: 0 }} />
-      <CardContent>
-            <form onSubmit={e => e.preventDefault()}>
-                <Grid container spacing={5}>
-                    <Grid item xs={12}>
-                        <TextField
-                            id="creator_id"
-                            fullWidth
-                            label='작성자'
-                            value={releaseNote.creatorId}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position='start'>
-                                        <AccountOutline />
-                                    </InputAdornment>
-                                )
-                            }}
-                            disabled={true}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <LocalizationProvider
-                            data-testid="creation_date"
-                            dateAdapter={AdapterDateFns}>
-                            <DesktopDatePicker
-                                label='작성날짜'
-                                inputFormat='yyyy-MM-dd'
-                                mask='____-__-__'
-                                value={releaseNote.creationDate}
-                                onChange={() => { }}
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                                renderInput={params => <TextField {...params} />}
-                                disabled={true}
-                            />
-                        </LocalizationProvider>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            fullWidth
-                            type='version'
-                            label='버전'
-                            placeholder='v x.y.z'
-                            helperText='Major 업데이트의 경우 x를, Minor 업데이트의 경우 y를, Patch 업데이트의 경우 z를 바꿔주세요.'
-                            value={releaseNote.version}
-                            onChange={(e) => setReleaseNote({ ...releaseNote, version: e.target.value })}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position='start'>
-                                        <Update />
-                                    </InputAdornment>
-                                )
-                            }}
-                        />
-                    </Grid>
+              fullWidth
+              InputProps={{
+                inputProps: { 'aria-label': '제목 입력창' },
+              }}
+            />
+          }
+          titleTypographyProps={{ variant: 'h6' }}
+          action={
+            <>
+              <Button
+                variant="outlined"
+                type='submit'
+                onClick={() => handleSave(releaseNote)}
+                color="primary"
+                sx={{ mr: 1, ml: 5 }}
+              >
+                저장
+              </Button>
+              <Button
+                data-testid="delete-button"
+                variant="outlined"
+                onClick={() => handleDelete(releaseNote.releaseNoteId)}
+                color="error"
+              >
+                삭제
+              </Button>
+            </>
+          }
+        />
+        <Divider sx={{ margin: 0 }} />
+        <CardContent>
 
-                    <Grid item xs={12}>
-                        <Grid container>
-                            <Grid item xs={6}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            id="is_important"
-                                            checked={releaseNote.isImportant}
-                                            onChange={(e) => setReleaseNote({ ...releaseNote, isImportant: e.target.checked })}
-                                            color="primary"
-                                        />
-                                    }
-                                    label="중요한 변경사항으로 등록"
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            id="is_public"
-                                            checked={releaseNote.isPublic}
-                                            onChange={(e) => setReleaseNote({ ...releaseNote, isPublic: e.target.checked })}
-                                            color="primary"
-                                        />
-                                    }
-                                    label="외부인에게 공개"
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
+          <Grid container spacing={5}>
+            <Grid item xs={12}>
+              <TextField
+                id="creator_id"
+                label='작성자'
+                {...register('creatorName')}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <AccountOutline />
+                    </InputAdornment>
+                  )
+                }}
+                disabled={true}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <LocalizationProvider
+                data-testid="creation_date"
+                dateAdapter={AdapterDateFns}>
+                <DesktopDatePicker
+                  label='작성날짜'
+                  inputFormat='yyyy-MM-dd'
+                  mask='____-__-__'
+                  value={releaseNote.creationDate}
+                  onChange={() => { }}
+                  InputProps={{
+                    readOnly: true,
+                    ...register('creationDate')
+                  }}
+                  renderInput={params => <TextField {...params} />}
+                  disabled={true}
+                />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={12}>
+              <Controller
+                control={control}
+                name='releaseNoteVersion'
+                render={({ field }) => (
+                  <TextField
+                    type='version'
+                    label='버전'
+                    placeholder='v x.y.z'
+                    helperText='Major 업데이트의 경우 x를, Minor 업데이트의 경우 y를, Patch 업데이트의 경우 z를 바꿔주세요.'
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position='start'>
+                          <Update />
+                        </InputAdornment>
+                      )
+                    }}
+                    {...field}
+                  />
+                )}
+              />
+            </Grid>
 
-                    {releaseContents.map((value, index) => (
-                        <FormReleaseContent key={index} index={index} />
-                    ))}
-
-                    <Grid item xs={12}>
-                        <Button
-                            data-testid="add_textfield_button"
-                            variant="outlined"
+            <Grid item xs={12}>
+              <Grid container>
+                <Grid item xs={6}>
+                  <Controller
+                    control={control}
+                    name="releaseNoteIsImportant"
+                    render={({ field }) => (
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            id="is_important"
+                            checked={field.value}
+                            onChange={(e) => field.onChange(e.target.checked)}
                             color="primary"
-                            onClick={handleReleaseContents}
-                        >
-                            변경사항 추가
-                        </Button>
-                    </Grid>
+                          />
+                        }
+                        label="중요한 변경사항으로 등록"
+                      />
+                    )}
+                  />
                 </Grid>
-            </form>
+                <Grid item xs={6}>
+                  <Controller
+                    control={control}
+                    name="releaseNoteIsPublic"
+                    render={({ field }) => (
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            id="is_public"
+                            checked={field.value}
+                            onChange={(e) => field.onChange(e.target.checked)}
+                            color="primary"
+                          />
+                        }
+                        label="외부인에게 공개"
+                      />
+                    )}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+
+            {releaseContents.map((value, index) => (
+              <FormReleaseContent key={index} index={index} register={register}/>
+            ))}
+
+            <Grid item xs={12}>
+              <Button
+                data-testid="add_textfield_button"
+                variant="outlined"
+                color="primary"
+                onClick={handleReleaseContents}
+              >
+                변경사항 추가
+              </Button>
+            </Grid>
+          </Grid>
+
         </CardContent>
+      </form>
     </Card>
   );
 };
