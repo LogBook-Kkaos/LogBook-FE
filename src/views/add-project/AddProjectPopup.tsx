@@ -83,6 +83,7 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [members, setMembers] = useState<MemberInfo[]>([])
   const [allUsers, setAllUsers] = useState<UserInfo[]>([])
+  const [creationFailed,setCreationFailed] = useState(false)
 
   const handleProjectNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProjectName(event.target.value)
@@ -137,7 +138,11 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
   
       return updatedMembers;
     });
-  };
+  }
+
+  const handleFailDialogClose = () => {
+    setCreationFailed(false);
+  }
   
   const handleClickAddButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     axios.post('/api/projects',
@@ -153,7 +158,7 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
     })
     .catch(function (error) {
       console.error('프로젝트 생성 실패:', error);
-      //프로젝트 생성 실패 Dialog
+      setCreationFailed(true);
     });
   }
 
@@ -196,6 +201,7 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
   }, [isOpen])
 
   return (
+    <>
     <StyledDialog open={isOpen} onClose={onClose} >
 
       <DialogTitle sx={{pl:7, pr:7}}>
@@ -305,6 +311,18 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
       </DialogActions>
 
     </StyledDialog>
+    <Dialog open={creationFailed} onClose={handleFailDialogClose}>
+      <DialogTitle>프로젝트 생성 실패</DialogTitle>
+      <DialogContent>
+        <Typography>프로젝트를 생성하지 못했습니다. 다시 시도해주세요.</Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleFailDialogClose} color="primary">
+          확인
+        </Button>
+      </DialogActions>
+    </Dialog>
+    </>
   )
 }
 
