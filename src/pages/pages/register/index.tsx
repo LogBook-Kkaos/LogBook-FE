@@ -9,7 +9,6 @@ import { useRouter } from 'next/router'
 
 // ** HTTP Client
 import axios from 'axios'
-import Cookies from 'js-cookie'
 
 // ** Recoil Import
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -36,6 +35,12 @@ import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormCo
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import FormHelperText from '@mui/material/FormHelperText'
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+
 
 // ** Icons Imports
 import Google from 'mdi-material-ui/Google'
@@ -47,13 +52,21 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
+import { set } from 'nprogress'
 
 interface formData {
-  username: string
+  userName: string
   email: string
   department: string
   password: string
   confirmPassword: string
+}
+
+interface ModalInfo {
+  open: boolean;
+  message: string;
+  messageDescription: string;
+  color: string;
 }
 
 // ** Styled Components
@@ -101,6 +114,7 @@ const RegisterPage = () => {
   const [user, setUser] = useRecoilState(userState);
   const [terms, setTerms] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [modalInfo, setModalInfo] = useState<ModalInfo>({ open: false, message: '', messageDescription: '', color: '' });
 
   const router = useRouter()
 
@@ -109,26 +123,39 @@ const RegisterPage = () => {
   const { register, watch, handleSubmit, setValue, formState: { errors } } = useForm<formData>();
 
   const onSubmit: SubmitHandler<formData> = (data) => {
-    axios.post('/api/user/register', data)
+    axios.post('/api/users/register', data)
       .then((res) => {
         const { accessToken, refreshToken } = res.data.result;
 
         // Store tokens in cookies and sessionStorage
-        Cookies.set('accessToken', accessToken);
         sessionStorage.setItem('accessToken', accessToken);
-        Cookies.set('refreshToken', refreshToken);
         sessionStorage.setItem('refreshToken', refreshToken);
-        
+
         setUser({
           ...user,
-          username: data.username,
+          userName: data.userName,
           email: data.email,
           department: data.department,
           password: data.password
         })
-        router.push('/pages/login');
-      }
-      )
+
+        setModalInfo({ open: true, message: `${data.userName}님, Logbook에 오신 것을 환영합니다!`, messageDescription: '로그인 페이지로 이동하여 로그인하세요.', color: 'success' });
+        setTimeout(() => {
+          router.push('/pages/login');
+        }, 3000);
+      })
+      .catch((error) => {
+        if (error.response.status === 409) {
+          // 에러 메시지 1 (서버에서 반환된 문제로 유의미한 메시지 추가 필요)
+          setModalInfo({ open: true, message: '이미 존재하는 회원입니다.', messageDescription: '다른 이메일로 시도해주세요.', color: 'error' });
+        } else if (error.response.status === 500) {
+          // 에러 메시지 2
+          setModalInfo({ open: true, message: '잠시 후 다시 시도하세요.', messageDescription: '서버 내부 오류로 인해 회원가입에 실패했습니다. 잠시 후 다시 시도해주세요.', color: 'error' });
+        } else {
+          // 다른 에러 코드 발생 시
+          setModalInfo({ open: true, message: '잠시 후 다시 시도하세요.', messageDescription: '알 수 없는 오류로 인해 회원가입에 실패했습니다. 잠시 후 다시 시도해주세요.', color: 'error' });
+        }
+      })
   }
 
   const onError = (errors: any) => {
@@ -165,8 +192,8 @@ const RegisterPage = () => {
             <Typography variant='body2'>릴리즈 노트를 쉽게 작성해보세요.</Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit, onError)}>
-            <TextField autoFocus fullWidth id='username' label='이름' sx={{ marginBottom: 4 }}
-              {...register("username", {
+            <TextField autoFocus fullWidth id='userName' label='이름' sx={{ marginBottom: 4 }}
+              {...register("userName", {
                 required: '이름을 입력해주세요.',
                 minLength: {
                   value: 2,
@@ -181,8 +208,8 @@ const RegisterPage = () => {
                   message: "한글과 영문 대소문자를 사용하세요.",
                 },
               })}
-              error={!!errors.username}
-              helperText={errors.username ? errors.username.message : ""} />
+              error={!!errors.userName}
+              helperText={errors.userName ? errors.userName.message : ""} />
             <TextField fullWidth type='email' label='이메일' sx={{ marginBottom: 4 }}
               {...register("email", {
                 required: '이메일을 입력해주세요.',
@@ -332,7 +359,38 @@ const RegisterPage = () => {
           </form>
         </CardContent>
       </Card>
+
+      <Dialog
+        open={modalInfo.open}
+        onClose={() => { }}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{modalInfo.message}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description' style={{color: modalInfo.color }}>
+            {modalInfo.messageDescription}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={
+            () => {
+              setModalInfo({
+                open: false,
+                message: '',
+                messageDescription: '',
+                color: ''
+              })
+            }
+          } color='primary' autoFocus>
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </Box>
+
+
   )
 }
 
