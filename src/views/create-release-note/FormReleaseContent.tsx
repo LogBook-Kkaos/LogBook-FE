@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, UseFormRegister, useForm } from 'react-hook-form';
+import { Form, UseFormRegister, UseFormReturn, useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Box from '@mui/material/Box';
@@ -9,11 +9,11 @@ import CategoryTag, { CategoryType } from 'src/views/create-release-note/Categor
 
 export interface FormReleaseContentProps {
   index: number;
-  register: UseFormRegister<any>;
+  methods: UseFormReturn<any>;
 }
 
-const FormReleaseContent: React.FC<FormReleaseContentProps> = ({ index, register}) => {
-  const { setValue, watch } = useForm();
+const FormReleaseContent: React.FC<FormReleaseContentProps> = ({ index, methods}) => {
+  const { register, setValue, watch } = methods;
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('General');
 
   const changeText = watch(`releaseContent.${index}.releaseSummary`, '');
