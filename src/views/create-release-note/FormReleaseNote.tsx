@@ -207,7 +207,7 @@ const FormReleaseNote = () => {
             </Grid>
 
             {releaseContents.map((value, index) => (
-              <FormReleaseContent key={index} index={index} register={register}/>
+              <FormReleaseContent key={index} index={index} methods={methods}/>
             ))}
 
             <Grid item xs={12}>
