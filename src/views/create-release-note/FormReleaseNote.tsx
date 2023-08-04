@@ -26,8 +26,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { releaseNoteState } from 'src/recoil/release-note/atoms';
 import FormReleaseContent from './FormReleaseContent';
 
-import { handleSave, handleDelete } from 'src/views/create-release-note/FormReleaseNoteActions';
-
 const FormReleaseNote = () => {
   
   const [releaseNote, setReleaseNote] = useRecoilState(releaseNoteState);
@@ -87,7 +85,7 @@ const FormReleaseNote = () => {
               <Button
                 variant="outlined"
                 type='submit'
-                onClick={() => handleSave(releaseNote)}
+                onClick={() => {}}
                 color="primary"
                 sx={{ mr: 1, ml: 5 }}
               >
@@ -96,7 +94,7 @@ const FormReleaseNote = () => {
               <Button
                 data-testid="delete-button"
                 variant="outlined"
-                onClick={() => handleDelete(releaseNote.releaseNoteId)}
+                onClick={() => {}}
                 color="error"
               >
                 삭제
