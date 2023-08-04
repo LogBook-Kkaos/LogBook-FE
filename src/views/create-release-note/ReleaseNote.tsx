@@ -4,7 +4,6 @@ export interface ReleaseNote {
   creatorId: number;
   version: string;
   creationDate: string;
-  status: string;
   releaseContent: { releaseSummary: string; category: string, documentLink: string }[];
   isImportant: boolean;
   isPublic: boolean;
