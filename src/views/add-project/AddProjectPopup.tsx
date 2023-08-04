@@ -75,6 +75,7 @@ const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 const AddProjectPopup = (props: AddProjectPopupProps) => {
   const { isOpen, onClose } = props
+  const accessToken = sessionStorage.getItem('accessToken')
 
   const loginUser = useRecoilValue(loginUserState)
   const [projectName, setProjectName] = useState('')
@@ -151,6 +152,10 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
         projectDescription: projectDescription,
         isPublic: isPublic,
         memberCount: members.length
+    },{
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
     })
     .then(function(response) {
       console.log(response);
@@ -181,7 +186,12 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
-        const response = await axios.get<SearchResults>('/api/users');
+        const axiosWithToken = axios.create({
+          headers:{
+            Authorization:`Bearer ${accessToken}`
+          }
+        })
+        const response = await axiosWithToken.get<SearchResults>('/api/users');
         const sortingResult = sortUsersByName(response.data.result);
         const filteredUsers = sortingResult.filter(user => user.userName !== loginUser.userName);
         setAllUsers(filteredUsers);
