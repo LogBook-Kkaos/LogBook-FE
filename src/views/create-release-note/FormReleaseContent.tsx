@@ -1,18 +1,19 @@
-// ChangeItem.tsx
 import React, { useState, useEffect } from 'react';
-import { Form, useForm } from 'react-hook-form';
+import { Form, UseFormRegister, useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
 import CategoryTag, { CategoryType } from 'src/views/create-release-note/CategoryTag';
-export interface ChangeItemProps {
+
+export interface FormReleaseContentProps {
   index: number;
+  register: UseFormRegister<any>;
 }
 
-const FormReleaseContent: React.FC<ChangeItemProps> = ({ index }) => {
-  const { register, setValue, watch } = useForm();
+const FormReleaseContent: React.FC<FormReleaseContentProps> = ({ index, register}) => {
+  const { setValue, watch } = useForm();
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('General');
 
   const changeText = watch(`releaseContent.${index}.releaseSummary`, '');
@@ -31,7 +32,9 @@ const FormReleaseContent: React.FC<ChangeItemProps> = ({ index }) => {
     };
 
     assignCategory(changeText);
-  }, [changeText]);
+    setValue(`releaseContent.${index}.category`, selectedCategory);
+  }, [changeText, index, selectedCategory, setValue]);
+  
 
   const handleTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -53,7 +56,7 @@ const FormReleaseContent: React.FC<ChangeItemProps> = ({ index }) => {
           label={`변경사항 ${index + 1}`}
           placeholder="변경사항을 작성해주세요..."
           sx={{ '& .MuiOutlinedInput-root': { alignItems: 'baseline' } }}
-          value={changeText}
+          {...register(`releaseContent.${index}.releaseSummary`)}
           onChange={handleTextFieldChange}
           InputProps={{
             startAdornment: (
