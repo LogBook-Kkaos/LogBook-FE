@@ -35,10 +35,8 @@ import FileRefreshOutline from 'mdi-material-ui/FileRefreshOutline'
 
 // ** Components Imports
 import TabReleaseNote from 'src/views/project-detail/TabReleaseNote'
-
-// ** Demo Tabs Imports
-import TabInfo from 'src/views/account-settings/TabInfo'
-import TabAccount from 'src/views/account-settings/TabAccount'
+import TabDocument from 'src/views/project-detail/TabDocument'
+import TabIssue from 'src/views/project-detail/TabIssue'
 
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
@@ -58,7 +56,6 @@ const TabName = styled('span')(({ theme }) => ({
     display: 'none'
   }
 }))
-
 interface ProjectInfo{
   projectName: string
   projectDescription?: string
@@ -191,13 +188,13 @@ const ProjectDetail = () => {
 
 
             <TabPanel sx={{ p: 0 }} value='issue'>
-              <TabAccount />
+              <TabIssue />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='release-note'>
               <TabReleaseNote />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='document'>
-              <TabInfo />
+              <TabDocument />
             </TabPanel>
         </TabContext>
       </Grid>
