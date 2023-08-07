@@ -15,7 +15,6 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import VerticalNavItems from 'src/navigation/vertical'
 
 // ** Component Import
-import UpgradeToProButton from './components/UpgradeToProButton'
 import VerticalAppBarContent from './components/vertical/AppBarContent'
 
 // ** Hook Import
@@ -45,20 +44,6 @@ const UserLayout = ({ children }: Props) => {
 
   const isHome = router.pathname === '/'
 
-  const UpgradeToProImg = () => {
-    return (
-      <Box sx={{ mx: 'auto' }}>
-        {/* <a
-          target='_blank'
-          rel='noreferrer'
-          href='https://themeselection.com/products/materio-mui-react-nextjs-admin-template/'
-        >
-          <img width={230} alt='upgrade to premium' src={`/images/misc/upgrade-banner-${settings.mode}.png`} />
-        </a> */}
-      </Box>
-    )
-  }
-
   return (
     <>
       {isHome ? (
@@ -68,8 +53,7 @@ const UserLayout = ({ children }: Props) => {
           hidden={hidden}
           settings={settings}
           saveSettings={saveSettings}
-          verticalNavItems={VerticalNavItems()} // Navigation Items
-          afterVerticalNavMenuContent={UpgradeToProImg}
+          verticalNavItems={VerticalNavItems()} 
           verticalAppBarContent={(
             props // AppBar Content
           ) => (
@@ -82,7 +66,6 @@ const UserLayout = ({ children }: Props) => {
           )}
         >
           {children}
-          <UpgradeToProButton />
         </VerticalLayout>
       )}
     </>
