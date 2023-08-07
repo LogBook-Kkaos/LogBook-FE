@@ -56,15 +56,15 @@ const rows = [
     createReleaseNoteData(1, 'v 1.0.0', '문서 최초 생성', [{ category: Category.Feature, releaseContent: '신규 기능 추가 / AA 기능 제공' }], '장예경', '2023.06.20')
 ]
 
+
 const TabIssue = () => {
 
     return (
         <Grid container justifyContent="space-between" alignItems="center">
             <Grid item xs={12}>
-                <Card sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Card sx={{ display: 'flex', flexDirection: 'column', overflow: 'auto', }}>
                     <CardContent sx={{ display: 'flex', justifyContent: 'space-between', gap: '0rem', alignItems: 'stretch' }}>
                         <CardWrapper>
-                            <IssueTag />
                             <IssueTag />
                         </CardWrapper>
                         <CardWrapper>

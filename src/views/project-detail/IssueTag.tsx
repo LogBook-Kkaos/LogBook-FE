@@ -11,7 +11,9 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import AvatarGroup from '@mui/material/AvatarGroup'
 import IconButton from '@mui/material/IconButton'
+import PlusThick from 'mdi-material-ui/PlusThick'
 import Cog from 'mdi-material-ui/CogOutline'
+import { blue } from '@mui/material/colors'
 
 interface DataType {
   title: string
@@ -45,15 +47,23 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
 
 const IssueTag = () => {
   return (
-    <Card sx={{ position: 'relative' }}>
-      <CardContent>
-        {issueData.map((item: DataType, index: number) => {
-          return (
-            <>
+    <Card sx={{ p: 3, m: 2, backgroundColor: "#e0f2ff" }}>
+      <CardHeader
+        title='할 일'
+        sx={{ pt: 2.5, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.6 } }}
+        titleTypographyProps={{
+          variant: 'h6',
+          sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' }
+        }}
+      />
+      {issueData.map((item: DataType, index: number) => {
+        return (
+          <Card sx={{ position: 'relative', mb: 2 }}>
+            <CardContent>
               <Box
                 sx={{
-                  mt: 2.75,
-                  mb: 8.75,
+                  mt: 2,
+                  mb: 5,
                   display: 'flex',
                   flexWrap: 'wrap',
                   alignItems: 'center',
@@ -61,7 +71,7 @@ const IssueTag = () => {
                 }}
               >
                 <Box sx={{ mr: 2, mb: 1, display: 'flex', flexDirection: 'column' }}>
-                  <Typography variant='h6'>{item.title}</Typography>
+                  <Typography >{item.title}</Typography>
                 </Box>
                 <IconButton style={{ borderRadius: 10, padding: 8 }}>
                   <Cog />
@@ -70,49 +80,17 @@ const IssueTag = () => {
               <Box sx={{ gap: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <Avatar src='/images/avatars/8.png' alt='Alice Cobb' />
               </Box>
-            </>)
-        })}
-      </CardContent>
+            </CardContent>
+          </Card>)
+      })}
+      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <IconButton style={{ borderRadius: 10 }}>
+          <PlusThick />
+        </IconButton>
+        <Box sx={{ paddingTop: 2, display: 'flex', flexDirection: 'column' }}>
+          <Typography >이슈 추가</Typography>
+        </Box></Box>
     </Card>
-    // <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'], height:'100%' }}>
-    //   <Box sx={{ width: '100%' }}>
-    //     <CardHeader
-    //       title='할 일'
-    //       sx={{ pt: 5.5, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.6 } }}
-    //       action={<Typography variant='caption'>View All</Typography>}
-    //       titleTypographyProps={{
-    //         variant: 'h6',
-    //         sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' }
-    //       }}
-    //     />
-    //     <CardContent sx={{ pb: theme => `${theme.spacing(5.5)} !important` }}>
-    //       {issueData.map((item: DataType, index: number) => {
-    //         return (
-    //           <Box
-    //             key={item.title}
-    //             sx={{ display: 'flex', alignItems: 'center', mb: index !== issueData.length - 1 ? 6 : 0 }}
-    //           >
-    //             <Box sx={{ minWidth: 38, display: 'flex', justifyContent: 'center' }}>
-    //             <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{item.title}</Typography>
-    //             </Box>
-    //             <Box
-    //               sx={{
-    //                 ml: 4,
-    //                 width: '100%',
-    //                 display: 'flex',
-    //                 flexWrap: 'wrap',
-    //                 alignItems: 'center',
-    //                 justifyContent: 'space-between'
-    //               }}
-    //             >
-    //               <Typography variant='caption'>{item.name}</Typography>
-    //             </Box>
-    //           </Box>
-    //         )
-    //       })}
-    //     </CardContent>
-    //   </Box>
-    // </Card>
   )
 }
 
