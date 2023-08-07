@@ -1,5 +1,5 @@
 // ** React Imports
-import React, { ElementType, ReactNode, useState } from 'react'
+import React, { ElementType, ReactNode, useState, useCallback } from 'react'
 
 // ** MUI Imports
 import Chip from '@mui/material/Chip'
@@ -23,6 +23,7 @@ import UserIcon from 'src/layouts/components/UserIcon'
 // ** Component Imports
 import NotificationPopup from 'src/views/notification/NotificationPopup'
 import ChattingPopup from 'src/views/chatting/ChattingPopup'
+import AddProjectPopup from 'src/views/add-project/AddProjectPopup'
 
 interface Props {
     item: NavPopup
@@ -64,20 +65,27 @@ const VerticalNavPopup = ({ item }: Props) => {
     // ** States
     const [isOpen, setIsOpen] = useState(false);
 
-    const handlePopupToggle = () => {
+    const handlePopupToggle = useCallback(() => {
         setIsOpen(!isOpen);
-    };
+    }, [isOpen]);
 
     const contentMap: Record<string, JSX.Element> = {
-        Notification: (
-          <NotificationPopup handlePopupClose={handlePopupToggle} />
+        'Notification': (
+            <NotificationPopup handlePopupClose={handlePopupToggle} />
         ),
-        Chatting:(
-          <ChattingPopup handlePopupClose={handlePopupToggle} />
+        'Chatting':(
+            <ChattingPopup handlePopupClose={handlePopupToggle} />
+        ),
+        'Project Add':(
+            <AddProjectPopup
+            isOpen={isOpen}
+            onClose={handlePopupToggle}
+            />
         )
     }
 
     return (
+        <>
         <ListItem
             disablePadding
             className='nav-link'
@@ -101,7 +109,6 @@ const VerticalNavPopup = ({ item }: Props) => {
         >
             <UserIcon icon={IconTag} />
         </ListItemIcon>
-
         <MenuItemTextMetaWrapper>
             <Typography {...(themeConfig.menuTextTruncate && { noWrap: true })}>{item.popupTitle}</Typography>
             {item.badgeContent ? (
@@ -117,9 +124,10 @@ const VerticalNavPopup = ({ item }: Props) => {
                 />
             ) : null}
         </MenuItemTextMetaWrapper>
-        {isOpen && contentMap[item.popupTitle]}
         </MenuNavLink>
         </ListItem>
+        {isOpen && contentMap[item.popupTitle]}
+        </>
     )
 }
 

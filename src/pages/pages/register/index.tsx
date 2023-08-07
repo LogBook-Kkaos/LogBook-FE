@@ -127,7 +127,7 @@ const RegisterPage = () => {
       .then((res) => {
         const { accessToken, refreshToken } = res.data.result;
 
-        // Store tokens in cookies and sessionStorage
+        // Store tokens in sessionStorage
         sessionStorage.setItem('accessToken', accessToken);
         sessionStorage.setItem('refreshToken', refreshToken);
 
