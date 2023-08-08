@@ -20,12 +20,10 @@ const createReleaseNoteData = (releaseNoteId: number, version: string, releaseTi
   return { releaseNoteId, version, releaseTitle, changeItems, creatorId, creationDate }
 }
 
-
 interface ReleaseContent {
   category: Category,
   releaseContent: string
 }
-
 
 const rows = [
   createReleaseNoteData(4, 'v 1.2.1', 'BB 기능 추가 및 변경', [{ category: Category.Feature, releaseContent: 'bb 기능 - 기능 설명' }, { category: Category.Changed, releaseContent: '타입 변경' }], '유소연', '2023.06.30'),
@@ -34,14 +32,10 @@ const rows = [
   createReleaseNoteData(1, 'v 1.0.0', '문서 최초 생성', [{ category: Category.Feature, releaseContent: '신규 기능 추가 / AA 기능 제공' }], '장예경', '2023.06.20')
 ]
 
-
 const TabReleaseNote = () => {
-
-
 
   return (
     <Grid container justifyContent="space-between" alignItems="center">
-
       <Grid item xs={12}>
         <TableContainer component={Paper} sx={{ maxHeight: 'calc(100vh - 400px)', position: 'relative', marginTop: '10px' }}>
           <Table sx={{ minWidth: 650 }} aria-label='project detail table'>

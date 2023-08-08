@@ -188,7 +188,7 @@ const ProjectDetail = () => {
               </Button>
             </Box>
             <TabPanel sx={{ p: 0 }} value='issue'>
-              <TabCreateIssue />
+              <TabIssue />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='release-note'>
               <TabReleaseNote />

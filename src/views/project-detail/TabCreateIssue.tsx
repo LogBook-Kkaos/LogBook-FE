@@ -6,25 +6,17 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import { styled } from '@mui/material/styles'
-import Paper from '@mui/material/Paper'
-import Table from '@mui/material/Table'
-import TableRow from '@mui/material/TableRow'
-import TableHead from '@mui/material/TableHead'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
 import Box, { BoxProps } from '@mui/material/Box';
-import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
-import ArrowLeft from 'mdi-material-ui/ArrowLeft'
 import IconButton from '@mui/material/IconButton'
-import CreateIssueTag from './CreateIssueTag';
 import Button, { ButtonProps } from '@mui/material/Button'
-import StatusTag, { Status } from "./StatusTag"
 import Avatar from '@mui/material/Avatar'
+import ArrowLeft from 'mdi-material-ui/ArrowLeft'
 
 // ** Custom Components Imports
 import CategoryTag, { Category } from 'src/views/project-detail/CategoryTag'
+import CreateIssueTag from './CreateIssueTag';
+import StatusTag, { Status } from "./StatusTag"
 
 const createReleaseNoteData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ReleaseContent[], creatorId: string, creationDate: string) => {
     return { releaseNoteId, version, releaseTitle, changeItems, creatorId, creationDate }
@@ -61,7 +53,6 @@ const rows = [
     createReleaseNoteData(2, 'v 1.1.1', 'AA 기능 수정 및 버그 해결', [{ category: Category.Fixed, releaseContent: '~ 연동 안되는 버그 수정' }, { category: Category.Changed, releaseContent: '~ 성능 개선' }], '이서빈', '2023.06.26'),
     createReleaseNoteData(1, 'v 1.0.0', '문서 최초 생성', [{ category: Category.Feature, releaseContent: '신규 기능 추가 / AA 기능 제공' }], '장예경', '2023.06.20')
 ]
-
 
 const TabCreateIssue = () => {
 

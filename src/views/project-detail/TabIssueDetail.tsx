@@ -5,24 +5,16 @@ import { useRouter } from 'next/router'
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import { styled } from '@mui/material/styles'
-import Paper from '@mui/material/Paper'
-import Table from '@mui/material/Table'
-import TableRow from '@mui/material/TableRow'
-import TableHead from '@mui/material/TableHead'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
+import IconButton from '@mui/material/IconButton';
+import Button, { ButtonProps } from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import Box, { BoxProps } from '@mui/material/Box';
-import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid'
-import ArrowLeft from 'mdi-material-ui/ArrowLeft'
-import IconButton from '@mui/material/IconButton'
-import SubIssueTag from './SubIssueTag';
-import Button, { ButtonProps } from '@mui/material/Button'
+import ArrowLeft from 'mdi-material-ui/ArrowLeft';
+import { styled } from '@mui/material/styles';
 
 // ** Custom Components Imports
 import CategoryTag, { Category } from 'src/views/project-detail/CategoryTag'
+import SubIssueTag from './SubIssueTag';
 
 const createReleaseNoteData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ReleaseContent[], creatorId: string, creationDate: string) => {
     return { releaseNoteId, version, releaseTitle, changeItems, creatorId, creationDate }
@@ -60,7 +52,6 @@ const rows = [
     createReleaseNoteData(1, 'v 1.0.0', '문서 최초 생성', [{ category: Category.Feature, releaseContent: '신규 기능 추가 / AA 기능 제공' }], '장예경', '2023.06.20')
 ]
 
-
 const TabIssueDetail = () => {
 
     return (
@@ -79,7 +70,7 @@ const TabIssueDetail = () => {
                                 sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' }
                             }}
                         />
-                        <Box sx={{ display: 'flex',}}>
+                        <Box sx={{ display: 'flex', }}>
                             <ButtonStyled variant='contained' sx={{ fontSize: '0.8rem' }}>
                                 저장
                                 <input
