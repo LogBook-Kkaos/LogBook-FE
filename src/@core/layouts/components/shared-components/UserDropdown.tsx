@@ -4,6 +4,9 @@ import { useState, SyntheticEvent, Fragment } from 'react'
 // ** Next Import
 import { useRouter } from 'next/router'
 
+// ** HTTP Client
+import axios from 'axios'
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
@@ -26,6 +29,7 @@ import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
 // ** Recoil Imports
 import { useRecoilValue } from 'recoil'
 import { loginUserState } from 'src/recoil/user/atoms'
+import { Session } from 'inspector'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -53,6 +57,35 @@ const UserDropdown = () => {
       router.push(url)
     }
     setAnchorEl(null)
+  }
+
+  const handleLogout = async () => {
+
+    const refreshToken = sessionStorage.getItem('refreshToken');
+
+    if (refreshToken) {
+      const response = await axios.delete('/api/users/logout', {
+        headers: {
+          'Authorization': `Bearer ${refreshToken}`
+        }
+      });
+  
+      if (response.status === 200) {
+        const keysToRemove = [
+          'accessToken',
+          'refreshToken',
+          'email',
+          'userName',
+          'department'
+        ];
+  
+        keysToRemove.forEach((key) => {
+          sessionStorage.removeItem(key);
+        });
+  
+        router.push('/pages/login');
+      }
+    }
   }
 
   const styles = {
@@ -150,7 +183,7 @@ const UserDropdown = () => {
           </Box>
         </MenuItem> */}
         <Divider />
-        <MenuItem sx={{ py: 2 }} onClick={() => handleDropdownClose('/pages/login')}>
+        <MenuItem sx={{ py: 2 }} onClick={handleLogout}>
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>
