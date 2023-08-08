@@ -146,11 +146,12 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
   }
   
   const handleClickAddButton = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const publicState = isPublic ? 'public' : 'private';
     axios.post('/api/projects',
     {
         projectName: projectName,
         projectDescription: projectDescription,
-        isPublic: isPublic,
+        isPublic: publicState,
         memberCount: members.length
     },{
       headers: {
@@ -159,7 +160,22 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
     })
     .then(function(response) {
       console.log(response);
-      onClose();
+      const projectID = response.data.result;
+      const memberData = members.map((member) => ({
+        email: member.email,
+        permissionLevel: member.role
+      }))
+      axios.post(`/api/projects/${projectID}/members`, memberData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      .then(function(response) {
+        console.log(response);
+        onClose();
+      }).catch(function (error) {
+        console.error('멤버 추가 실패:', error);
+      });
     })
     .catch(function (error) {
       console.error('프로젝트 생성 실패:', error);
