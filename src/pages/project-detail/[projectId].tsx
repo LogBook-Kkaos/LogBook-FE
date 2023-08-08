@@ -38,6 +38,7 @@ import TabReleaseNote from 'src/views/project-detail/TabReleaseNote'
 import TabDocument from 'src/views/project-detail/TabDocument'
 import TabIssue from 'src/views/project-detail/TabIssue'
 import TabIssueDetail from 'src/views/project-detail/TabIssueDetail'
+import TabCreateIssue from 'src/views/project-detail/TabCreateIssue'
 
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
@@ -187,7 +188,7 @@ const ProjectDetail = () => {
               </Button>
             </Box>
             <TabPanel sx={{ p: 0 }} value='issue'>
-              <TabIssueDetail />
+              <TabCreateIssue />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='release-note'>
               <TabReleaseNote />
