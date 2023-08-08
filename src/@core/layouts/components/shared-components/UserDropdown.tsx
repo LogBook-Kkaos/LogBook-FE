@@ -105,6 +105,7 @@ const UserDropdown = () => {
   return (
     <Fragment>
       <Badge
+        data-testid='user-avatar'
         overlap='circular'
         onClick={handleDropdownOpen}
         sx={{ ml: 2, cursor: 'pointer' }}
@@ -183,7 +184,7 @@ const UserDropdown = () => {
           </Box>
         </MenuItem> */}
         <Divider />
-        <MenuItem sx={{ py: 2 }} onClick={handleLogout}>
+        <MenuItem sx={{ py: 2 }} onClick={handleLogout} data-testid="logout-button">
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>
