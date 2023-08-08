@@ -1,4 +1,3 @@
-
 // ** React Imports
 import { SyntheticEvent, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -32,12 +31,11 @@ import LightbulbOnOutline from 'mdi-material-ui/LightbulbOnOutline'
 import NoteAlertOutline from 'mdi-material-ui/NoteAlertOutline'
 import FileRefreshOutline from 'mdi-material-ui/FileRefreshOutline'
 
-
 // ** Components Imports
 import TabReleaseNote from 'src/views/project-detail/TabReleaseNote'
+import TabDocument from 'src/views/project-detail/TabDocument'
 
 // ** Demo Tabs Imports
-import TabInfo from 'src/views/account-settings/TabInfo'
 import TabAccount from 'src/views/account-settings/TabAccount'
 
 
@@ -71,9 +69,14 @@ const ProjectDetail = () => {
   const router = useRouter();
   const {projectId} = router.query;
 
-  const handleCreateReleaseNote = () => {
-    console.log('create release note')
-    router.push('/create-release-note')
+  const handleCreate = () => {
+    if (value === 'release-note') {
+      console.log('create release note');
+      router.push('/create-release-note');
+    } else if (value === 'document') {
+      console.log('create document');
+      router.push('/create-document')
+    }
   }
 
   const [value, setValue] = useState<string>('issue')
@@ -100,8 +103,16 @@ const ProjectDetail = () => {
       fetchProjectInfo();
     }
   }, [projectId]);
+  let createButtonLabel = '';
+  
+  if (value === 'release-note') {
+    createButtonLabel = '릴리즈 노트 생성';
+  } else if (value === 'document') {
+    createButtonLabel = '기술 문서 생성';
+  }
 
   return (
+
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Typography variant='h5'>
@@ -183,13 +194,12 @@ const ProjectDetail = () => {
                   borderRadius: 1,
                   marginLeft: 'auto'
                 }}
-                onClick={handleCreateReleaseNote}
+                onClick={handleCreate}
               >
-                릴리즈 노트 작성하기
+                {createButtonLabel}
               </Button>
+
             </Box>
-
-
             <TabPanel sx={{ p: 0 }} value='issue'>
               <TabAccount />
             </TabPanel>
@@ -197,11 +207,12 @@ const ProjectDetail = () => {
               <TabReleaseNote />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='document'>
-              <TabInfo />
+              <TabDocument />
             </TabPanel>
         </TabContext>
       </Grid>
     </Grid>
+
   )
 }
 
