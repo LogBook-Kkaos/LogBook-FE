@@ -62,7 +62,7 @@ const TabIssue = () => {
     return (
         <Grid container justifyContent="space-between" alignItems="center">
             <Grid item xs={12}>
-                <Card sx={{ maxHeight: 'calc(100vh - 400px)', display: 'flex', flexDirection: 'column', overflow: 'auto', }}>
+                <Card sx={{ maxHeight: 'calc(100vh - 350px)', display: 'flex', flexDirection: 'column', overflow: 'auto', }}>
                     <CardContent sx={{ display: 'flex', justifyContent: 'space-between', gap: '0rem', alignItems: 'stretch' }}>
                         <CardWrapper>
                             <IssueTag />

@@ -37,6 +37,7 @@ import FileRefreshOutline from 'mdi-material-ui/FileRefreshOutline'
 import TabReleaseNote from 'src/views/project-detail/TabReleaseNote'
 import TabDocument from 'src/views/project-detail/TabDocument'
 import TabIssue from 'src/views/project-detail/TabIssue'
+import TabIssueDetail from 'src/views/project-detail/TabIssueDetail'
 
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
@@ -185,10 +186,8 @@ const ProjectDetail = () => {
                 릴리즈 노트 작성하기
               </Button>
             </Box>
-
-
             <TabPanel sx={{ p: 0 }} value='issue'>
-              <TabIssue />
+              <TabIssueDetail />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='release-note'>
               <TabReleaseNote />
