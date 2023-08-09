@@ -82,7 +82,8 @@ const SubIssueTag = () => {
         </IconButton>
         <Box sx={{ paddingTop: 2, display: 'flex', flexDirection: 'column' }}>
           <Typography >하위 이슈 추가</Typography>
-        </Box></Box>
+        </Box>
+        </Box>
     </Card>
   )
 }

@@ -16,6 +16,9 @@ import { styled } from '@mui/material/styles';
 import CategoryTag, { Category } from 'src/views/project-detail/CategoryTag'
 import SubIssueTag from './SubIssueTag';
 
+import { useRecoilState } from 'recoil';
+import { activeView } from '../../recoil/issue/atom';
+
 const createReleaseNoteData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ReleaseContent[], creatorId: string, creationDate: string) => {
     return { releaseNoteId, version, releaseTitle, changeItems, creatorId, creationDate }
 }
@@ -54,11 +57,26 @@ const rows = [
 
 const TabIssueDetail = () => {
 
+    const [activeTab, setActiveTab] = useRecoilState(activeView);
+
+    const handleIssueClick = () => {
+        setActiveTab('issue');
+    };
+
+    const handleIssueCardClick = () => {
+        setActiveTab('issueDetail');
+    };
+
+    const handleAddIssueClick = () => {
+        setActiveTab('createIssue');
+    };
+
     return (
         <Grid container justifyContent="flex-start" alignItems="center" >
             <Grid item xs={12} >
                 <Card sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <IconButton sx={{ ml: 8, mt: 5 }} style={{ borderRadius: 10, padding: 8, alignSelf: "self-start" }}>
+                    <IconButton sx={{ ml: 8, mt: 5 }} style={{ borderRadius: 10, padding: 8, alignSelf: "self-start" }}
+                        onClick={handleIssueClick}>
                         <ArrowLeft />
                     </IconButton>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 5 }}>

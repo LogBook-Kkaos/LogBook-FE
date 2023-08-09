@@ -40,6 +40,9 @@ import TabIssue from 'src/views/project-detail/TabIssue'
 import TabIssueDetail from 'src/views/project-detail/TabIssueDetail'
 import TabCreateIssue from 'src/views/project-detail/TabCreateIssue'
 
+import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
+import { activeView } from '../../recoil/issue/atom';
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -68,7 +71,7 @@ interface ProjectInfo{
 const ProjectDetail = () => {
 
   const router = useRouter();
-  const {projectId} = router.query;
+  const activeTab = useRecoilValue(activeView);
 
   const handleCreateReleaseNote = () => {
     console.log('create release note')
@@ -139,63 +142,65 @@ const ProjectDetail = () => {
       </Grid>
       <Grid item xs={12}>
         <TabContext value={value}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-              <TabList
-                onChange={handleChange}
-                aria-label='project-detail tabs'
-                sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}`, flexGrow: 1 }}
-              >
-                <Tab
-                  value='issue'
-                  label={
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <LightbulbOnOutline />
-                      <TabName>이슈</TabName>
-                    </Box>
-                  }
-                />
-                <Tab
-                  value='release-note'
-                  label={
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <NoteAlertOutline />
-                      <TabName>릴리즈 노트</TabName>
-                    </Box>
-                  }
-                />
-                <Tab
-                  value='document'
-                  label={
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <FileRefreshOutline />
-                      <TabName>기술 문서</TabName>
-                    </Box>
-                  }
-                />
-              </TabList>
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{
-                  mt: 1,
-                  mb: 1,
-                  borderRadius: 1,
-                  marginLeft: 'auto'
-                }}
-                onClick={handleCreateReleaseNote}
-              >
-                릴리즈 노트 작성하기
-              </Button>
-            </Box>
-            <TabPanel sx={{ p: 0 }} value='issue'>
-              <TabIssue />
-            </TabPanel>
-            <TabPanel sx={{ p: 0 }} value='release-note'>
-              <TabReleaseNote />
-            </TabPanel>
-            <TabPanel sx={{ p: 0 }} value='document'>
-              <TabDocument />
-            </TabPanel>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+            <TabList
+              onChange={handleChange}
+              aria-label='project-detail tabs'
+              sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}`, flexGrow: 1 }}
+            >
+              <Tab
+                value='issue'
+                label={
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <LightbulbOnOutline />
+                    <TabName>이슈</TabName>
+                  </Box>
+                }
+              />
+              <Tab
+                value='release-note'
+                label={
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <NoteAlertOutline />
+                    <TabName>릴리즈 노트</TabName>
+                  </Box>
+                }
+              />
+              <Tab
+                value='document'
+                label={
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <FileRefreshOutline />
+                    <TabName>기술 문서</TabName>
+                  </Box>
+                }
+              />
+            </TabList>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{
+                mt: 1,
+                mb: 1,
+                borderRadius: 1,
+                marginLeft: 'auto'
+              }}
+              onClick={handleCreateReleaseNote}
+            >
+              릴리즈 노트 작성하기
+            </Button>
+          </Box>
+          <TabPanel sx={{ p: 0 }} value='issue'>
+            {activeTab === 'issue' && <TabIssue />}
+            {activeTab === 'issueDetail' && <TabIssueDetail />}
+            {activeTab === 'createIssue' && <TabCreateIssue />}
+          </TabPanel>
+          <TabPanel sx={{ p: 0 }} value='release-note'>
+            <TabReleaseNote />
+          </TabPanel>
+          <TabPanel sx={{ p: 0 }} value='document'>
+            <TabDocument />
+          </TabPanel>
         </TabContext>
       </Grid>
     </Grid>

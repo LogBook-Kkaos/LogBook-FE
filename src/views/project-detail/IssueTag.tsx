@@ -11,6 +11,9 @@ import PlusThick from 'mdi-material-ui/PlusThick'
 import Cog from 'mdi-material-ui/CogOutline'
 import { styled } from '@mui/material/styles'
 
+import { useRecoilState } from 'recoil';
+import { activeView } from '../../recoil/issue/atom';
+
 interface DataType {
   title: string
   name: string
@@ -42,6 +45,16 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
 }))
 
 const IssueTag = () => {
+  const [activeTab, setActiveTab] = useRecoilState(activeView);
+
+  const handleIssueCardClick = () => {
+    setActiveTab('issueDetail');
+  };
+
+  const handleAddIssueClick = () => {
+    setActiveTab('createIssue');
+  };
+
   return (
     <Card sx={{ p: 3, m: 2, backgroundColor: "#e0f2ff" }}>
       <CardHeader
@@ -54,7 +67,8 @@ const IssueTag = () => {
       />
       {issueData.map((item: DataType, index: number) => {
         return (
-          <Card sx={{ position: 'relative', mb: 2 }}>
+          <Card sx={{ position: 'relative', mb: 2 }}
+            onClick={handleIssueCardClick}>
             <CardContent>
               <Box
                 sx={{
@@ -79,13 +93,15 @@ const IssueTag = () => {
             </CardContent>
           </Card>)
       })}
-      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row' }}
+        onClick={handleAddIssueClick}>
         <IconButton style={{ borderRadius: 10 }}>
           <PlusThick />
         </IconButton>
         <Box sx={{ paddingTop: 2, display: 'flex', flexDirection: 'column' }}>
           <Typography >이슈 추가</Typography>
-        </Box></Box>
+        </Box>
+      </Box>
     </Card>
   )
 }
