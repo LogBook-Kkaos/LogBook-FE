@@ -40,7 +40,6 @@ import TabIssue from 'src/views/project-detail/TabIssue'
 import TabIssueDetail from 'src/views/project-detail/TabIssueDetail'
 import TabCreateIssue from 'src/views/project-detail/TabCreateIssue'
 
-import { useRecoilValue } from 'recoil';
 import { activeView } from 'src/recoil/issue/atom';
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
@@ -70,6 +69,7 @@ interface ProjectInfo{
 const ProjectDetail = () => {
 
   const router = useRouter();
+  const {projectId} = router.query;
   const activeTab = useRecoilValue(activeView);
 
   const handleCreateReleaseNote = () => {
