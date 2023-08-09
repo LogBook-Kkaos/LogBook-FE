@@ -1,7 +1,13 @@
 
 // ** React Imports
-import { SyntheticEvent, useState } from 'react'
+import { SyntheticEvent, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+
+// ** HTTP Client
+import axios from 'axios'
+
+import { useRecoilValue } from 'recoil'
+import { tokensState } from 'src/recoil/auth/atoms'
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
@@ -53,7 +59,12 @@ const TabName = styled('span')(({ theme }) => ({
   }
 }))
 
-
+interface ProjectInfo{
+  projectName: string
+  projectDescription?: string
+  isPublic?: string
+  memberCount?: number
+}
 
 const ProjectDetail = () => {
 
@@ -66,18 +77,37 @@ const ProjectDetail = () => {
   }
 
   const [value, setValue] = useState<string>('issue')
+  const [project, setProject] = useState<ProjectInfo>();
+  const { accessToken } = useRecoilValue(tokensState)
+  
+  const headers = { Authorization: `Bearer ${accessToken}` }
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
   }
 
+  useEffect(() => {
+    const fetchProjectInfo = async () => {
+      try {
+        const response = await axios.get(`/api/projects/${projectId}`,{headers});
+        setProject(response.data.result)
+      } catch (error) {
+        console.error('Error fetching project information:', error);
+      }
+    };
+
+    if (projectId) {
+      fetchProjectInfo();
+    }
+  }, [projectId]);
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Typography variant='h5'>
-          Project {projectId}
+          {project?.projectName}
         </Typography>
-        <Typography variant='body2'>This is the project description.</Typography>
+        <Typography variant='body2' style={{paddingTop:5}}>{project?.projectDescription}</Typography>
       </Grid>
       <Grid item xs={12}>
         <Grid container justifyContent="space-between" alignItems="center">
