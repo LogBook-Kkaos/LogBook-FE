@@ -1,6 +1,3 @@
-// ** Next Imports
-import { useRouter } from 'next/router'
-
 // ** MUI Imports
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -54,16 +51,16 @@ const TabCreateIssue = () => {
 
     const [activeTab, setActiveTab] = useRecoilState(activeView);
 
-const handleTabChange = (newTab) => {
-  setActiveTab(newTab);
-};
+    const handleTabChange = (newTab: string) => {
+        setActiveTab(newTab);
+    };
 
     return (
         <Grid container justifyContent="flex-start" alignItems="center" >
             <Grid item xs={12} >
                 <Card sx={{ display: 'flex', flexDirection: 'column' }}>
                     <IconButton sx={{ ml: 8, mt: 5 }} style={{ borderRadius: 10, padding: 8, alignSelf: "self-start" }}
-                        onClick={handleIssueClick}>
+                        onClick={() => handleTabChange('issue')}>
                         <ArrowLeft />
                     </IconButton>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 5 }}>

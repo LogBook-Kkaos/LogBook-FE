@@ -49,16 +49,8 @@ const TabIssueDetail = () => {
 
     const [activeTab, setActiveTab] = useRecoilState(activeView);
 
-    const handleIssueClick = () => {
-        setActiveTab('issue');
-    };
-
-    const handleIssueCardClick = () => {
-        setActiveTab('issueDetail');
-    };
-
-    const handleAddIssueClick = () => {
-        setActiveTab('createIssue');
+    const handleTabChange = (newTab: string) => {
+        setActiveTab(newTab);
     };
 
     return (
@@ -66,7 +58,7 @@ const TabIssueDetail = () => {
             <Grid item xs={12} >
                 <Card sx={{ display: 'flex', flexDirection: 'column' }}>
                     <IconButton sx={{ ml: 8, mt: 5 }} style={{ borderRadius: 10, padding: 8, alignSelf: "self-start" }}
-                        onClick={handleIssueClick}>
+                        onClick={() => handleTabChange('issue')}>
                         <ArrowLeft />
                     </IconButton>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 5 }}>

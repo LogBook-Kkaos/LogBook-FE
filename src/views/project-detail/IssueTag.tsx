@@ -47,12 +47,8 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
 const IssueTag = () => {
   const [activeTab, setActiveTab] = useRecoilState(activeView);
 
-  const handleIssueCardClick = () => {
-    setActiveTab('issueDetail');
-  };
-
-  const handleAddIssueClick = () => {
-    setActiveTab('createIssue');
+  const handleTabChange = (newTab: string) => {
+    setActiveTab(newTab);
   };
 
   return (
@@ -68,7 +64,7 @@ const IssueTag = () => {
       {issueData.map((item: DataType, index: number) => {
         return (
           <Card sx={{ position: 'relative', mb: 2 }}
-            onClick={handleIssueCardClick}>
+            onClick={() => handleTabChange('issueDetail')}>
             <CardContent>
               <Box
                 sx={{
@@ -94,7 +90,7 @@ const IssueTag = () => {
           </Card>)
       })}
       <Box sx={{ display: 'flex', flexDirection: 'row' }}
-        onClick={handleAddIssueClick}>
+        onClick={() => handleTabChange('createIssue')}>
         <IconButton style={{ borderRadius: 10 }}>
           <PlusThick />
         </IconButton>
