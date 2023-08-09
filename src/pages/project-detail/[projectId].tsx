@@ -41,8 +41,7 @@ import TabIssueDetail from 'src/views/project-detail/TabIssueDetail'
 import TabCreateIssue from 'src/views/project-detail/TabCreateIssue'
 
 import { useRecoilValue } from 'recoil';
-import { useRecoilState } from 'recoil';
-import { activeView } from '../../recoil/issue/atom';
+import { activeView } from 'src/recoil/issue/atom';
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
