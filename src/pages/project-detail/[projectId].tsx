@@ -8,6 +8,7 @@ import axios from 'axios'
 
 import { useRecoilValue } from 'recoil'
 import { tokensState } from 'src/recoil/auth/atoms'
+import { activeView } from 'src/recoil/issue/atom';
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
@@ -39,8 +40,6 @@ import TabDocument from 'src/views/project-detail/TabDocument'
 import TabIssue from 'src/views/project-detail/TabIssue'
 import TabIssueDetail from 'src/views/project-detail/TabIssueDetail'
 import TabCreateIssue from 'src/views/project-detail/TabCreateIssue'
-
-import { activeView } from 'src/recoil/issue/atom';
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
