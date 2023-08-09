@@ -13,7 +13,7 @@ import { styled } from '@mui/material/styles';
 import SubIssueTag from './SubIssueTag';
 
 import { useRecoilState } from 'recoil';
-import { activeView } from '../../recoil/issue/atom';
+import { activeView } from 'src/recoil/issue/atom';
 
 const CardWrapper = styled(Box)<BoxProps>({
     width: '33%',

@@ -12,7 +12,7 @@ import Cog from 'mdi-material-ui/CogOutline'
 import { styled } from '@mui/material/styles'
 
 import { useRecoilState } from 'recoil';
-import { activeView } from '../../recoil/issue/atom';
+import { activeView } from 'src/recoil/issue/atom';
 
 interface DataType {
   title: string

@@ -16,7 +16,7 @@ import CreateIssueTag from './CreateIssueTag';
 import StatusTag, { Status } from "./StatusTag"
 
 import { useRecoilState } from 'recoil';
-import { activeView } from '../../recoil/issue/atom';
+import { activeView } from 'src/recoil/issue/atom';
 
 const createReleaseNoteData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ReleaseContent[], creatorId: string, creationDate: string) => {
     return { releaseNoteId, version, releaseTitle, changeItems, creatorId, creationDate }
