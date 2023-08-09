@@ -69,21 +69,21 @@ const ProjectDetail = () => {
 
   const router = useRouter();
   const {projectId} = router.query;
-  const activeTab = useRecoilValue(activeView);
+  const activeIssueTab = useRecoilValue(activeView);
 
   const handleCreateReleaseNote = () => {
     console.log('create release note')
     router.push('/create-release-note')
   }
 
-  const [value, setValue] = useState<string>('issue')
+  const [activeTab, setActiveTab] = useState<string>('issue')
   const [project, setProject] = useState<ProjectInfo>();
   const { accessToken } = useRecoilValue(tokensState)
   
   const headers = { Authorization: `Bearer ${accessToken}` }
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
-    setValue(newValue)
+    setActiveTab(newValue)
   }
 
   useEffect(() => {
@@ -139,7 +139,7 @@ const ProjectDetail = () => {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <TabContext value={value}>
+        <TabContext value={activeTab}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
             <TabList
               onChange={handleChange}
@@ -189,9 +189,9 @@ const ProjectDetail = () => {
             </Button>
           </Box>
           <TabPanel sx={{ p: 0 }} value='issue'>
-            {activeTab === 'issue' && <TabIssue />}
-            {activeTab === 'issueDetail' && <TabIssueDetail />}
-            {activeTab === 'createIssue' && <TabCreateIssue />}
+            {activeIssueTab === 'issue' && <TabIssue />}
+            {activeIssueTab === 'issueDetail' && <TabIssueDetail />}
+            {activeIssueTab === 'createIssue' && <TabCreateIssue />}
           </TabPanel>
           <TabPanel sx={{ p: 0 }} value='release-note'>
             <TabReleaseNote />

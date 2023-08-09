@@ -12,7 +12,7 @@ import ArrowLeft from 'mdi-material-ui/ArrowLeft'
 
 // ** Custom Components Imports
 import CategoryTag, { Category } from 'src/views/project-detail/CategoryTag'
-import CreateIssueTag from './CreateIssueTag';
+import CreateIssueCard from './CreateIssueCard';
 import StatusTag, { Status } from "./StatusTag"
 
 import { useRecoilState } from 'recoil';
@@ -101,7 +101,7 @@ const TabCreateIssue = () => {
                     </Box>
                     <CardContent sx={{ display: 'flex', justifyContent: 'center', gap: '0rem', alignItems: 'stretch' }}>
                         <CardWrapper sx={{ width: '100%' }}>
-                            <CreateIssueTag />
+                            <CreateIssueCard />
                         </CardWrapper>
                     </CardContent>
                 </Card>

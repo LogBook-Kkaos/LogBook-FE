@@ -10,7 +10,7 @@ import ArrowLeft from 'mdi-material-ui/ArrowLeft';
 import { styled } from '@mui/material/styles';
 
 // ** Custom Components Imports
-import SubIssueTag from './SubIssueTag';
+import SubIssueCard from './SubIssueCard';
 
 import { useRecoilState } from 'recoil';
 import { activeView } from 'src/recoil/issue/atom';
@@ -80,7 +80,7 @@ const TabIssueDetail = () => {
                     />
                     <CardContent sx={{ display: 'flex', justifyContent: 'center', gap: '0rem', alignItems: 'stretch' }}>
                         <CardWrapper sx={{ width: '100%' }}>
-                            <SubIssueTag />
+                            <SubIssueCard />
                         </CardWrapper>
                     </CardContent>
                 </Card>
