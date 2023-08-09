@@ -30,12 +30,12 @@ interface ReleaseContent {
     releaseContent: string
 }
 
-interface DataType {
+interface ProjectDataType {
     id: number;
     title: string;
 }
 
-const projectData: DataType = {
+const projectData: ProjectDataType = {
     id: 1,
     title: "할 일",
 };
