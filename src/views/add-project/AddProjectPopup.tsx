@@ -173,6 +173,7 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
       .then(function(response) {
         console.log(response);
         onClose();
+        window.location.href = window.location.href;
       }).catch(function (error) {
         console.error('멤버 추가 실패:', error);
       });

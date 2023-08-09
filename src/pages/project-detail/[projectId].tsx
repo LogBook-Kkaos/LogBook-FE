@@ -1,15 +1,11 @@
 
 // ** React Imports
 import { SyntheticEvent, useState } from 'react'
-
 import { useRouter } from 'next/router'
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
-import Link from '@mui/material/Link'
-import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
-import CardHeader from '@mui/material/CardHeader'
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -62,12 +58,12 @@ const TabName = styled('span')(({ theme }) => ({
 const ProjectDetail = () => {
 
   const router = useRouter();
+  const {projectId} = router.query;
 
   const handleCreateReleaseNote = () => {
     console.log('create release note')
     router.push('/create-release-note')
   }
-
 
   const [value, setValue] = useState<string>('issue')
 
@@ -79,7 +75,7 @@ const ProjectDetail = () => {
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Typography variant='h5'>
-          Project 1
+          Project {projectId}
         </Typography>
         <Typography variant='body2'>This is the project description.</Typography>
       </Grid>
