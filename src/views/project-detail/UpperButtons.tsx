@@ -36,18 +36,27 @@ const UpperButtons =({ routerPath, createButtonLabel }: { routerPath: string, cr
     const handleCreate = () => {
           router.push(routerPath)
       }
+
+    
+    //style component
+    const IconButtonStyle = {
+        border: '1px solid rgba(0, 0, 0, 0.23)',
+        borderRadius: 10,
+        padding: 8,
+        marginRight: 16
+      };
     
 
     return(
         <Grid container sx={{ width: '100%',mt:3, justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-                <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
+                <IconButton style={IconButtonStyle}>
                     <Cog />
                 </IconButton>
-                <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
+                <IconButton style={IconButtonStyle}>
                     <Sort />
                 </IconButton>
-                <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
+                <IconButton style={IconButtonStyle}>
                     <Filter />
                 </IconButton>
                 <TextField

@@ -69,15 +69,7 @@ const ProjectDetail = () => {
   const router = useRouter();
   const {projectId} = router.query;
 
-  const handleCreate = () => {
-    if (value === 'release-note') {
-      console.log('create release note');
-      router.push('/create-release-note');
-    } else if (value === 'document') {
-      console.log('create document');
-      router.push('/create-document')
-    }
-  }
+
 
   const [value, setValue] = useState<string>('issue')
   const [project, setProject] = useState<ProjectInfo>();
@@ -103,7 +95,6 @@ const ProjectDetail = () => {
       fetchProjectInfo();
     }
   }, [projectId]);
-  let createButtonLabel = '';
   
 
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -11,8 +12,13 @@ interface CardDocumentProps {
   }
 
 const CardDocument: React.FC<CardDocumentProps> = ({ imageUrl, date, title }) => {
+  const router = useRouter();
+  const handleCardClick = () => {
+    router.push("/document-detail")
+  };
+
   return (
-    <Card sx={{ m: 5, width: 250 }}>
+    <Card sx={{ m: 5, width: 250, transition: 'transform 0.2s', '&:hover': { transform: 'scale(1.05)' } }} onClick={handleCardClick} >
       <CardMedia
         component="img"
         height="140"
