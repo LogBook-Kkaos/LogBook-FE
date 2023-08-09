@@ -3,7 +3,6 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import TextField from '@mui/material/TextField';
 
-
 const CreateIssueTag = () => {
     return (
         <Card sx={{ p: 1, m: 2, backgroundColor: "#e0f2ff" }}>

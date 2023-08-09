@@ -1,6 +1,3 @@
-// ** Next Imports
-import { useRouter } from 'next/router'
-
 // ** MUI Imports
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -9,7 +6,6 @@ import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 
 // ** Custom Components Imports
-import CategoryTag, { Category } from 'src/views/project-detail/CategoryTag'
 import IssueTag from './IssueTag';
 
 interface DataType {
