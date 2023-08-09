@@ -61,17 +61,9 @@ const TabCreateIssue = () => {
 
     const [activeTab, setActiveTab] = useRecoilState(activeView);
 
-    const handleIssueClick = () => {
-        setActiveTab('issue');
-    };
-
-    const handleIssueCardClick = () => {
-        setActiveTab('issueDetail');
-    };
-
-    const handleAddIssueClick = () => {
-        setActiveTab('createIssue');
-    };
+const handleTabChange = (newTab) => {
+  setActiveTab(newTab);
+};
 
     return (
         <Grid container justifyContent="flex-start" alignItems="center" >
