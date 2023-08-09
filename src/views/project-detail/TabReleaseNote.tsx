@@ -15,6 +15,7 @@ import Grid from '@mui/material/Grid'
 
 // ** Custom Components Imports
 import CategoryTag, { Category } from 'src/views/project-detail/CategoryTag'
+import UpperButtons from './UpperButtons'
 
 const createReleaseNoteData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ReleaseContent[], creatorId: string, creationDate: string) => {
   return { releaseNoteId, version, releaseTitle, changeItems, creatorId, creationDate }
@@ -43,6 +44,7 @@ const TabReleaseNote = () => {
     <Grid container justifyContent="space-between" alignItems="center">
 
       <Grid item xs={12}>
+      <UpperButtons createButtonLabel="릴리즈 노트 생성" routerPath="/create-release-note"/>
         <TableContainer component={Paper} sx={{ maxHeight: 'calc(100vh - 400px)', position: 'relative', marginTop: '10px' }}>
           <Table sx={{ minWidth: 650 }} aria-label='project detail table'>
             <TableHead>

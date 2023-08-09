@@ -105,11 +105,8 @@ const ProjectDetail = () => {
   }, [projectId]);
   let createButtonLabel = '';
   
-  if (value === 'release-note') {
-    createButtonLabel = '릴리즈 노트 생성';
-  } else if (value === 'document') {
-    createButtonLabel = '기술 문서 생성';
-  }
+
+
 
   return (
 
@@ -123,29 +120,6 @@ const ProjectDetail = () => {
       <Grid item xs={12}>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid>
-          </Grid>
-          <Grid>
-            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
-              <Cog />
-            </IconButton>
-            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
-              <Sort />
-            </IconButton>
-            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
-              <Filter />
-            </IconButton>
-            <TextField
-              size='small'
-              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
-              placeholder='Search'
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <Magnify fontSize='small' />
-                  </InputAdornment>
-                )
-              }}
-            />
           </Grid>
         </Grid>
       </Grid>
@@ -185,20 +159,6 @@ const ProjectDetail = () => {
                   }
                 />
               </TabList>
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{
-                  mt: 1,
-                  mb: 1,
-                  borderRadius: 1,
-                  marginLeft: 'auto'
-                }}
-                onClick={handleCreate}
-              >
-                {createButtonLabel}
-              </Button>
-
             </Box>
             <TabPanel sx={{ p: 0 }} value='issue'>
               <TabAccount />
