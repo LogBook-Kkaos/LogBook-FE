@@ -131,10 +131,10 @@ const SubIssueTag = () => {
           </CardContent>
         </Card>
       ) : (
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}
+          onClick={handleAddSubIssue}>
           <IconButton
             style={{ borderRadius: 10 }}
-            onClick={handleAddSubIssue}
           >
             <PlusThick />
           </IconButton>
