@@ -8,16 +8,6 @@ import { styled } from '@mui/material/styles';
 // ** Custom Components Imports
 import IssueTag from './IssueTag';
 
-interface DataType {
-    id: number;
-    title: string;
-}
-
-const projectData: DataType = {
-    id: 1,
-    title: "할 일",
-};
-
 const CardWrapper = styled(Box)<BoxProps>({
     width: '33%',
     height: 500

@@ -10,30 +10,10 @@ import ArrowLeft from 'mdi-material-ui/ArrowLeft';
 import { styled } from '@mui/material/styles';
 
 // ** Custom Components Imports
-import CategoryTag, { Category } from 'src/views/project-detail/CategoryTag'
 import SubIssueTag from './SubIssueTag';
 
 import { useRecoilState } from 'recoil';
 import { activeView } from '../../recoil/issue/atom';
-
-const createReleaseNoteData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ReleaseContent[], creatorId: string, creationDate: string) => {
-    return { releaseNoteId, version, releaseTitle, changeItems, creatorId, creationDate }
-}
-
-interface ReleaseContent {
-    category: Category,
-    releaseContent: string
-}
-
-interface DataType {
-    id: number;
-    title: string;
-}
-
-const projectData: DataType = {
-    id: 1,
-    title: "할 일",
-};
 
 const CardWrapper = styled(Box)<BoxProps>({
     width: '33%',
