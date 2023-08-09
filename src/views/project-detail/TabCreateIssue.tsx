@@ -30,7 +30,7 @@ interface ReleaseContent {
     releaseContent: string
 }
 
-interface DataType {
+interface ProjectDataType {
     id: number;
     title: string;
 }
