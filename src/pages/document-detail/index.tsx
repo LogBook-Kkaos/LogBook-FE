@@ -21,13 +21,13 @@ const Document = () => {
         sx={{
           display: 'flex',
           justifyContent: 'flex-end',
-          margin: 2, // 조정하여 버튼과의 간격을 조절하세요
+          margin: 2, 
         }}
       >
         <Button
           variant="contained"
           color="primary"
-          sx={{ marginRight: 2 }} // 조정하여 버튼 사이의 간격을 조절하세요
+          sx={{ marginRight: 2 }}
         >
           삭제
         </Button>

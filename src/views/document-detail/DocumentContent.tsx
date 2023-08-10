@@ -18,8 +18,8 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
 }));
 
 const DocumentContent = () => {
-  const title = "안녕하세요"; // Hardcoded title
-  const content = "<p><strong>문서 내용</strong>을 채워주세요!</p>"; // Hardcoded content
+  const title = "안녕하세요"; 
+  const content = "<p><strong>문서 내용</strong>을 채워주세요!</p>"; 
 
 //style component
   const customStyles = {
