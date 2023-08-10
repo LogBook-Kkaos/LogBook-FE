@@ -1,4 +1,3 @@
-
 // ** React Imports
 import { SyntheticEvent, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -32,12 +31,11 @@ import LightbulbOnOutline from 'mdi-material-ui/LightbulbOnOutline'
 import NoteAlertOutline from 'mdi-material-ui/NoteAlertOutline'
 import FileRefreshOutline from 'mdi-material-ui/FileRefreshOutline'
 
-
 // ** Components Imports
 import TabReleaseNote from 'src/views/project-detail/TabReleaseNote'
+import TabDocument from 'src/views/project-detail/TabDocument'
 
 // ** Demo Tabs Imports
-import TabInfo from 'src/views/account-settings/TabInfo'
 import TabAccount from 'src/views/account-settings/TabAccount'
 
 
@@ -71,10 +69,7 @@ const ProjectDetail = () => {
   const router = useRouter();
   const {projectId} = router.query;
 
-  const handleCreateReleaseNote = () => {
-    console.log('create release note')
-    router.push('/create-release-note')
-  }
+
 
   const [value, setValue] = useState<string>('issue')
   const [project, setProject] = useState<ProjectInfo>();
@@ -100,8 +95,20 @@ const ProjectDetail = () => {
       fetchProjectInfo();
     }
   }, [projectId]);
+  
+
+  //style component
+  const IconButtonStyle = {
+    border: '1px solid rgba(0, 0, 0, 0.23)',
+    borderRadius: 10,
+    padding: 8,
+    marginRight: 16
+  };
+
+
 
   return (
+
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Typography variant='h5'>
@@ -112,29 +119,6 @@ const ProjectDetail = () => {
       <Grid item xs={12}>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid>
-          </Grid>
-          <Grid>
-            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
-              <Cog />
-            </IconButton>
-            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
-              <Sort />
-            </IconButton>
-            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
-              <Filter />
-            </IconButton>
-            <TextField
-              size='small'
-              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
-              placeholder='Search'
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <Magnify fontSize='small' />
-                  </InputAdornment>
-                )
-              }}
-            />
           </Grid>
         </Grid>
       </Grid>
@@ -174,22 +158,10 @@ const ProjectDetail = () => {
                   }
                 />
               </TabList>
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{
-                  mt: 1,
-                  mb: 1,
-                  borderRadius: 1,
-                  marginLeft: 'auto'
-                }}
-                onClick={handleCreateReleaseNote}
-              >
-                릴리즈 노트 작성하기
-              </Button>
+              <IconButton style={IconButtonStyle}>
+                    <Cog />
+                </IconButton>
             </Box>
-
-
             <TabPanel sx={{ p: 0 }} value='issue'>
               <TabAccount />
             </TabPanel>
@@ -197,11 +169,12 @@ const ProjectDetail = () => {
               <TabReleaseNote />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='document'>
-              <TabInfo />
+              <TabDocument />
             </TabPanel>
         </TabContext>
       </Grid>
     </Grid>
+
   )
 }
 
