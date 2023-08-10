@@ -50,9 +50,7 @@ const UpperButtons =({ routerPath, createButtonLabel }: { routerPath: string, cr
     return(
         <Grid container sx={{ width: '100%',mt:3, justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-                <IconButton style={IconButtonStyle}>
-                    <Cog />
-                </IconButton>
+
                 <IconButton style={IconButtonStyle}>
                     <Sort />
                 </IconButton>

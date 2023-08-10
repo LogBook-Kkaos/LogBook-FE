@@ -97,6 +97,14 @@ const ProjectDetail = () => {
   }, [projectId]);
   
 
+  //style component
+  const IconButtonStyle = {
+    border: '1px solid rgba(0, 0, 0, 0.23)',
+    borderRadius: 10,
+    padding: 8,
+    marginRight: 16
+  };
+
 
 
   return (
@@ -150,6 +158,9 @@ const ProjectDetail = () => {
                   }
                 />
               </TabList>
+              <IconButton style={IconButtonStyle}>
+                    <Cog />
+                </IconButton>
             </Box>
             <TabPanel sx={{ p: 0 }} value='issue'>
               <TabAccount />
