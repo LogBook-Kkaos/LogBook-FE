@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -32,7 +34,7 @@ const issueData = [
     title: "기능 A 수정",
     name: "이서빈"
   }
-]
+];
 
 const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
   margin: theme.spacing(5, 0),
@@ -44,11 +46,15 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
   }
 }))
 
-const IssueTag = () => {
+const IssueTag = ({ onIssueCreate, issueData }) => {
   const [activeTab, setActiveTab] = useRecoilState(activeView);
 
   const handleTabChange = (newTab: string) => {
     setActiveTab(newTab);
+  };
+
+  const handleIssueCreate = (issueTitle) => {
+    onIssueCreate(issueTitle);
   };
 
   return (

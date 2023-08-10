@@ -9,14 +9,14 @@ const CreateIssueTag = () => {
             <Box sx={{ minWidth: 38, display: 'flex', justifyContent: 'left', p: '1.25rem' }}>
                 <TextField
                     sx={{ backgroundColor: 'white' }}
-                    id="document_title"
-                    label="기능 내용 설명"
+                    id="issue_content"
+                    label="이슈 내용 설명"
                     multiline
                     rows={8}
                     variant="outlined"
                     fullWidth
                     InputProps={{
-                        inputProps: { 'aria-label': '제목 입력창' }
+                        inputProps: { 'aria-label': '이슈 내용 입력창' }
                     }}
                 />
             </Box>

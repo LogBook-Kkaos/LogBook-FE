@@ -58,7 +58,7 @@ const TabName = styled('span')(({ theme }) => ({
     display: 'none'
   }
 }))
-interface ProjectInfo{
+interface ProjectInfo {
   projectName: string
   projectDescription?: string
   isPublic?: string
@@ -68,7 +68,7 @@ interface ProjectInfo{
 const ProjectDetail = () => {
 
   const router = useRouter();
-  const {projectId} = router.query;
+  const { projectId } = router.query;
   const activeIssueTab = useRecoilValue(activeView);
 
   const handleCreateReleaseNote = () => {
@@ -79,7 +79,7 @@ const ProjectDetail = () => {
   const [activeTab, setActiveTab] = useState<string>('issue')
   const [project, setProject] = useState<ProjectInfo>();
   const { accessToken } = useRecoilValue(tokensState)
-  
+
   const headers = { Authorization: `Bearer ${accessToken}` }
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
@@ -89,7 +89,7 @@ const ProjectDetail = () => {
   useEffect(() => {
     const fetchProjectInfo = async () => {
       try {
-        const response = await axios.get(`/api/projects/${projectId}`,{headers});
+        const response = await axios.get(`/api/projects/${projectId}`, { headers });
         setProject(response.data.result)
       } catch (error) {
         console.error('Error fetching project information:', error);
@@ -101,13 +101,19 @@ const ProjectDetail = () => {
     }
   }, [projectId]);
 
+  const [issueData, setIssueData] = useState([]);
+
+  const handleIssueCreate = (issueTitle) => {
+    setIssueData([...issueData, { title: issueTitle, name: '이서빈' }]);
+  };
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Typography variant='h5'>
           {project?.projectName}
         </Typography>
-        <Typography variant='body2' style={{paddingTop:5}}>{project?.projectDescription}</Typography>
+        <Typography variant='body2' style={{ paddingTop: 5 }}>{project?.projectDescription}</Typography>
       </Grid>
       <Grid item xs={12}>
         <Grid container justifyContent="space-between" alignItems="center">
@@ -189,9 +195,9 @@ const ProjectDetail = () => {
             </Button>
           </Box>
           <TabPanel sx={{ p: 0 }} value='issue'>
-            {activeIssueTab === 'issue' && <TabIssue />}
+            {activeIssueTab === 'issue' && <TabIssue onIssueCreate={handleIssueCreate} issueData={issueData} />}
             {activeIssueTab === 'issueDetail' && <TabIssueDetail />}
-            {activeIssueTab === 'createIssue' && <TabCreateIssue />}
+            {activeIssueTab === 'createIssue' && <TabCreateIssue onIssueCreate={handleIssueCreate} />}
           </TabPanel>
           <TabPanel sx={{ p: 0 }} value='release-note'>
             <TabReleaseNote />
