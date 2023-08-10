@@ -43,11 +43,16 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
         setActiveTab('issue');
     };
 
+    const handleTabChange = (newTab: string) => {
+        setActiveTab(newTab);
+    };
+
     return (
         <Grid container justifyContent="flex-start" alignItems="center" >
             <Grid item xs={12} >
                 <Card sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <IconButton sx={{ ml: 8, mt: 5 }} style={{ borderRadius: 10, padding: 8, alignSelf: "self-start" }}>
+                    <IconButton sx={{ ml: 8, mt: 5 }} style={{ borderRadius: 10, padding: 8, alignSelf: "self-start" }}
+                        onClick={() => handleTabChange('issue')}>
                         <ArrowLeft />
                     </IconButton>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 5 }}>
