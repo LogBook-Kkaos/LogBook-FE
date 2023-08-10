@@ -24,7 +24,7 @@ const TabDocument = () => {
     <Grid container justifyContent="flex-start" spacing={0}>
       <UpperButtons createButtonLabel="기술문서 생성" routerPath="/create-document"/>
       <CardDocument
-        imageUrl="https://cdn.inflearn.com/public/courses/328412/cover/4b378968-fcc9-47e7-b08d-a1635551b602/328412-eng-new.png" // 이미지 URL을 여기에 넣으세요
+        imageUrl="https://cdn.inflearn.com/public/courses/328412/cover/4b378968-fcc9-47e7-b08d-a1635551b602/328412-eng-new.png" 
         date="2023-08-08"
         title="문서 제목"
       />
