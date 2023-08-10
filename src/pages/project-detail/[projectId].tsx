@@ -33,7 +33,6 @@ import LightbulbOnOutline from 'mdi-material-ui/LightbulbOnOutline'
 import NoteAlertOutline from 'mdi-material-ui/NoteAlertOutline'
 import FileRefreshOutline from 'mdi-material-ui/FileRefreshOutline'
 
-
 // ** Components Imports
 import TabReleaseNote from 'src/views/project-detail/TabReleaseNote'
 import TabDocument from 'src/views/project-detail/TabDocument'
@@ -58,6 +57,7 @@ const TabName = styled('span')(({ theme }) => ({
     display: 'none'
   }
 }))
+
 interface ProjectInfo {
   projectName: string
   projectDescription?: string
@@ -70,6 +70,7 @@ const ProjectDetail = () => {
   const router = useRouter();
   const { projectId } = router.query;
   const activeIssueTab = useRecoilValue(activeView);
+  const [issueData, setIssueData] = useState<{ title: string; name: string; }[]>([]);
 
   const handleCreateReleaseNote = () => {
     console.log('create release note')
@@ -101,9 +102,7 @@ const ProjectDetail = () => {
     }
   }, [projectId]);
 
-  const [issueData, setIssueData] = useState([]);
-
-  const handleIssueCreate = (issueTitle) => {
+  const handleIssueCreate = (issueTitle: string) => {
     setIssueData([...issueData, { title: issueTitle, name: '이서빈' }]);
   };
 
@@ -150,7 +149,7 @@ const ProjectDetail = () => {
             <TabList
               onChange={handleChange}
               aria-label='project-detail tabs'
-              sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}`, flexGrow: 1 }}
+              sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}`, flexGrow: 1 }}
             >
               <Tab
                 value='issue'

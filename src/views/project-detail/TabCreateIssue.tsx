@@ -16,6 +16,7 @@ import TextField from '@mui/material/TextField';
 import CreateIssueCard from './CreateIssueCard';
 import StatusTag, { Status } from "./StatusTag"
 
+// ** Recoil Imports
 import { useRecoilState } from 'recoil';
 import { activeView } from 'src/recoil/issue/atom';
 
@@ -29,17 +30,18 @@ const ButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
     width: 80,
 }))
 
-const TabCreateIssue = ({ onIssueCreate }) => {
+interface onIssueCreateProps {
+    onIssueCreate: any
+}
+const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
 
     const [activeTab, setActiveTab] = useRecoilState(activeView);
     const [issueTitle, setIssueTitle] = useState('');
-    const [issueData, setIssueData] = useState(issueData);
 
     const handleCreateIssue = () => {
         onIssueCreate(issueTitle);
         setActiveTab('issue');
-      };
-      
+    };
 
     return (
         <Grid container justifyContent="flex-start" alignItems="center" >

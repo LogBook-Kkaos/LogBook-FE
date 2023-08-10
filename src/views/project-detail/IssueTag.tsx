@@ -6,12 +6,10 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
-import MuiDivider, { DividerProps } from '@mui/material/Divider'
 import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
 import PlusThick from 'mdi-material-ui/PlusThick'
 import Cog from 'mdi-material-ui/CogOutline'
-import { styled } from '@mui/material/styles'
 
 import { useRecoilState } from 'recoil';
 import { activeView } from 'src/recoil/issue/atom';
@@ -21,40 +19,16 @@ interface DataType {
   name: string
 }
 
-const issueData = [
-  {
-    title: "버그 수정",
-    name: "이서빈"
-  },
-  {
-    title: "xyz API 개발",
-    name: "이서빈"
-  },
-  {
-    title: "기능 A 수정",
-    name: "이서빈"
-  }
-];
+interface IssueTagProps {
+  onIssueCreate: any,
+  issueData: any
+}
 
-const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
-  margin: theme.spacing(5, 0),
-  borderRight: `1px solid ${theme.palette.divider}`,
-  [theme.breakpoints.down('md')]: {
-    borderRight: 'none',
-    margin: theme.spacing(0, 5),
-    borderBottom: `1px solid ${theme.palette.divider}`
-  }
-}))
-
-const IssueTag = ({ onIssueCreate, issueData }) => {
+const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
   const [activeTab, setActiveTab] = useRecoilState(activeView);
 
   const handleTabChange = (newTab: string) => {
     setActiveTab(newTab);
-  };
-
-  const handleIssueCreate = (issueTitle) => {
-    onIssueCreate(issueTitle);
   };
 
   return (

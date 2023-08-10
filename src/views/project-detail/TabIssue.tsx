@@ -1,11 +1,11 @@
+import React, { useState } from 'react';
+
 // ** MUI Imports
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Box, { BoxProps } from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
-
-import React, { useState } from 'react';
 
 // ** Custom Components Imports
 import IssueTag from './IssueTag';
@@ -14,12 +14,14 @@ const CardWrapper = styled(Box)<BoxProps>({
     width: '33%',
     height: 500
 })
+interface IssueTagProps {
+    onIssueCreate: any,
+    issueData: any
+}
 
-const TabIssue = ({ onIssueCreate, issueData }) => {
-    const [activeIssueTab, setActiveIssueTab] = useState(''); // Set your initial state here if needed
-  
-    const handleIssueCreate = (issueTitle) => {
-      onIssueCreate(issueTitle);
+const TabIssue = ({ onIssueCreate, issueData }: IssueTagProps) => {
+    const handleIssueCreate = (issueTitle: string) => {
+        onIssueCreate(issueTitle);
     };
 
     return (
@@ -31,10 +33,10 @@ const TabIssue = ({ onIssueCreate, issueData }) => {
                             <IssueTag onIssueCreate={handleIssueCreate} issueData={issueData} />
                         </CardWrapper>
                         <CardWrapper>
-                        <IssueTag onIssueCreate={handleIssueCreate} issueData={issueData} />
+                            <IssueTag onIssueCreate={handleIssueCreate} issueData={issueData} />
                         </CardWrapper>
                         <CardWrapper>
-                        <IssueTag onIssueCreate={handleIssueCreate} issueData={issueData} />
+                            <IssueTag onIssueCreate={handleIssueCreate} issueData={issueData} />
                         </CardWrapper>
                     </CardContent>
                 </Card>
