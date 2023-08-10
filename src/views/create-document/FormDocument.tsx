@@ -81,7 +81,7 @@
         <Box sx={{ minWidth: 38, display: 'flex', justifyContent: 'left', pl:'1.25rem' }}>
           <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>Content</Typography>
         </Box>
-        <Box sx={{ minWidth: 38, justifyContent: 'centor', p:'1.25rem' }}>
+        <Box sx={{ minWidth: 38, justifyContent: 'center', p:'1.25rem' }}>
           <DynamicEditor
             editorState={editorState}
             wrapperClassName="demo-wrapper"
