@@ -29,12 +29,12 @@ const TabDocument = () => {
         title="문서 제목"
       />
       <CardDocument
-        imageUrl="https://b2750956.smushcdn.com/2750956/wp-content/uploads/2021/01/3-31510_svg-kubernetes-logo-hd-png-download-696x664.png?lossy=1&strip=1&webp=1" // 이미지 URL을 여기에 넣으세요
+        imageUrl="https://b2750956.smushcdn.com/2750956/wp-content/uploads/2021/01/3-31510_svg-kubernetes-logo-hd-png-download-696x664.png?lossy=1&strip=1&webp=1"
         date="2023-08-08"
         title="문서 제목"
       />
       <CardDocument
-        imageUrl="https://t1.daumcdn.net/cfile/tistory/24283C3858F778CA2E" // 이미지 URL을 여기에 넣으세요
+        imageUrl="https://t1.daumcdn.net/cfile/tistory/24283C3858F778CA2E"
         date="2023-08-08"
         title="문서 제목"
       />
