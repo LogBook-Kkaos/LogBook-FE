@@ -1,7 +1,9 @@
 // StatusTag.tsx
 import React from "react";
-import Typography from '@mui/material/Typography'
+
+// ** MUI Imports
 import Box from "@mui/material/Box";
+import Typography from '@mui/material/Typography'
 
 export const Status = {
   NotStarted: '시작 전',
@@ -27,27 +29,27 @@ interface StatusTagProps {
 }
 
 const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
-    return (
-      <Box
-        sx={{
-          borderRadius: 1,
-          paddingTop: 0.1,
-          paddingBottom: 0.1,
-          paddingLeft: 1,
-          paddingRight: 1,
-          background: statusColors[status],
-          display: "inline-block",
-        }}
+  return (
+    <Box
+      sx={{
+        borderRadius: 1,
+        paddingTop: 0.1,
+        paddingBottom: 0.1,
+        paddingLeft: 1,
+        paddingRight: 1,
+        background: statusColors[status],
+        display: "inline-block",
+      }}
+    >
+      <Typography
+        variant="caption"
+        component="span"
+        sx={{ color: statusTextColors[status] }}
       >
-        <Typography
-          variant="caption"
-          component="span"
-          sx={{ color: statusTextColors[status] }}
-        >
-          <b>{status}</b>
-        </Typography>
-      </Box>
-    );
-  };
+        <b>{status}</b>
+      </Typography>
+    </Box>
+  );
+};
 
 export default StatusTag;
