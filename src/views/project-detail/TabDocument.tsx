@@ -32,6 +32,10 @@ const rows = [
   createReleaseNoteData(1, 'API 레퍼선스\n구분에 대한 설명을 작성합니다.', '문서 최초 생성', [{ category: Category.Feature, releaseContent: '신규 기능 추가 / AA 기능 제공' }])
 ]
 
+import CardDocument from './CardDocument'
+import UpperButtons from './UpperButtons'
+
+
 
 const TabDocument = () => {
 

@@ -1,4 +1,3 @@
-
 // ** React Imports
 import { SyntheticEvent, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -39,6 +38,7 @@ import TabDocument from 'src/views/project-detail/TabDocument'
 import TabIssue from 'src/views/project-detail/TabIssue'
 import TabIssueDetail from 'src/views/project-detail/TabIssueDetail'
 import TabCreateIssue from 'src/views/project-detail/TabCreateIssue'
+import TabAccount from 'src/views/account-settings/TabAccount'
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -72,10 +72,7 @@ const ProjectDetail = () => {
   const activeIssueTab = useRecoilValue(activeView);
   const [issueData, setIssueData] = useState<{ title: string; name: string; }[]>([]);
 
-  const handleCreateReleaseNote = () => {
-    console.log('create release note')
-    router.push('/create-release-note')
-  }
+
 
   const [activeTab, setActiveTab] = useState<string>('issue')
   const [project, setProject] = useState<ProjectInfo>();
@@ -101,12 +98,24 @@ const ProjectDetail = () => {
       fetchProjectInfo();
     }
   }, [projectId]);
+  
+
+  //style component
+  const IconButtonStyle = {
+    border: '1px solid rgba(0, 0, 0, 0.23)',
+    borderRadius: 10,
+    padding: 8,
+    marginRight: 16
+  };
+
+
 
   const handleIssueCreate = (issueTitle: string) => {
     setIssueData([...issueData, { title: issueTitle, name: '이서빈' }]);
   };
 
   return (
+
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Typography variant='h5'>
@@ -117,29 +126,6 @@ const ProjectDetail = () => {
       <Grid item xs={12}>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid>
-          </Grid>
-          <Grid>
-            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
-              <Cog />
-            </IconButton>
-            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
-              <Sort />
-            </IconButton>
-            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
-              <Filter />
-            </IconButton>
-            <TextField
-              size='small'
-              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
-              placeholder='Search'
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <Magnify fontSize='small' />
-                  </InputAdornment>
-                )
-              }}
-            />
           </Grid>
         </Grid>
       </Grid>
@@ -207,6 +193,7 @@ const ProjectDetail = () => {
         </TabContext>
       </Grid>
     </Grid>
+
   )
 }
 
