@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Select from 'react-select';
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -26,12 +27,37 @@ interface IssueTagProps {
 
 const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
   const [activeTab, setActiveTab] = useRecoilState(activeView);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [selectVisible, setSelectVisible] = useState<boolean>(false);
+  const [selectedValue, setSelectedValue] = useState<string>('');
 
   const handleTabChange = (newTab: string) => {
     setActiveTab(newTab);
   };
 
-  return (
+  const handleAvatarClick = (index: number) => {
+    if (expandedIndex === index) {
+      setExpandedIndex(null);
+      setSelectVisible(false);
+    } else {
+      setExpandedIndex(index);
+      setSelectVisible(true);
+    }
+  };
+
+  const handleSelectChange = (selectedOption: any) => {
+    setSelectedValue(selectedOption.value);
+    console.log(selectedOption.value)
+  };
+
+  const options = [
+    { value: '이서빈', label: '이서빈' },
+    { value: '이소현', label: '이소현' },
+    { value: '윤주은', label: '윤주은' }, 
+    { value: '장예경', label: '장예경' },
+  ];
+
+  return (<>
     <Card sx={{ p: 3, m: 2, backgroundColor: "#e0f2ff" }}>
       <CardHeader
         title='할 일'
@@ -43,7 +69,8 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
       />
       {issueData.map((item: DataType, index: number) => {
         return (
-          <Card sx={{ position: 'relative', mb: 2 }}
+          <Card key={index}
+            sx={{ position: 'relative', mb: 2 }}
             onClick={() => handleTabChange('issueDetail')}>
             <CardContent>
               <Box
@@ -63,8 +90,25 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
                   <Cog />
                 </IconButton>
               </Box>
-              <Box sx={{ gap: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <Avatar src='/images/avatars/8.png' alt='Alice Cobb' />
+              <Box
+                sx={{
+                  gap: 2,
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  position: 'relative'
+                }}
+              >
+                <Avatar
+                  src='/images/avatars/8.png'
+                  alt={selectedValue || '없음'}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleAvatarClick(index);
+                  }}
+                  sx={{ cursor: 'pointer' }}
+                />
               </Box>
             </CardContent>
           </Card>)
@@ -79,6 +123,29 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
         </Box>
       </Box>
     </Card>
+    {expandedIndex !== null &&
+      selectVisible && (
+        <Box
+          sx={{
+            position: 'relative',
+            top: 'calc(-25% + 0px)',
+            left: '140px',
+            width: "150px",
+            mt: 1,
+            py: 1,
+            backgroundColor: '#fff',
+            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
+            zIndex: 5000
+          }}
+        >
+          <Select options={options}
+            menuIsOpen
+            onMenuClose={() => setSelectVisible(false)}
+            onChange={handleSelectChange}
+          />
+        </Box>
+      )}
+  </>
   )
 }
 
