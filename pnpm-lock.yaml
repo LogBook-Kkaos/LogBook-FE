@@ -86,6 +86,9 @@ dependencies:
   react-popper:
     specifier: ^2.2.5
     version: 2.2.5(@popperjs/core@2.11.2)(react@17.0.2)
+  react-select:
+    specifier: ^5.7.4
+    version: 5.7.4(@types/react@17.0.37)(react-dom@17.0.2)(react@17.0.2)
   recharts:
     specifier: ^2.7.2
     version: 2.7.2(prop-types@15.8.1)(react-dom@17.0.2)(react@17.0.2)
@@ -545,6 +548,27 @@ packages:
     resolution: {integrity: sha512-W2P2c/VRW1/1tLox0mVUalvnWXxavmv/Oum2aPsRcoDJuob75FC3Y8FbpfLwUegRcxINtGUMPq0tFCvYNTBXNA==}
     dev: false
 
+  /@emotion/react@11.11.1(@types/react@17.0.37)(react@17.0.2):
+    resolution: {integrity: sha512-5mlW1DquU5HaxjLkfkGN1GA/fvVGdyHURRiX/0FHl2cfIfRxSOfmxEH5YS43edp0OldZrZ+dkBKbngxcNCdZvA==}
+    peerDependencies:
+      '@types/react': '*'
+      react: '>=16.8.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.6
+      '@emotion/babel-plugin': 11.11.0
+      '@emotion/cache': 11.11.0
+      '@emotion/serialize': 1.1.2
+      '@emotion/use-insertion-effect-with-fallbacks': 1.0.1(react@17.0.2)
+      '@emotion/utils': 1.2.1
+      '@emotion/weak-memoize': 0.3.1
+      '@types/react': 17.0.37
+      hoist-non-react-statics: 3.3.2
+      react: 17.0.2
+    dev: false
+
   /@emotion/react@11.7.0(@babel/core@7.22.6)(@types/react@17.0.37)(react@17.0.2):
     resolution: {integrity: sha512-WL93hf9+/2s3cA1JVJlz8+Uy6p6QWukqQFOm2OZO5ki51hfucHMOmbSjiyC3t2Y4RI8XUmBoepoc/24ny/VBbA==}
     peerDependencies:
@@ -647,6 +671,14 @@ packages:
     resolution: {integrity: sha512-KOEGMu6dmJZtpadb476IsZBclKvILjopjUii3V+7MnXIQCYh8W3NgNcgwo21n9LXZX6EDIKvqfjYxXebDwxKmQ==}
     dev: false
 
+  /@emotion/use-insertion-effect-with-fallbacks@1.0.1(react@17.0.2):
+    resolution: {integrity: sha512-jT/qyKZ9rzLErtrjGgdkMBn2OP8wl0G3sQlBb3YPryvKHsjvINUhVaPFfP+fpBcOkmrVOVEEHQFJ7nbj2TH2gw==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 17.0.2
+    dev: false
+
   /@emotion/utils@0.11.3:
     resolution: {integrity: sha512-0o4l6pZC+hI88+bzuaX/6BgOvQVhbt2PfmxauVaYOGgbsAw14wdKyvMCZXnsnsHys94iadcF+RG/wZyx6+ZZBw==}
     dev: false
@@ -679,6 +711,23 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@floating-ui/core@1.4.1:
+    resolution: {integrity: sha512-jk3WqquEJRlcyu7997NtR5PibI+y5bi+LS3hPmguVClypenMsCY3CBa3LAQnozRCtCrYWSEtAdiskpamuJRFOQ==}
+    dependencies:
+      '@floating-ui/utils': 0.1.1
+    dev: false
+
+  /@floating-ui/dom@1.5.1:
+    resolution: {integrity: sha512-KwvVcPSXg6mQygvA1TjbN/gh///36kKtllIF8SUm0qpFj8+rvYrpvlYdL1JoA71SHpDqgSSdGOSoQ0Mp3uY5aw==}
+    dependencies:
+      '@floating-ui/core': 1.4.1
+      '@floating-ui/utils': 0.1.1
+    dev: false
+
+  /@floating-ui/utils@0.1.1:
+    resolution: {integrity: sha512-m0G6wlnhm/AX0H12IOWtK8gASEMffnX08RtKkCgTdHb9JpHKGloI7icFfLg9ZmQeavcvR0PKmzxClyuFPSjKWw==}
+    dev: false
 
   /@hapi/accept@5.0.2:
     resolution: {integrity: sha512-CmzBx/bXUR8451fnZRuZAJRlzgm0Jgu5dltTX/bszmR2lheb9BpyN47Q1RbaGTsvFzn0PXAEs+lXDKfshccYZw==}
@@ -4236,6 +4285,10 @@ packages:
     resolution: {integrity: sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==}
     dev: false
 
+  /memoize-one@6.0.0:
+    resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
+    dev: false
+
   /merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
 
@@ -4954,6 +5007,27 @@ packages:
       lodash: 4.17.21
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
+    dev: false
+
+  /react-select@5.7.4(@types/react@17.0.37)(react-dom@17.0.2)(react@17.0.2):
+    resolution: {integrity: sha512-NhuE56X+p9QDFh4BgeygHFIvJJszO1i1KSkg/JPcIJrbovyRtI+GuOEa4XzFCEpZRAEoEI8u/cAHK+jG/PgUzQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@babel/runtime': 7.22.6
+      '@emotion/cache': 11.11.0
+      '@emotion/react': 11.11.1(@types/react@17.0.37)(react@17.0.2)
+      '@floating-ui/dom': 1.5.1
+      '@types/react-transition-group': 4.4.6
+      memoize-one: 6.0.0
+      prop-types: 15.8.1
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-transition-group: 4.4.5(react-dom@17.0.2)(react@17.0.2)
+      use-isomorphic-layout-effect: 1.1.2(@types/react@17.0.37)(react@17.0.2)
+    transitivePeerDependencies:
+      - '@types/react'
     dev: false
 
   /react-smooth@2.0.3(prop-types@15.8.1)(react-dom@17.0.2)(react@17.0.2):
@@ -5769,6 +5843,19 @@ packages:
     dependencies:
       punycode: 2.3.0
     dev: true
+
+  /use-isomorphic-layout-effect@1.1.2(@types/react@17.0.37)(react@17.0.2):
+    resolution: {integrity: sha512-49L8yCO3iGT/ZF9QttjwLF/ZD9Iwto5LnH5LmEdk/6cFmXddqi2ulF0edxTwjj+7mqvpVVGQWvbXZdn32wRSHA==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@types/react': 17.0.37
+      react: 17.0.2
+    dev: false
 
   /use-subscription@1.5.1(react@17.0.2):
     resolution: {integrity: sha512-Xv2a1P/yReAjAbhylMfFplFKj9GssgTwN7RlcTxBujFQcloStWNDQdc4g4NRWH9xS4i/FDk04vQBptAXoF3VcA==}

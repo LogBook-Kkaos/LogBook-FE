@@ -146,12 +146,11 @@ const AddProjectPopup = (props: AddProjectPopupProps) => {
   }
   
   const handleClickAddButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const publicState = isPublic ? 'public' : 'private';
     axios.post('/api/projects',
     {
         projectName: projectName,
         projectDescription: projectDescription,
-        isPublic: publicState,
+        public: isPublic,
         memberCount: members.length
     },{
       headers: {

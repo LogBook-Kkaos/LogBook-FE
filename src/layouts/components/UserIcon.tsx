@@ -17,11 +17,6 @@ const UserIcon = (props: UserIconProps) => {
 
   let styles
 
-  /* styles = {
-    color: 'red',
-    fontSize: '2rem'
-  } */
-
   // @ts-ignore
   return <IconTag {...iconProps} style={{ ...styles }} />
 }
