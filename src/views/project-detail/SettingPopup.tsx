@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 import { styled } from '@mui/material/styles'
 import Grid from '@mui/material/Grid'
@@ -21,7 +22,7 @@ import MemberRoleButton, { MemberRole } from '../add-project/MemberRoleButton'
 
 // ** Recoil Imports
 import { useRecoilValue } from 'recoil'
-import { loginUserState } from 'src/recoil/user/atoms'
+import { loginUserState, userState } from 'src/recoil/user/atoms'
 
 interface SettingPopupProps {
    isOpen: boolean
@@ -78,14 +79,18 @@ const label = { inputProps: { 'aria-label': 'Switch demo' } };
 const SettingPopup = (props: SettingPopupProps) => {
   const { isOpen, onClose, projectId, token } = props
   const headers = { Authorization: `Bearer ${token}` }
+  const router = useRouter()
 
-  const loginUser = useRecoilValue(loginUserState)
   const [projectName, setProjectName] = useState('')
   const [projectDescription, setProjectDescription] = useState('')
   const [isPublic, setIsPublic] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [members, setMembers] = useState<MemberInfo[]>([])
   const [allUsers, setAllUsers] = useState<UserInfo[]>([])
+  const [originMembers, setOriginMembers] = useState<MemberInfo[]>([])
+  const [invitedMembers, setInvitedMembers] = useState<MemberInfo[]>([])
+  const [updatedMembers, setUpdatedMembers] = useState<MemberInfo[]>([])
+  const [deletedMembers, setDeletedMembers] = useState<MemberInfo[]>([])
   const [changeFailed,setChangeFailed] = useState(false)
 
   const handleProjectNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,12 +139,15 @@ const SettingPopup = (props: SettingPopupProps) => {
       const updatedMembers = [...prevMembers];
       const currentRole = updatedMembers[index].permissionLevel;
   
-      updatedMembers[index].permissionLevel =
+      updatedMembers[index] = {
+      ...updatedMembers[index],
+      permissionLevel:
         currentRole === MemberRole.Editor
           ? MemberRole.Viewer
-          : MemberRole.Editor;
-  
-      return updatedMembers;
+          : MemberRole.Editor,
+    };
+
+    return updatedMembers;
     });
   }
 
@@ -147,44 +155,60 @@ const SettingPopup = (props: SettingPopupProps) => {
     setChangeFailed(false);
   }
   
-  const handleClickSaveButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onClose();
-    //수정필요
-    // axios.post('/api/projects',
-    // {
-    //     projectName: projectName,
-    //     projectDescription: projectDescription,
-    //     isPublic: publicState,
-    //     memberCount: members.length
-    // },{
-    //   headers: {
-    //     Authorization: `Bearer ${accessToken}`
-    //   }
-    // })
-    // .then(function(response) {
-    //   console.log(response);
-    //   const projectID = response.data.result;
-    //   const memberData = members.map((member) => ({
-    //     email: member.email,
-    //     permissionLevel: member.role
-    //   }))
-    //   axios.post(`/api/projects/${projectID}/members`, memberData, {
-    //     headers: {
-    //       Authorization: `Bearer ${accessToken}`
-    //     }
-    //   })
-    //   .then(function(response) {
-    //     console.log(response);
-    //     onClose();
-    //     window.location.href = window.location.href;
-    //   }).catch(function (error) {
-    //     console.error('멤버 추가 실패:', error);
-    //   });
-    // })
-    // .catch(function (error) {
-    //   console.error('프로젝트 생성 실패:', error);
-    //   setChangeFailed(true);
-    // });
+  const handleClickSaveButton = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const newInvitedMembers = members.filter((member) => !originMembers.some((om) => om.email === member.email));
+    setInvitedMembers((prevInvitedMembers) => [...prevInvitedMembers, ...newInvitedMembers]);
+  
+    const newDeletedMembers = originMembers.filter((om) => !members.some((member) => member.email === om.email));
+    setDeletedMembers((prevDeletedMembers) => [...prevDeletedMembers, ...newDeletedMembers]);
+  
+    const newUpdatedMembers = members.filter(
+      (member) => originMembers.some((om) => om.email === member.email && om.permissionLevel !== member.permissionLevel)
+    );
+    setUpdatedMembers((prevUpdatedMembers) => [...prevUpdatedMembers, ...newUpdatedMembers]);
+  
+    const invitedMembers = newInvitedMembers.map((member) => ({
+      email: member.email,
+      permissionLevel: member.permissionLevel,
+    }));
+  
+    const updateMembers = newUpdatedMembers.map((member) => ({
+      email: member.email,
+      permissionLevel: member.permissionLevel,
+    }));
+  
+    const deleteMembers = newDeletedMembers.map((member) => ({
+      email: member.email,
+    }));
+  
+    try {
+      await axios.put(
+        `/api/projects/${projectId}`,
+        {
+          projectName: projectName,
+          projectDescription: projectDescription,
+          public: isPublic,
+          memberCount: members.length,
+        },
+        { headers }
+      );
+
+      if (invitedMembers.length > 0) {
+        await axios.post(`/api/projects/${projectId}/members`, invitedMembers, { headers });
+      }
+      if (updateMembers.length > 0) {
+        await axios.put(`/api/projects/${projectId}/members/edit`, updateMembers, { headers });
+      }
+      if (deleteMembers.length > 0) {
+        await axios.delete(`/api/projects/${projectId}/members/delete`, { headers, data: deleteMembers });
+      }
+      onClose();
+      router.push(`/dashboard`);
+    } catch (error) {
+      console.error('프로젝트 수정 실패:', error);
+      setChangeFailed(true);
+      router.push(`/dashboard`);
+    }
   }
 
   const searchResults = (props: React.HTMLAttributes<HTMLLIElement>, option: UserInfo, state: AutocompleteRenderOptionState) => (
@@ -226,8 +250,6 @@ const SettingPopup = (props: SettingPopupProps) => {
   
         const usersResponse = await axios.get<SearchResults>('/api/users', { headers });
         const sortingUsers = sortUsersByName(usersResponse.data.result);
-        // const filteredUsers = sortingResult.filter(user => user.userName !== loginUser.userName);
-        // setAllUsers(filteredUsers);
   
         const membersResponse = await axios.get(`/api/projects/${projectId}/members`, { headers });
         const memberData = membersResponse.data.result;
@@ -238,7 +260,7 @@ const SettingPopup = (props: SettingPopupProps) => {
         }));
         const sortingMembers = sortMembers(members);
         setMembers(sortingMembers);
-
+        setOriginMembers(sortingMembers);
 
         const filteredUsers = sortingUsers.filter((user) => !members.some((member:any) => member.userName === user.userName));
         setAllUsers(filteredUsers);

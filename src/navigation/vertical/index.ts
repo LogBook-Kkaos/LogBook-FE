@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 // ** Icon Imports
 import HomeOutline from 'mdi-material-ui/HomeOutline'
@@ -26,6 +27,7 @@ interface MyProject {
 }
 
 const navigation = (): VerticalNavItemsType => {
+  const router = useRouter()
   const [myProject,setMyProject]=useState<MyProject[]>([])
   const { accessToken } = useRecoilValue(tokensState)
   const loginUser = useRecoilValue(loginUserState)
@@ -63,7 +65,7 @@ const navigation = (): VerticalNavItemsType => {
   
     fetchMenuItems();
 
-  }, []);
+  }, [router.asPath]);
 
   return [
     {
