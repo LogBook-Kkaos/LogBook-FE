@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import Select from 'react-select';
 
 // ** MUI Imports
+import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
-import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
-import Avatar from '@mui/material/Avatar'
+import Cog from 'mdi-material-ui/CogOutline'
+import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import PlusThick from 'mdi-material-ui/PlusThick'
-import Cog from 'mdi-material-ui/CogOutline'
 
+// ** Recoil Imports
 import { useRecoilState } from 'recoil';
 import { activeView } from 'src/recoil/issue/atom';
 
@@ -53,7 +54,7 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
   const options = [
     { value: '이서빈', label: '이서빈' },
     { value: '이소현', label: '이소현' },
-    { value: '윤주은', label: '윤주은' }, 
+    { value: '윤주은', label: '윤주은' },
     { value: '장예경', label: '장예경' },
   ];
 
