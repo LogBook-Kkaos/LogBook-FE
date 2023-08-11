@@ -39,6 +39,7 @@ import TabIssue from 'src/views/project-detail/TabIssue'
 import TabIssueDetail from 'src/views/project-detail/TabIssueDetail'
 import TabCreateIssue from 'src/views/project-detail/TabCreateIssue'
 import TabAccount from 'src/views/account-settings/TabAccount'
+import SettingPopup from 'src/views/project-detail/SettingPopup'
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -72,16 +73,23 @@ const ProjectDetail = () => {
   const activeIssueTab = useRecoilValue(activeView);
   const [issueData, setIssueData] = useState<{ title: string; name: string; }[]>([]);
 
-
-
   const [activeTab, setActiveTab] = useState<string>('issue')
   const [project, setProject] = useState<ProjectInfo>();
   const { accessToken } = useRecoilValue(tokensState)
+  const [isOpenSetting, setIsOpenSetting] = useState(false)
 
   const headers = { Authorization: `Bearer ${accessToken}` }
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setActiveTab(newValue)
+  }
+
+  const openSetting = () => {
+    setIsOpenSetting(true)
+  }
+
+  const closeSetting = () => {
+    setIsOpenSetting(false)
   }
 
   useEffect(() => {
@@ -127,7 +135,34 @@ const ProjectDetail = () => {
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid>
           </Grid>
+          <Grid>
+            <IconButton 
+              onClick={openSetting}
+              style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}
+            >
+              <Cog />
+            </IconButton>
+            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
+              <Sort />
+            </IconButton>
+            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
+              <Filter />
+            </IconButton>
+            <TextField
+              size='small'
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
+              placeholder='Search'
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Magnify fontSize='small' />
+                  </InputAdornment>
+                )
+              }}
+            />
+          </Grid>
         </Grid>
+        <SettingPopup isOpen={isOpenSetting} onClose={closeSetting} projectId={projectId} token={accessToken}/>
       </Grid>
       <Grid item xs={12}>
         <TabContext value={activeTab}>
