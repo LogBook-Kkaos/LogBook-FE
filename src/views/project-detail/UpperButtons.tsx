@@ -30,11 +30,14 @@ import NoteAlertOutline from 'mdi-material-ui/NoteAlertOutline'
 import FileRefreshOutline from 'mdi-material-ui/FileRefreshOutline'
 
 
-const UpperButtons =({ routerPath, createButtonLabel }: { routerPath: string, createButtonLabel: string })  =>{
+const UpperButtons =({ routerPath, createButtonLabel, projectId }: { routerPath: string, createButtonLabel: string, projectId: string })  =>{
     const router = useRouter();
 
     const handleCreate = () => {
-          router.push(routerPath)
+        router.push({
+            pathname: routerPath,
+            query: { projectId: projectId }
+        });
       }
 
     

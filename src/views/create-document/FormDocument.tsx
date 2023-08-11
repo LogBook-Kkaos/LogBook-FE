@@ -1,9 +1,12 @@
   import { useState, useEffect } from "react";
+  import { useRouter } from 'next/router';
+  import axios from 'axios';
   import { Editor } from "react-draft-wysiwyg";
   import {
     EditorState,
     ContentState,
-    convertFromHTML
+    convertFromHTML,
+    convertToRaw
   } from "draft-js";
   import { stateToHTML } from "draft-js-export-html"; 
   import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -16,20 +19,44 @@
   import { styled } from '@mui/material/styles'
   import MuiDivider, { DividerProps } from '@mui/material/Divider'
   import Button, { ButtonProps }  from '@mui/material/Button'
+  import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
 
   const DynamicEditor = dynamic(() => import('react-draft-wysiwyg').then((module) => module.Editor), {
     ssr: false
   });
 
-  const FormDocument = () => {
+  interface FormDocumentProps {
+    projectId: string; 
+  }
+  
+  interface ModalInfo {
+    open: boolean
+    message: string
+    messageDescription: string
+    color: string
+  }
+
+  const FormDocument: React.FC<FormDocumentProps> = ({ projectId }) => {
+    const router = useRouter();
+
     const [title, setTitle] = useState('');
     const [oldCode, setOldCode] = useState(`<p> <strong>문서 내용</strong>을 채워주세요!</p>`);
+    const [modalInfo, setModalInfo] = useState<ModalInfo>({ open: false, message: '', messageDescription: '', color: '' });
+    const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+
+    const closeModal = () => {
+      setModalInfo({ open: false, message: '', messageDescription: '', color: '' });
+      router.push("/project-detail/" + projectId);
+    };
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setTitle(event.target.value);
     };
-
-    const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
     useEffect(() => {
       const blocksFromHTML = convertFromHTML(oldCode);
@@ -40,7 +67,13 @@
     const onEditorStateChange = (state: EditorState) => {
       setEditorState(state);
       const htmlContent = stateToHTML(state.getCurrentContent());
-      console.log(htmlContent);
+    };
+
+    const extractImageUrlsFromContent = (htmlContent: string) => {
+      const doc = new DOMParser().parseFromString(htmlContent, "text/html");
+      const imgElements = doc.querySelectorAll("img");
+      const imageUrls = Array.from(imgElements).map((img) => img.src);
+      return imageUrls;
     };
 
     // Styled Divider component
@@ -58,6 +91,54 @@
       margin: theme.spacing(4.5),
       width: 210,
     }))
+
+
+    //axios
+    const handleAutoRelease = async () => {
+      const htmlContent = stateToHTML(editorState.getCurrentContent());
+    
+      const requestData = {
+        documentTitle: title,
+        documentContent: htmlContent,
+        imageUrlList: extractImageUrlsFromContent(htmlContent)
+      };
+      try {
+        const response = await axios.post(`/api/projects/${projectId}/documents`, requestData);
+        console.log("Document saved:", response.data);
+        setModalInfo({
+          open: true,
+          message: '기술문서 저장',
+          messageDescription: '기술문서를 저장했습니다.',
+          color: 'success'
+        });
+      } catch (error) {
+        console.error("Error saving document:", error);
+      }
+    };
+  
+    const handleSaveLater = async () => {
+      const htmlContent = stateToHTML(editorState.getCurrentContent());
+      const requestData = {
+        documentTitle: title,
+        documentContent: htmlContent,
+        imageUrlList: extractImageUrlsFromContent(htmlContent)
+      };
+  
+      try {
+        const response = await axios.post(`/api/projects/${projectId}/documents`, requestData);
+        console.log("Document saved for later:", response.data);
+        
+        setModalInfo({
+          open: true,
+          message: '기술문서 저장',
+          messageDescription: '기술문서를 저장했습니다.',
+          color: 'success'
+        });
+        
+      } catch (error) {
+        console.error("Error saving document for later:", error);
+      }
+    };
 
     return (
       <div>
@@ -91,7 +172,7 @@
         </Box>
 
         <Box sx={{ minWidth: 50, display: 'flex', justifyContent: 'right', p:3 }}>
-          <ButtonStyled variant='contained'>
+          <ButtonStyled variant='contained' onClick={handleAutoRelease}>
             자동 Release note 생성
             <input
               hidden
@@ -100,7 +181,7 @@
               id='account-settings-upload-image'
             />
           </ButtonStyled>
-          <ButtonStyled variant='contained'>
+          <ButtonStyled variant='contained' onClick={handleSaveLater}>
             나중에 생성
             <input
               hidden
@@ -110,7 +191,25 @@
             />
           </ButtonStyled>
         </Box>
-      </div>
+        <Dialog
+        open={modalInfo.open}
+        onClose={closeModal}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{modalInfo.message}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description' style={{ color: modalInfo.color }}>
+            {modalInfo.messageDescription}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeModal} color='primary' autoFocus>
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
     );
   }
 

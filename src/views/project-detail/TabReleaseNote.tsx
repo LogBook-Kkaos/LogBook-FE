@@ -33,12 +33,17 @@ const rows = [
   createReleaseNoteData(1, 'v 1.0.0', '문서 최초 생성', [{ category: Category.Feature, releaseContent: '신규 기능 추가 / AA 기능 제공' }], '장예경', '2023.06.20')
 ]
 
-const TabReleaseNote = () => {
+interface TabReleaseProps {
+  projectId: string; 
+}
+
+
+const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId }) => {
 
   return (
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item xs={12}>
-      <UpperButtons createButtonLabel="릴리즈 노트 생성" routerPath="/create-release-note"/>
+      <UpperButtons createButtonLabel="릴리즈 노트 생성" routerPath="/create-release-note" projectId={projectId}/>
         <TableContainer component={Paper} sx={{ maxHeight: 'calc(100vh - 400px)', position: 'relative', marginTop: '10px' }}>
           <Table sx={{ minWidth: 650 }} aria-label='project detail table'>
             <TableHead>

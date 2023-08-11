@@ -220,10 +220,11 @@ const ProjectDetail = () => {
             {activeIssueTab === 'createIssue' && <TabCreateIssue onIssueCreate={handleIssueCreate} />}
           </TabPanel>
           <TabPanel sx={{ p: 0 }} value='release-note'>
-            <TabReleaseNote />
+          {projectId && <TabReleaseNote projectId={projectId as string} />}
           </TabPanel>
           <TabPanel sx={{ p: 0 }} value='document'>
-            <TabDocument />
+            {projectId && <TabDocument projectId={projectId as string} />}
+              {/* {projectId && <TabDocument projectId={projectId} />} */}
           </TabPanel>
         </TabContext>
       </Grid>

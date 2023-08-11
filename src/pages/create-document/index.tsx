@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
@@ -14,6 +16,9 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 
 const CreateDocument = () => {
+  const router = useRouter();
+  const { projectId } = router.query;
+
   return (
     <DatePickerWrapper>
       <Box
@@ -25,7 +30,7 @@ const CreateDocument = () => {
       >
         
         <Card>
-          <FormDocument/>
+          {projectId && <FormDocument projectId={projectId as string} />}
         </Card>
       </Box>
     </DatePickerWrapper>
