@@ -46,7 +46,7 @@ const Document = () => {
         }}
       >
         <Card variant="outlined" sx={{ width: '100%' }}>
-          <DocumentContent />
+          <DocumentContent/>
         </Card>
       </Box>
 

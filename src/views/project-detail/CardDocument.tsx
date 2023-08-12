@@ -10,19 +10,20 @@ interface CardDocumentProps {
     date: string;
     title: string;
     documentId: string;
+    projectId: string;
   }
 
-const CardDocument: React.FC<CardDocumentProps> = ({ imageUrl, date, title, documentId }) => {
+const CardDocument: React.FC<CardDocumentProps> = ({ imageUrl, date, title, documentId, projectId }) => {
   const router = useRouter();
 
   const handleCardClick = () => {
     router.push({
       pathname: "/document-detail",
-      query: { documentId: documentId }
+      query: { documentId: documentId, projectId: projectId}
   });
   };
 
-  const defaultImageUrl = '/images/LogBook_Logo_vertical.svg'; // Replace with the path to your default image
+  const defaultImageUrl = '/images/LogBook_Logo_vertical.svg';
 
   return (
     <Card sx={{ m: 5, width: 250, transition: 'transform 0.2s', '&:hover': { transform: 'scale(1.05)' } }} onClick={handleCardClick} >

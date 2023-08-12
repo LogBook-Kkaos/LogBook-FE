@@ -1,11 +1,15 @@
-// components/DocumentContent.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
+import { useRouter } from 'next/router';
+import { useRecoilValue } from 'recoil'
+import { tokensState } from 'src/recoil/auth/atoms'
+
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { styled } from '@mui/material/styles';
-  import Box from '@mui/material/Box'
+import Box from '@mui/material/Box'
 import MuiDivider, { DividerProps } from '@mui/material/Divider';
+import axios from 'axios'; // Import axios to make API requests
 
 const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
   margin: theme.spacing(2, 0),
@@ -18,10 +22,38 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
 }));
 
 const DocumentContent = () => {
-  const title = "안녕하세요"; 
-  const content = "<p><strong>문서 내용</strong>을 채워주세요!</p>"; 
+  const [documentInfo, setDocumentInfo] = useState(null);
+  const { accessToken } = useRecoilValue(tokensState)
+  
+  const headers = { Authorization: `Bearer ${accessToken}` }
 
-//style component
+  const router = useRouter();
+  const { documentId, projectId } = router.query;
+
+
+
+
+  useEffect(() => {
+    axios.get(`/api/projects/${projectId}/documents/${documentId}`, { headers })
+      .then(response => {
+        console.log(response);
+        setDocumentInfo(response.data.result);
+      })
+      .catch(error => {
+        console.error('Error fetching document:', error);
+      });
+  }, [projectId, documentId]);
+
+
+  // Return loading state if documentInfo is not fetched yet
+  if (!documentInfo) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  // Destructure the documentInfo object to get title and content
+  const { documentTitle, documentContent } = documentInfo;
+
+  // Style component
   const customStyles = {
     container: {
       minWidth: 38,
@@ -46,7 +78,7 @@ const DocumentContent = () => {
       </Box>
       <Box sx={customStyles.container}>
         <Typography variant="h6" sx={customStyles.footer}>
-          {title}
+          {documentTitle}
         </Typography>
       </Box>
       <Divider flexItem />
@@ -54,7 +86,7 @@ const DocumentContent = () => {
         <Typography variant='h5' sx={customStyles.upper}>Content</Typography>
       </Box>
       <Box sx={customStyles.container}>
-      <Typography component="div" dangerouslySetInnerHTML={{ __html: content }} />
+        <Typography component="div" dangerouslySetInnerHTML={{ __html: documentContent }} />
       </Box>
     </div>
   );
