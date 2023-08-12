@@ -200,19 +200,6 @@ const ProjectDetail = () => {
                 }
               />
             </TabList>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{
-                mt: 1,
-                mb: 1,
-                borderRadius: 1,
-                marginLeft: 'auto'
-              }}
-              onClick={handleCreateReleaseNote}
-            >
-              릴리즈 노트 작성하기
-            </Button>
           </Box>
           <TabPanel sx={{ p: 0 }} value='issue'>
             {activeIssueTab === 'issue' && <TabIssue onIssueCreate={handleIssueCreate} issueData={issueData} />}
