@@ -29,10 +29,10 @@ const DocumentContent = () => {
   const router = useRouter();
   const { documentId, projectId } = router.query;
 
+
   useEffect(() => {
     axios.get(`/api/projects/${projectId}/documents/${documentId}`, { headers })
       .then(response => {
-        console.log(response);
         setDocumentInfo(response.data.result);
       })
       .catch(error => {

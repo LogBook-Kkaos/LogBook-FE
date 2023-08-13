@@ -5,29 +5,17 @@ import { useRouter } from 'next/router'
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
-import Link from '@mui/material/Link'
-import Card from '@mui/material/Card'
-import Typography from '@mui/material/Typography'
-import CardHeader from '@mui/material/CardHeader'
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
-import Box from '@mui/material/Box'
-import TabList from '@mui/lab/TabList'
-import TabPanel from '@mui/lab/TabPanel'
-import TabContext from '@mui/lab/TabContext'
-import { styled } from '@mui/material/styles'
-import MuiTab, { TabProps } from '@mui/material/Tab'
+
 
 // ** Icons Imports
-import Cog from 'mdi-material-ui/cog'
 import Sort from 'mdi-material-ui/sort'
 import Filter from 'mdi-material-ui/filter'
 import Magnify from 'mdi-material-ui/Magnify'
-import LightbulbOnOutline from 'mdi-material-ui/LightbulbOnOutline'
-import NoteAlertOutline from 'mdi-material-ui/NoteAlertOutline'
-import FileRefreshOutline from 'mdi-material-ui/FileRefreshOutline'
+
 
 
 const UpperButtons =({ routerPath, createButtonLabel, projectId }: { routerPath: string, createButtonLabel: string, projectId: string })  =>{

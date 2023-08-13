@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Editor } from "react-draft-wysiwyg";
 import { useRecoilValue } from 'recoil'
 import { tokensState } from 'src/recoil/auth/atoms'
 import {
   EditorState,
   ContentState,
   convertFromHTML,
-  convertToRaw
 } from "draft-js";
 import { stateToHTML } from "draft-js-export-html"; 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -48,10 +46,7 @@ const FormDocument = () => {
   const [modalInfo, setModalInfo] = useState<ModalInfo>({ open: false, message: '', messageDescription: '', color: '' });
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  const [documentInfo, setDocumentInfo] = useState<{
-    documentTitle: string;
-    documentContent: string;
-  }>({ documentTitle: '', documentContent: '' });
+
 
   const closeModal = () => {
     setModalInfo({ open: false, message: '', messageDescription: '', color: '' });
@@ -67,11 +62,7 @@ const FormDocument = () => {
     if (documentId) {
       axios.get(`/api/projects/${projectId}/documents/${documentId}`, {headers})
         .then((response) => {
-          console.log("응답"+response.data);
           const { documentTitle, documentContent } = response.data.result;
-          console.log(documentTitle);
-          setDocumentInfo({ documentTitle, documentContent });
-          console.log(documentInfo);
           setTitle(documentTitle);
           const blocksFromHTML = convertFromHTML(documentContent);
           const state = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
@@ -116,8 +107,6 @@ const FormDocument = () => {
     width: 210,
   }))
 
-
-  //axios
   const handleAutoRelease = async () => {
     const htmlContent = stateToHTML(editorState.getCurrentContent());
   
@@ -135,6 +124,7 @@ const FormDocument = () => {
         messageDescription: '기술문서를 저장했습니다.',
         color: 'success'
       });
+      
     } catch (error) {
       console.error("Error saving document:", error);
     }
@@ -151,7 +141,6 @@ const FormDocument = () => {
     try {
       const response = await axios.post(`/api/projects/${projectId}/documents`, requestData);
       console.log("Document saved for later:", response.data);
-      
       setModalInfo({
         open: true,
         message: '기술문서 저장',

@@ -13,7 +13,6 @@ import { activeView } from 'src/recoil/issue/atom';
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
-import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import Box from '@mui/material/Box'
@@ -38,7 +37,6 @@ import TabDocument from 'src/views/project-detail/TabDocument'
 import TabIssue from 'src/views/project-detail/TabIssue'
 import TabIssueDetail from 'src/views/project-detail/TabIssueDetail'
 import TabCreateIssue from 'src/views/project-detail/TabCreateIssue'
-import TabAccount from 'src/views/account-settings/TabAccount'
 import SettingPopup from 'src/views/project-detail/SettingPopup'
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
@@ -211,7 +209,6 @@ const ProjectDetail = () => {
           </TabPanel>
           <TabPanel sx={{ p: 0 }} value='document'>
             {projectId && <TabDocument projectId={projectId as string} />}
-              {/* {projectId && <TabDocument projectId={projectId} />} */}
           </TabPanel>
         </TabContext>
       </Grid>
