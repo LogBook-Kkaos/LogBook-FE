@@ -30,7 +30,7 @@ const CreateDocument = () => {
       >
         
         <Card>
-          {projectId && <FormDocument projectId={projectId as string} />}
+          <FormDocument/>
         </Card>
       </Box>
     </DatePickerWrapper>

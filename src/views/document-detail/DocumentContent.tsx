@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import Typography from "@mui/material/Typography";
 import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil'
 import { tokensState } from 'src/recoil/auth/atoms'
+import axios from 'axios';
 
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
+// ** MUI Imports
 import { styled } from '@mui/material/styles';
+import Typography from "@mui/material/Typography";
 import Box from '@mui/material/Box'
 import MuiDivider, { DividerProps } from '@mui/material/Divider';
-import axios from 'axios'; // Import axios to make API requests
+
 
 const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
   margin: theme.spacing(2, 0),
@@ -22,16 +22,12 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
 }));
 
 const DocumentContent = () => {
+
   const [documentInfo, setDocumentInfo] = useState(null);
   const { accessToken } = useRecoilValue(tokensState)
-  
   const headers = { Authorization: `Bearer ${accessToken}` }
-
   const router = useRouter();
   const { documentId, projectId } = router.query;
-
-
-
 
   useEffect(() => {
     axios.get(`/api/projects/${projectId}/documents/${documentId}`, { headers })
@@ -44,13 +40,10 @@ const DocumentContent = () => {
       });
   }, [projectId, documentId]);
 
-
-  // Return loading state if documentInfo is not fetched yet
   if (!documentInfo) {
     return <Typography>Loading...</Typography>;
   }
 
-  // Destructure the documentInfo object to get title and content
   const { documentTitle, documentContent } = documentInfo;
 
   // Style component

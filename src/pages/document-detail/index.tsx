@@ -1,3 +1,6 @@
+import { useRouter } from 'next/router';
+import axios from 'axios';
+
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
@@ -15,6 +18,26 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 
 const Document = () => {
+
+  const router = useRouter();
+  const { documentId, projectId } = router.query;
+
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(`/api/projects/${projectId}/documents/${documentId}`);
+      if (response.status === 200) {
+        router.push(`/project-detail/${projectId}`);
+      }
+    } catch (error) {
+      console.error('Error deleting document:', error);
+    }
+  };
+
+  const handleEdit = () => {
+    router.push(`/create-document?projectId=${projectId}&documentId=${documentId}`);
+  };
+
+
   return (
     <DatePickerWrapper>
       <Box
@@ -28,12 +51,14 @@ const Document = () => {
           variant="contained"
           color="primary"
           sx={{ marginRight: 2 }}
+          onClick={handleDelete}
         >
           삭제
         </Button>
         <Button
           variant="contained"
           color="primary"
+          onClick={handleEdit}
         >
           수정
         </Button>
