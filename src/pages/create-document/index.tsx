@@ -1,5 +1,4 @@
 // ** MUI Imports
-import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card';
 
@@ -23,7 +22,6 @@ const CreateDocument = () => {
           alignItems: 'center',
         }}
       >
-        
         <Card>
           <FormDocument/>
         </Card>

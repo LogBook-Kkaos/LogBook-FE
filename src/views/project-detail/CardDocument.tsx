@@ -9,20 +9,28 @@ interface CardDocumentProps {
     imageUrl: string;
     date: string;
     title: string;
+    documentId: string;
+    projectId: string;
   }
 
-const CardDocument: React.FC<CardDocumentProps> = ({ imageUrl, date, title }) => {
+const CardDocument: React.FC<CardDocumentProps> = ({ imageUrl, date, title, documentId, projectId }) => {
   const router = useRouter();
+
   const handleCardClick = () => {
-    router.push("/document-detail")
+    router.push({
+      pathname: "/document-detail",
+      query: { documentId: documentId, projectId: projectId}
+  });
   };
+
+  const defaultImageUrl = '/images/LogBook_Logo_vertical.svg';
 
   return (
     <Card sx={{ m: 5, width: 250, transition: 'transform 0.2s', '&:hover': { transform: 'scale(1.05)' } }} onClick={handleCardClick} >
       <CardMedia
         component="img"
         height="140"
-        image={imageUrl}
+        src={imageUrl || defaultImageUrl}
         alt="Document Image"
       />
       <CardContent>
