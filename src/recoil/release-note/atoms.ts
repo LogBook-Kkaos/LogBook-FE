@@ -11,7 +11,6 @@ export const releaseNoteState = atom<ReleaseNote>({
         creatorId: 0,
         version: '',
         creationDate: today,
-        status: '',
         releaseContent: [],
         isImportant: false,
         isPublic: false,
