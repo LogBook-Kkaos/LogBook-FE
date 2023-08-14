@@ -31,6 +31,8 @@ const FormReleaseNote = () => {
   const [releaseNote, setReleaseNote] = useRecoilState(releaseNoteState);
   const [releaseContents, setReleaseContents] = useState<string[]>(['']);
 
+  const versionPattern = /^(\d+\.){2}\d+$/;
+
   const methods = useForm(
     {
       defaultValues: {
@@ -144,25 +146,33 @@ const FormReleaseNote = () => {
               <Controller
                 control={control}
                 name='releaseNoteVersion'
-                render={({ field }) => (
-                  <TextField
-                    type='version'
-                    label='버전'
-                    placeholder='v x.y.z'
-                    helperText='Major 업데이트의 경우 x를, Minor 업데이트의 경우 y를, Patch 업데이트의 경우 z를 바꿔주세요.'
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position='start'>
-                          <Update />
-                        </InputAdornment>
-                      )
-                    }}
-                    {...field}
-                  />
-                )}
+                rules={{ pattern: versionPattern }} // 버전 유효성 검사 추가
+                render={({ field }) => {
+                  const hasError = !field.value.match(versionPattern);
+                  return (
+                    <TextField
+                      type='version'
+                      label='버전'
+                      placeholder='x.y.z'
+                      helperText={
+                        hasError
+                          ? '올바른 버전 형식이 아닙니다. x.y.z 형식으로 입력해주세요.'
+                          : 'Major 업데이트의 경우 x를, Minor 업데이트의 경우 y를, Patch 업데이트의 경우 z를 바꿔주세요.'
+                      }
+                      error={hasError} // 버전 입력이 올바르지 않으면 에러 표시
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position='start'>
+                            <Update />
+                          </InputAdornment>
+                        ),
+                      }}
+                      {...field}
+                    />
+                  );
+                }}
               />
             </Grid>
-
             <Grid item xs={12}>
               <Grid container>
                 <Grid item xs={6}>
