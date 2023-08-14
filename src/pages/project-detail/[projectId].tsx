@@ -70,9 +70,9 @@ const ProjectDetail = () => {
   const [project, setProject] = useState<ProjectInfo>()
   const { accessToken } = useRecoilValue(tokensState)
   const loginUser = useRecoilValue(loginUserState)
-  const email = loginUser.email
   const [isOpenSetting, setIsOpenSetting] = useState(false)
   const [isLeader, setIsLeader] = useState(false)
+  const [permissionLevel, setPermissionLevel] = useState('')
 
   const headers = { Authorization: `Bearer ${accessToken}` }
 
@@ -96,9 +96,10 @@ const ProjectDetail = () => {
 
         const userPermissionResponse = await axios.get(`/api/projects/${projectId}/members/permission?email=${loginUser.email}`, { headers });
         const userPermissionLevel = userPermissionResponse.data.result.permissionLevel;
+        setPermissionLevel(userPermissionLevel);
 
         if (userPermissionLevel === '관리자') {
-          setIsLeader(true);
+          setIsLeader(true);  
         } else{
           setIsLeader(false);
         }
@@ -188,10 +189,10 @@ const ProjectDetail = () => {
             {activeIssueTab === 'createIssue' && <TabCreateIssue onIssueCreate={handleIssueCreate} />}
           </TabPanel>
           <TabPanel sx={{ p: 0 }} value='release-note'>
-          {projectId && <TabReleaseNote projectId={projectId as string} />}
+            {projectId && <TabReleaseNote projectId={projectId as string} permissionLevel={permissionLevel}/>}
           </TabPanel>
           <TabPanel sx={{ p: 0 }} value='document'>
-            {projectId && <TabDocument projectId={projectId as string} />}
+            {projectId && <TabDocument projectId={projectId as string} permissionLevel={permissionLevel}/>}
           </TabPanel>
         </TabContext>
       </Grid>
