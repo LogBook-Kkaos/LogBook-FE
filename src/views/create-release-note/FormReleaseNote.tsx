@@ -2,6 +2,12 @@
 import { useState, useEffect } from 'react';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 
+// ** Next Imports
+import { useRouter } from 'next/router';
+
+// ** HTTP Clients
+import axios from 'axios';
+
 // ** MUI Imports
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -25,32 +31,59 @@ import AccountOutline from 'mdi-material-ui/AccountOutline';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { releaseNoteState } from 'src/recoil/release-note/atoms';
 import FormReleaseContent from './FormReleaseContent';
+import { CategoryType } from './CategoryTag';
+import { Category } from './CategoryTag';
+
+interface GetMemberIdParams {
+  projectId: string;
+  email: string;
+}
+
+interface ReleaseNoteDataTypes {
+  creationDate: Date;
+  creatorName: string;
+  releaseNoteTitle: string;
+  releaseNoteVersion: string;
+  releaseNoteIsImportant: boolean;
+  releaseNoteIsPublic: boolean;
+  releaseContents: Array<{
+    releaseSummary: string;
+    category: CategoryType;
+    documentLink: string;
+  }>;
+}
 
 const FormReleaseNote = () => {
-  
+
   const [releaseNote, setReleaseNote] = useRecoilState(releaseNoteState);
   const [releaseContents, setReleaseContents] = useState<string[]>(['']);
 
   const versionPattern = /^(\d+\.){2}\d+$/;
 
-  const methods = useForm(
+  const methods = useForm<ReleaseNoteDataTypes>(
     {
       defaultValues: {
-        creationDate: releaseNote.creationDate,
-        creatorName: typeof window !== 'undefined' ? sessionStorage.getItem('userName') : null,
+        creationDate: new Date(releaseNote.creationDate),
+        creatorName: typeof window !== 'undefined' ? sessionStorage.getItem('userName') ?? undefined : undefined,
         releaseNoteTitle: releaseNote.releaseNoteTitle,
         releaseNoteVersion: releaseNote.version,
         releaseNoteIsImportant: releaseNote.isImportant,
         releaseNoteIsPublic: releaseNote.isPublic,
+        releaseContents: [],
       },
     },
   );
   const { register, control, handleSubmit, setValue } = methods;
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'releaseContents',
+  });
 
 
   const handleReleaseContents = () => {
-    setReleaseContents([...releaseContents, '']);
+    append({ releaseSummary: '', category: Category.General, documentLink: '' });
   };
+
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const title = event.target.value;
@@ -60,13 +93,74 @@ const FormReleaseNote = () => {
     });
   };
 
+  const router = useRouter();
+
+  const projectId = router.query.projectId;
+
+  async function getMemberId(params: GetMemberIdParams):Promise<string> {
+    const { projectId, email } = params;
+    const response = await axios
+      .get(`/api/projects/${projectId}/members/info`, {
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+        },
+        params: {
+          email: email,
+        }
+      }
+      );
+    const { result: memberId } = response.data;
+
+    return memberId;
+
+
+  }
+
+  const onSubmit = async (data: ReleaseNoteDataTypes) => {
+    try {
+
+      const creatorId = await getMemberId({ projectId: projectId as string, email: sessionStorage.getItem('email') as string });
+      
+      const requestData = {
+        creator: {
+          creatorId: creatorId,
+          creatorName: data.creatorName,
+        },
+        releaseTitle: data.releaseNoteTitle,
+        creationDate: data.creationDate,
+        version: data.releaseNoteVersion,
+        important: data.releaseNoteIsImportant,
+        public: data.releaseNoteIsPublic,
+        releaseContents: data.releaseContents,
+      }
+
+      console.log(requestData);
+      
+      const response = await axios
+      .post(`/api/projects/${projectId}/release_notes`, 
+
+        requestData
+      ,
+      {
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+        },
+      }
+      );
+
+      const { result: releaseNoteId } = response.data;
+
+      console.log(`릴리즈 노트 생성 완료. ID: ${releaseNoteId}`);
+    } catch (error) {
+      // 에러가 발생하면 콘솔에 에러 출력
+      console.error('릴리즈 노트 생성 중 문제가 발생했습니다: ', error);
+    }
+  };
+
+
   return (
     <Card>
-      <form onSubmit={
-        handleSubmit((data) => {
-          console.log(data);
-        })
-      }>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <CardHeader
           title={
             <TextField
@@ -87,7 +181,7 @@ const FormReleaseNote = () => {
               <Button
                 variant="outlined"
                 type='submit'
-                onClick={() => {}}
+                onClick={() => { }}
                 color="primary"
                 sx={{ mr: 1, ml: 5 }}
               >
@@ -96,7 +190,7 @@ const FormReleaseNote = () => {
               <Button
                 data-testid="delete-button"
                 variant="outlined"
-                onClick={() => {}}
+                onClick={() => { }}
                 color="error"
               >
                 삭제
@@ -146,7 +240,7 @@ const FormReleaseNote = () => {
               <Controller
                 control={control}
                 name='releaseNoteVersion'
-                rules={{ pattern: versionPattern }} // 버전 유효성 검사 추가
+                rules={{ pattern: versionPattern }}
                 render={({ field }) => {
                   const hasError = !field.value.match(versionPattern);
                   return (
@@ -216,9 +310,10 @@ const FormReleaseNote = () => {
               </Grid>
             </Grid>
 
-            {releaseContents.map((value, index) => (
-              <FormReleaseContent key={index} index={index} methods={methods}/>
+            {fields.map((field, index) => (
+              <FormReleaseContent key={field.id} index={index} methods={methods} field={field} removeContent={() => remove(index)} />
             ))}
+
 
             <Grid item xs={12}>
               <Button
