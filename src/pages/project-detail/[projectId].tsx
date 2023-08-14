@@ -104,7 +104,7 @@ const ProjectDetail = () => {
       fetchProjectInfo();
     }
   }, [projectId]);
-  
+
 
   //style component
   const IconButtonStyle = {
