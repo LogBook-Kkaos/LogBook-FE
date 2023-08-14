@@ -20,12 +20,14 @@ const FormReleaseContent: React.FC<FormReleaseContentProps> = ({ index, methods}
 
   useEffect(() => {
     const assignCategory = (text: string) => {
-      if (text.includes('버그 수정') || text.includes('개선 사항')) {
+      if (text.includes('수정')) {
         setSelectedCategory('Fixed');
-      } else if (text.includes('새로운 기능')) {
+      } else if (text.includes('기능')) {
         setSelectedCategory('Feature');
-      } else if (text.includes('성능 개선')) {
+      } else if (text.includes('개선')) {
         setSelectedCategory('Changed');
+      } else if (text.includes('삭제') || text.includes('중단')) {
+        setSelectedCategory('Deprecated');
       } else {
         setSelectedCategory('General');
       }
