@@ -20,9 +20,10 @@ interface Document {
 
 interface TabDocumentProps {
   projectId: string; 
+  permissionLevel: string;
 }
 
-const TabDocument: React.FC<TabDocumentProps> = ({ projectId }) => {
+const TabDocument: React.FC<TabDocumentProps> = ({ projectId, permissionLevel }) => {
   const [documents, setDocuments] = useState<Document[]>([]);
 
   const { accessToken } = useRecoilValue(tokensState)
@@ -34,7 +35,6 @@ const TabDocument: React.FC<TabDocumentProps> = ({ projectId }) => {
     const fetchDocumentInfo = async () => {
       try {
         const response = await axios.get(`/api/projects/${projectId}/documents`, { headers });
-        console.log(response.data.result);
         if (Array.isArray(response.data.result)) {
           setDocuments(response.data.result as Document[]); 
         } else {
@@ -45,14 +45,13 @@ const TabDocument: React.FC<TabDocumentProps> = ({ projectId }) => {
       } 
     }
     fetchDocumentInfo();
-  }, [projectId, headers]); 
-  
-  console.log(documents); 
+  }, [projectId]); 
 
 
   return (
     <Grid container justifyContent="flex-start" spacing={2}>
-      <UpperButtons createButtonLabel="기술문서 생성" routerPath="/create-document" projectId={projectId}/>
+      <Grid item xs={12}>
+      <UpperButtons createButtonLabel="기술문서 생성" routerPath="/create-document" projectId={projectId} permissionLevel={permissionLevel}/>
 
       {documents.map((document, index) => (
         <CardDocument
@@ -64,6 +63,7 @@ const TabDocument: React.FC<TabDocumentProps> = ({ projectId }) => {
           projectId={projectId}
         />
       ))}
+      </Grid>
     </Grid>
   );
 }   

@@ -7,14 +7,13 @@ import axios from 'axios'
 
 import { useRecoilValue } from 'recoil'
 import { tokensState } from 'src/recoil/auth/atoms'
-import { activeView } from 'src/recoil/issue/atom';
+import { activeView } from 'src/recoil/issue/atom'
+import { loginUserState } from 'src/recoil/user/atoms'
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
-import TextField from '@mui/material/TextField'
-import InputAdornment from '@mui/material/InputAdornment'
 import Box from '@mui/material/Box'
 import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
@@ -24,9 +23,6 @@ import MuiTab, { TabProps } from '@mui/material/Tab'
 
 // ** Icons Imports
 import Cog from 'mdi-material-ui/cog'
-import Sort from 'mdi-material-ui/sort'
-import Filter from 'mdi-material-ui/filter'
-import Magnify from 'mdi-material-ui/Magnify'
 import LightbulbOnOutline from 'mdi-material-ui/LightbulbOnOutline'
 import NoteAlertOutline from 'mdi-material-ui/NoteAlertOutline'
 import FileRefreshOutline from 'mdi-material-ui/FileRefreshOutline'
@@ -69,12 +65,14 @@ const ProjectDetail = () => {
   const router = useRouter();
   const { projectId } = router.query;
   const activeIssueTab = useRecoilValue(activeView);
-  const [issueData, setIssueData] = useState<{ title: string; name: string; }[]>([]);
-
+  const [issueData, setIssueData] = useState<{ title: string; name: string; }[]>([])
   const [activeTab, setActiveTab] = useState<string>('issue')
-  const [project, setProject] = useState<ProjectInfo>();
+  const [project, setProject] = useState<ProjectInfo>()
   const { accessToken } = useRecoilValue(tokensState)
+  const loginUser = useRecoilValue(loginUserState)
   const [isOpenSetting, setIsOpenSetting] = useState(false)
+  const [isLeader, setIsLeader] = useState(false)
+  const [permissionLevel, setPermissionLevel] = useState('')
 
   const headers = { Authorization: `Bearer ${accessToken}` }
 
@@ -91,17 +89,27 @@ const ProjectDetail = () => {
   }
 
   useEffect(() => {
-    const fetchProjectInfo = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`/api/projects/${projectId}`, { headers });
-        setProject(response.data.result)
+        const projectResponse = await axios.get(`/api/projects/${projectId}`, { headers });
+        setProject(projectResponse.data.result)
+
+        const userPermissionResponse = await axios.get(`/api/projects/${projectId}/members/permission?email=${loginUser.email}`, { headers });
+        const userPermissionLevel = userPermissionResponse.data.result.permissionLevel;
+        setPermissionLevel(userPermissionLevel);
+
+        if (userPermissionLevel === '관리자') {
+          setIsLeader(true);  
+        } else{
+          setIsLeader(false);
+        }
       } catch (error) {
         console.error('Error fetching project information:', error);
       }
     };
 
     if (projectId) {
-      fetchProjectInfo();
+      fetchData();
     }
   }, [projectId]);
 
@@ -111,10 +119,8 @@ const ProjectDetail = () => {
     border: '1px solid rgba(0, 0, 0, 0.23)',
     borderRadius: 10,
     padding: 8,
-    marginRight: 16
+    marginLeft: 16
   };
-
-
 
   const handleIssueCreate = (issueTitle: string) => {
     setIssueData([...issueData, { title: issueTitle, name: '이서빈' }]);
@@ -124,44 +130,22 @@ const ProjectDetail = () => {
 
     <Grid container spacing={6}>
       <Grid item xs={12}>
+        <Grid sx={{display:'flex', alignItems:'center'}}>
         <Typography variant='h5'>
           {project?.projectName}
         </Typography>
+        {isLeader && (
+          <IconButton 
+            onClick={openSetting}
+            style={IconButtonStyle}
+          >
+            <Cog />
+          </IconButton>
+        )}
+        </Grid>
         <Typography variant='body2' style={{ paddingTop: 5 }}>{project?.projectDescription}</Typography>
       </Grid>
-      <Grid item xs={12}>
-        <Grid container justifyContent="space-between" alignItems="center">
-          <Grid>
-          </Grid>
-          <Grid>
-            <IconButton 
-              onClick={openSetting}
-              style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}
-            >
-              <Cog />
-            </IconButton>
-            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
-              <Sort />
-            </IconButton>
-            <IconButton style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}>
-              <Filter />
-            </IconButton>
-            <TextField
-              size='small'
-              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
-              placeholder='Search'
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <Magnify fontSize='small' />
-                  </InputAdornment>
-                )
-              }}
-            />
-          </Grid>
-        </Grid>
-        <SettingPopup isOpen={isOpenSetting} onClose={closeSetting} projectId={projectId} token={accessToken}/>
-      </Grid>
+      <SettingPopup isOpen={isOpenSetting} onClose={closeSetting} projectId={projectId} token={accessToken}/>
       <Grid item xs={12}>
         <TabContext value={activeTab}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
@@ -205,10 +189,10 @@ const ProjectDetail = () => {
             {activeIssueTab === 'createIssue' && <TabCreateIssue onIssueCreate={handleIssueCreate} />}
           </TabPanel>
           <TabPanel sx={{ p: 0 }} value='release-note'>
-          {projectId && <TabReleaseNote projectId={projectId as string} />}
+            {projectId && <TabReleaseNote projectId={projectId as string} permissionLevel={permissionLevel}/>}
           </TabPanel>
           <TabPanel sx={{ p: 0 }} value='document'>
-            {projectId && <TabDocument projectId={projectId as string} />}
+            {projectId && <TabDocument projectId={projectId as string} permissionLevel={permissionLevel}/>}
           </TabPanel>
         </TabContext>
       </Grid>
