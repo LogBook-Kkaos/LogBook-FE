@@ -105,7 +105,7 @@ const NotificationPopup = ({ handlePopupClose }: Props) => {
         open={true}
         onClose={handlePopupClose}
         anchorReference="anchorPosition"
-        anchorPosition={{ top: 800, left: 270 }}
+        anchorPosition={{ top: 600, left: 270 }}
         anchorOrigin={{
           vertical: 'center',
           horizontal: 'right',
