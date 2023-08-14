@@ -106,7 +106,7 @@ const ProjectDetail = () => {
       fetchProjectInfo();
     }
   }, [projectId]);
-  
+
 
   //style component
   const IconButtonStyle = {
@@ -136,7 +136,7 @@ const ProjectDetail = () => {
           <Grid>
           </Grid>
           <Grid>
-            <IconButton 
+            <IconButton
               onClick={openSetting}
               style={{ border: '1px solid rgba(0, 0, 0, 0.23)', borderRadius: 10, padding: 8, marginRight: 16 }}
             >
@@ -162,7 +162,7 @@ const ProjectDetail = () => {
             />
           </Grid>
         </Grid>
-        <SettingPopup isOpen={isOpenSetting} onClose={closeSetting} projectId={projectId} token={accessToken}/>
+        <SettingPopup isOpen={isOpenSetting} onClose={closeSetting} projectId={projectId} token={accessToken} />
       </Grid>
       <Grid item xs={12}>
         <TabContext value={activeTab}>
@@ -200,19 +200,6 @@ const ProjectDetail = () => {
                 }
               />
             </TabList>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{
-                mt: 1,
-                mb: 1,
-                borderRadius: 1,
-                marginLeft: 'auto'
-              }}
-              onClick={handleCreateReleaseNote}
-            >
-              릴리즈 노트 작성하기
-            </Button>
           </Box>
           <TabPanel sx={{ p: 0 }} value='issue'>
             {activeIssueTab === 'issue' && <TabIssue onIssueCreate={handleIssueCreate} issueData={issueData} />}
