@@ -42,6 +42,7 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
 
 const MyIssue: React.FC<MyIssueProps> = ({ projectId, headers, userName }) => {
   
+  const router = useRouter()
   const [ myIssues, setMyIssues ] = useState<MyIssueInfo[]>([])
 
   useEffect(() => {
@@ -88,13 +89,24 @@ const MyIssue: React.FC<MyIssueProps> = ({ projectId, headers, userName }) => {
       fetchData();
   }, [projectId])
 
+  const handleViewAll = (projectId : any) => {
+    router.push(`/project-detail/${projectId}`);
+  }
+
   return (
     <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'], height:'100%' }}>
       <Box sx={{ width: '100%' }}>
         <CardHeader
           title='내 할일'
           sx={{ pt: 5.5, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.6 } }}
-          action={<Typography variant='caption'>View All</Typography>}
+          action={
+            <Typography
+              variant='caption'
+              onClick={() => handleViewAll(projectId)}
+              style={{ cursor: 'pointer' }}>
+              View All
+            </Typography>
+          }
           titleTypographyProps={{
             variant: 'h6',
             sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' }

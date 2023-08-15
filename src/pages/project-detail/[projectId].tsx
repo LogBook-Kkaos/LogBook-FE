@@ -103,6 +103,11 @@ const ProjectDetail = () => {
         } else{
           setIsLeader(false);
         }
+
+        if (router.query.activeTab === 'release-note') {
+          setActiveTab('release-note');
+        }
+
       } catch (error) {
         console.error('Error fetching project information:', error);
       }

@@ -24,7 +24,7 @@ interface ReleaseNoteInfo {
 }
 
 const LatestRelease : React.FC<LatestReleaseProps> = ({ projectId, headers }) => {
-
+  const router = useRouter()
   const [ releaseNotes, setReleaseNotes ] = useState<ReleaseNoteInfo[]>([])
 
   useEffect(() => {
@@ -52,6 +52,10 @@ const LatestRelease : React.FC<LatestReleaseProps> = ({ projectId, headers }) =>
       fetchData();
   }, [projectId])
 
+  const handleViewAll = (projectId : any) => {
+    router.push(`/project-detail/${projectId}?activeTab=release-note`);
+  }
+
   return (
     <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'], height:'100%'
      }}>
@@ -59,7 +63,14 @@ const LatestRelease : React.FC<LatestReleaseProps> = ({ projectId, headers }) =>
         <CardHeader
           title='최근 릴리즈'
           sx={{ pt: 5.5, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.6 } }}
-          action={<Typography variant='caption'>View All</Typography>}
+          action={
+            <Typography
+              variant='caption'
+              onClick={() => handleViewAll(projectId)}
+              style={{ cursor: 'pointer' }}>
+              View All
+            </Typography>
+          }
           titleTypographyProps={{
             variant: 'h6',
             sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' }

@@ -32,7 +32,7 @@ interface ProjectInfo {
 }
 
 const Project = () => {
-  const router = useRouter();
+  const router = useRouter()
   const { accessToken } = useRecoilValue(tokensState)
   const loginUser = useRecoilValue(loginUserState)
   const userName = loginUser.userName

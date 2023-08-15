@@ -24,6 +24,7 @@ interface graphData{
 }
 
 const ProjectStatus : React.FC<ProjectStatusProps> = ({ projectId, headers }) => {
+  const router = useRouter()
   const [ graphData, setGraphData ] = useState<graphData[]>([])
   const colors = ['#8884d8', '#82ca9d', '#ffc658'];
 
@@ -57,6 +58,9 @@ const ProjectStatus : React.FC<ProjectStatusProps> = ({ projectId, headers }) =>
       fetchData();
   }, [projectId])
   
+  const handleViewAll = (projectId : any) => {
+    router.push(`/project-detail/${projectId}`);
+  }
 
   return (
     <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'], height: '100%' }}>
@@ -64,7 +68,14 @@ const ProjectStatus : React.FC<ProjectStatusProps> = ({ projectId, headers }) =>
         <CardHeader
           title='프로젝트 진행률'
           sx={{ pt: 5.5, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.2 } }}
-          action={<Typography variant='caption'>View All</Typography>}
+          action={
+            <Typography
+              variant='caption'
+              onClick={() => handleViewAll(projectId)}
+              style={{ cursor: 'pointer' }}>
+              View All
+            </Typography>
+          }
           titleTypographyProps={{
             variant: 'h6',
             sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' }
