@@ -19,6 +19,8 @@ import Grid from '@mui/material/Grid'
 // ** Custom Components Imports
 import CategoryTag, { Category, CategoryType } from 'src/views/project-detail/CategoryTag'
 import UpperButtons from './UpperButtons'
+import ReleaseNoteDetailModal from './ReleaseNoteDetailModal'
+
 import axios from 'axios'
 import { useEffect } from 'react'
 
@@ -31,7 +33,7 @@ interface Creator {
   userName: string;
 }
 
-interface ReleaseNote {
+export interface ReleaseNote {
   releaseNoteId: number;
   creator: Creator;
   version: string;
@@ -51,20 +53,24 @@ interface TabReleaseProps {
   permissionLevel: string;
 }
 
-const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId }) => {
+function handleTitleClick(releaseNote: ReleaseNote) {
+  console.log(releaseNote.releaseNoteId);
+}
+
+const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId, permissionLevel }) => {
   const [releaseNotes, setReleaseNotes] = useState<ReleaseNote[]>([]);
+  const [selectedReleaseNote, setSelectedReleaseNote] = useState<ReleaseNote | null>(null);
 
   const createRowFromReleaseNote = (releaseNote: ReleaseNote, index: number) => {
     const { releaseNoteId, version, releaseTitle, releaseContents, creator, creationDate } = releaseNote;
     const formattedDate = new Date(creationDate).toLocaleDateString();
-
     return (
       <TableRow key = {index}>
         <TableCell component='th' scope='row'>
         {releaseNotes.length - index}
         </TableCell>
-        <TableCell align='left'>{version}</TableCell>
-        <TableCell align='left'>
+        <TableCell align='left'>v {version}</TableCell>
+        <TableCell align='left' onClick={() => onReleaseNoteClicked(releaseNote.releaseNoteId)}>
           <Typography variant="subtitle2" sx={{ marginBottom: 1 }}><strong>{releaseTitle}</strong></Typography>
           {releaseContents.map((item, index) => (
             <Box key={index} sx={{ marginBottom: 1 }}>
@@ -102,12 +108,28 @@ const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId }) => {
   }
 
 
+  const onReleaseNoteClicked = async (releaseNoteId: number) => {
+    try {
+      const response = await axios.get(`/api/projects/${projectId}/release_notes/${releaseNoteId}`,
+      { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('accessToken'),} }
+      );
+      setSelectedReleaseNote(response.data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
   useEffect(() => {
     fetchReleaseNotes();
   }, [])
 
 
+
+
+
   return (
+    <Box>
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item xs={12}>
         <UpperButtons createButtonLabel="릴리즈 노트 생성" routerPath="/create-release-note" projectId={projectId} permissionLevel={permissionLevel}/>
@@ -129,6 +151,8 @@ const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId }) => {
         </TableContainer>
       </Grid>
     </Grid>
+    {selectedReleaseNote && <ReleaseNoteDetailModal releaseNote={selectedReleaseNote} onClose={() => setSelectedReleaseNote(null)} />}
+    </Box>
   )
 }
 
