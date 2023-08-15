@@ -8,9 +8,11 @@ import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Legend } from 'recharts';
 
 
+interface ProjectStatusProps{
+  projectId: string
+}
 
-
-const ProjectStatus = () => {
+const ProjectStatus : React.FC<ProjectStatusProps> = ({ projectId }) => {
   const data = [
     { name: '완료', value: 30 },
     { name: '진행중', value: 50 },

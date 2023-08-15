@@ -8,6 +8,9 @@ import CardContent from '@mui/material/CardContent'
 import MuiDivider, { DividerProps } from '@mui/material/Divider'
 import LinearProgress from '@mui/material/LinearProgress'
 
+interface MyIssueProps {
+  projectId: string
+}
 
 interface DataType {
   title: string
@@ -48,7 +51,7 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
     }
   }))
 
-const MyIssue = () => {
+  const MyIssue: React.FC<MyIssueProps> = ({ projectId }) => {
   return (
     <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'], height:'100%' }}>
       <Box sx={{ width: '100%' }}>

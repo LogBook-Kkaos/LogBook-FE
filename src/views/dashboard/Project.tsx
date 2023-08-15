@@ -95,13 +95,13 @@ const Project = () => {
             }}
           >
             <CardWrapper>
-              <LatestRelease />
+              <LatestRelease projectId={project.projectId} headers={headers}/>
             </CardWrapper>
             <CardWrapper>
-              <MyIssue />
+              <MyIssue projectId={project.projectId}/>
             </CardWrapper>
             <CardWrapper>
-              <ProjectStatus />
+              <ProjectStatus projectId={project.projectId}/>
             </CardWrapper>
           </CardContent>
         </Card>
