@@ -35,7 +35,8 @@ const Project = () => {
   const router = useRouter();
   const { accessToken } = useRecoilValue(tokensState)
   const loginUser = useRecoilValue(loginUserState)
-  const email = loginUser.email;
+  const userName = loginUser.userName
+  const email = loginUser.email
   const headers = { Authorization: `Bearer ${accessToken}` }
   const [ projects,setProjects ] = useState<ProjectInfo[]>([])
 
@@ -98,7 +99,7 @@ const Project = () => {
               <LatestRelease projectId={project.projectId} headers={headers}/>
             </CardWrapper>
             <CardWrapper>
-              <MyIssue projectId={project.projectId}/>
+              <MyIssue projectId={project.projectId} headers={headers} userName={userName}/>
             </CardWrapper>
             <CardWrapper>
               <ProjectStatus projectId={project.projectId}/>

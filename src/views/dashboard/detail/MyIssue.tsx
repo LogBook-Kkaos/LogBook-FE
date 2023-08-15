@@ -1,3 +1,10 @@
+// ** React Imports
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+
+// ** HTTP Client
+import axios from 'axios'
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -10,6 +17,16 @@ import LinearProgress from '@mui/material/LinearProgress'
 
 interface MyIssueProps {
   projectId: string
+  headers: any
+  userName: string | null
+}
+
+interface MyIssueInfo {
+  issueId: string
+  issueTitle: string
+  startDate: Date
+  endDate: Date
+  status: string
 }
 
 interface DataType {
@@ -51,7 +68,54 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
     }
   }))
 
-  const MyIssue: React.FC<MyIssueProps> = ({ projectId }) => {
+const MyIssue: React.FC<MyIssueProps> = ({ projectId, headers, userName }) => {
+  
+  const [ myIssues, setMyIssues ] = useState<MyIssueInfo[]>([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const params = { assigneeName: userName };
+        const MyIssueResponse = await axios.get(`/api/projects/${projectId}/issues/filter`, {
+          headers: headers,
+          params: params
+        });
+
+        const sortedIssues = MyIssueResponse.data.result.sort((a:any, b:any) => {
+          const endDateA = new Date(a.endDate);
+          const endDateB = new Date(b.endDate);
+          if (endDateA < endDateB) return -1;
+          if (endDateA > endDateB) return 1;
+      
+          const statusOrder = ['할일', '진행중', '완료'];
+          const statusIndexA = statusOrder.indexOf(a.status);
+          const statusIndexB = statusOrder.indexOf(b.status);
+          if (statusIndexA < statusIndexB) return -1;
+          if (statusIndexA > statusIndexB) return 1;
+      
+          if (a.issueTitle < b.issueTitle) return -1;
+          if (a.issueTitle > b.issueTitle) return 1;
+      
+          return 0;
+        });
+
+        const formattedMyIssues = sortedIssues.map((item: any) => ({
+          issueId: item.issueId,
+          issueTitle: item.issueTitle,
+          startDate: item.startDate,
+          endDate: item.endDate,
+          status: item.status
+        }));
+        
+        setMyIssues(formattedMyIssues);
+        
+      } catch (error) {
+        console.error('Error fetching myissue information:', error);
+      }
+    };
+      fetchData();
+  }, [projectId])
+
   return (
     <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'], height:'100%' }}>
       <Box sx={{ width: '100%' }}>
@@ -65,14 +129,14 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
           }}
         />
         <CardContent sx={{ pb: theme => `${theme.spacing(5.5)} !important` }}>
-          {issueData.map((item: DataType, index: number) => {
+          {myIssues.map((item: MyIssueInfo, index: number) => {
             return (
               <Box
-                key={item.title}
+                key={item.issueId}
                 sx={{ display: 'flex', alignItems: 'center', mb: index !== issueData.length - 1 ? 6 : 0 }}
               >
                 <Box sx={{ minWidth: 38, display: 'flex', justifyContent: 'center' }}>
-                <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{item.title}</Typography>
+                <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{item.issueTitle}</Typography>
                 </Box>
                 <Box
                   sx={{
@@ -85,7 +149,7 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
                   }}
                 >
                   <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>
-                      {item.start_date.toLocaleDateString()}~{item.end_date.toLocaleDateString()}
+                      {item.startDate.toLocaleDateString()}~{item.endDate.toLocaleDateString()}
                   </Typography>
                   <Typography variant='caption'>{item.status}</Typography>
                 </Box>
@@ -93,11 +157,15 @@ const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
             )
           })}
           <Divider flexItem/>
-          <Box sx={{ marginTop:2, minWidth: 85, display: 'flex', flexDirection: 'column' }}>
-              <Typography variant='body2' sx={{ mb: 2, fontWeight: 700, color: 'text.primary' }}>
-                  진행률({`${(issueData.filter(item => item.status === "완료").length / issueData.length * 100).toFixed(0)}%`})
-              </Typography>
-            <LinearProgress color={'primary'} value={issueData.filter(item => item.status === "완료").length/issueData.length*100} variant='determinate' />
+          <Box sx={{ marginTop: 2, minWidth: 85, display: 'flex', flexDirection: 'column' }}>
+            <Typography variant='body2' sx={{ mb: 2, fontWeight: 700, color: 'text.primary' }}>
+              진행률({`${((myIssues.filter(item => item.status === "완료").length / myIssues.length * 100) || 0).toFixed(0)}%`})
+            </Typography>
+            <LinearProgress
+              color={'primary'}
+              value={(myIssues.filter(item => item.status === "완료").length / myIssues.length * 100) || 0}
+              variant='determinate'
+            />
           </Box>
         </CardContent>
       </Box>
