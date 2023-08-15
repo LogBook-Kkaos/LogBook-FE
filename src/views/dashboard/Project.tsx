@@ -102,7 +102,7 @@ const Project = () => {
               <MyIssue projectId={project.projectId} headers={headers} userName={userName}/>
             </CardWrapper>
             <CardWrapper>
-              <ProjectStatus projectId={project.projectId}/>
+              <ProjectStatus projectId={project.projectId} headers={headers}/>
             </CardWrapper>
           </CardContent>
         </Card>

@@ -1,25 +1,61 @@
+// ** React Imports
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+
+// ** HTTP Client
+import axios from 'axios'
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
-import React, { useEffect, useState } from 'react';
-import { PieChart, Pie, Cell, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Legend } from 'recharts'
 
 
 interface ProjectStatusProps{
   projectId: string
+  headers: any
+}
+interface graphData{
+  name: string
+  value: number
 }
 
-const ProjectStatus : React.FC<ProjectStatusProps> = ({ projectId }) => {
-  const data = [
-    { name: '완료', value: 30 },
-    { name: '진행중', value: 50 },
-    { name: '준비중', value: 20 },
-  ];
-
+const ProjectStatus : React.FC<ProjectStatusProps> = ({ projectId, headers }) => {
+  const [ graphData, setGraphData ] = useState<graphData[]>([])
   const colors = ['#8884d8', '#82ca9d', '#ffc658'];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const IssuesResponse = await axios.get(`/api/projects/${projectId}/issues`, { headers });
+        const issues: any[] = IssuesResponse.data.result;
+
+        const totalCount = issues.length;
+        const todoCount = issues.filter(item => item.status === '할일').length;
+        const inProgressCount = issues.filter(item => item.status === '진행중').length;
+        const doneCount = issues.filter(item => item.status === '완료').length;
+
+        const todoRatio = totalCount > 0 ? todoCount / totalCount : 0;
+        const inProgressRatio = totalCount > 0 ? inProgressCount / totalCount : 0;
+        const doneRatio = totalCount > 0 ? doneCount / totalCount : 0;
+
+        const data: graphData[] = [
+          { name: '할일', value: todoRatio },
+          { name: '진행중', value: inProgressRatio },
+          { name: '완료', value: doneRatio }
+        ];
+
+        setGraphData(data);
+        
+      } catch (error) {
+        console.error('Error fetching myissue information:', error);
+      }
+    };
+      fetchData();
+  }, [projectId])
   
 
   return (
@@ -48,7 +84,7 @@ const ProjectStatus : React.FC<ProjectStatusProps> = ({ projectId }) => {
            <div>
             <PieChart width={400} height={400}>
               <Pie
-                  data={data}
+                  data={graphData}
                   dataKey="value"
                   cx="50%"
                   cy="50%"
@@ -57,7 +93,7 @@ const ProjectStatus : React.FC<ProjectStatusProps> = ({ projectId }) => {
                   fill="#8884d8"
                   label
                 >
-                  {data.map((entry, index) => (
+                  {graphData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                   ))}
                 </Pie>
