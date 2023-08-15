@@ -33,7 +33,7 @@ const ReleaseNoteDetailModal: React.FC<ReleaseNoteDetailModalProps> = ({ release
             <strong>Creator: </strong>{releaseNote?.creator.userName}
         </Typography>
         <Typography id="modal-modal-description" variant="body2" sx={{marginTop: '20px'}}>
-            <strong>Creation Date: </strong>{new Date(releaseNote?.creationDate).toLocaleDateString()}
+            <strong>Creation Date: </strong>{releaseNote?.creationDate ? new Date(releaseNote?.creationDate).toLocaleDateString(): ""}
         </Typography>
         <Typography id="modal-modal-description" variant="body2" sx={{marginTop: '20px'}}>
           {releaseNote?.releaseContents.map((item, index) => (
