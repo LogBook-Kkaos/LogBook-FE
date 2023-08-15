@@ -117,6 +117,11 @@ const FormReleaseNote = () => {
   }
 
   const onSubmit = async (data: ReleaseNoteDataTypes) => {
+    if (data.releaseContents.length === 0) {
+      alert('적어도 하나의 릴리즈 콘텐츠가 필요합니다!');
+      return;
+    }
+    
     try {
 
       const creatorId = await getMemberId({ projectId: projectId as string, email: sessionStorage.getItem('email') as string });
@@ -151,6 +156,8 @@ const FormReleaseNote = () => {
       const { result: releaseNoteId } = response.data;
 
       console.log(`릴리즈 노트 생성 완료. ID: ${releaseNoteId}`);
+
+      router.push(`/projects/${projectId}/release_notes`);
     } catch (error) {
       // 에러가 발생하면 콘솔에 에러 출력
       console.error('릴리즈 노트 생성 중 문제가 발생했습니다: ', error);
@@ -166,7 +173,9 @@ const FormReleaseNote = () => {
             <TextField
               id="release_note_title"
               label="릴리즈 노트 제목"
-              {...register('releaseNoteTitle')}
+              {...register('releaseNoteTitle', {
+                required: '제목을 입력해주세요.',
+              })}
               onChange={handleTitleChange}
               variant="outlined"
               fullWidth
@@ -238,34 +247,42 @@ const FormReleaseNote = () => {
             </Grid>
             <Grid item xs={12}>
               <Controller
-                control={control}
-                name='releaseNoteVersion'
-                rules={{ pattern: versionPattern }}
-                render={({ field }) => {
-                  const hasError = !field.value.match(versionPattern);
-                  return (
-                    <TextField
-                      type='version'
-                      label='버전'
-                      placeholder='x.y.z'
-                      helperText={
-                        hasError
-                          ? '올바른 버전 형식이 아닙니다. x.y.z 형식으로 입력해주세요.'
-                          : 'Major 업데이트의 경우 x를, Minor 업데이트의 경우 y를, Patch 업데이트의 경우 z를 바꿔주세요.'
-                      }
-                      error={hasError} // 버전 입력이 올바르지 않으면 에러 표시
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Update />
-                          </InputAdornment>
-                        ),
-                      }}
-                      {...field}
-                    />
-                  );
-                }}
-              />
+  control={control}
+  name='releaseNoteVersion'
+  rules={{ 
+    pattern: versionPattern,
+    required: '버전은 필수 항목입니다.' // 이 부분을 추가하세요.
+  }}
+  render={({ field }) => {
+    // 버전 에러 메시지를 추가
+    const errorMsg = (() => {
+      if (!field.value) return '버전은 필수 항목입니다.';
+      if (!field.value.match(versionPattern)) return '올바른 버전 형식이 아닙니다. x.y.z 형식으로 입력해주세요.';
+      return '';
+    })();
+
+    return (
+      <TextField
+        type='version'
+        label='버전'
+        placeholder='x.y.z'
+        helperText={
+          errorMsg
+        }
+        error={!!errorMsg} // 버전 입력이 올바르지 않거나 비어있으면 에러 표시
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position='start'>
+              <Update />
+            </InputAdornment>
+          ),
+        }}
+        {...field}
+      />
+    );
+  }}
+/>
+
             </Grid>
             <Grid item xs={12}>
               <Grid container>
