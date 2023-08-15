@@ -29,34 +29,6 @@ interface MyIssueInfo {
   status: string
 }
 
-interface DataType {
-  title: string
-  start_date: Date
-  end_date: Date
-  status: string
-}
-
-const issueData = [
-  {
-    title: "할일1",
-    start_date: new Date("2023-07-01"),
-    end_date: new Date("2023-07-10"),
-    status: "진행중"
-  },
-  {
-    title: "할일2",
-    start_date: new Date("2023-07-01"),
-    end_date: new Date("2023-07-10"),
-    status: "진행중"
-  },
-  {
-    title: "할일3",
-    start_date: new Date("2023-07-01"),
-    end_date: new Date("2023-07-10"),
-    status: "완료"
-  }
-]
-
 // Styled Divider component
 const Divider = styled(MuiDivider)<DividerProps>(({ theme }) => ({
     margin: theme.spacing(5, 0),
@@ -133,7 +105,7 @@ const MyIssue: React.FC<MyIssueProps> = ({ projectId, headers, userName }) => {
             return (
               <Box
                 key={item.issueId}
-                sx={{ display: 'flex', alignItems: 'center', mb: index !== issueData.length - 1 ? 6 : 0 }}
+                sx={{ display: 'flex', alignItems: 'center', mb: index !== myIssues.length - 1 ? 6 : 0 }}
               >
                 <Box sx={{ minWidth: 38, display: 'flex', justifyContent: 'center' }}>
                 <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{item.issueTitle}</Typography>
