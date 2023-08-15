@@ -48,8 +48,8 @@ interface ReleaseContent {
 
 interface TabReleaseProps {
   projectId: string; 
+  permissionLevel: string;
 }
-
 
 const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId }) => {
   const [releaseNotes, setReleaseNotes] = useState<ReleaseNote[]>([]);
@@ -107,11 +107,10 @@ const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId }) => {
   }, [])
 
 
-
   return (
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item xs={12}>
-      <UpperButtons createButtonLabel="릴리즈 노트 생성" routerPath="/create-release-note" projectId={projectId}/>
+        <UpperButtons createButtonLabel="릴리즈 노트 생성" routerPath="/create-release-note" projectId={projectId} permissionLevel={permissionLevel}/>
         <TableContainer component={Paper} sx={{ maxHeight: 'calc(100vh - 400px)', position: 'relative', marginTop: '10px' }}>
           <Table sx={{ minWidth: 650 }} aria-label='project detail table'>
             <TableHead>

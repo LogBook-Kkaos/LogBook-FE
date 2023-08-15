@@ -16,9 +16,14 @@ import Sort from 'mdi-material-ui/sort'
 import Filter from 'mdi-material-ui/filter'
 import Magnify from 'mdi-material-ui/Magnify'
 
+interface UpperButtonsProps {
+    routerPath: string,
+    createButtonLabel: string,
+    projectId: string,
+    permissionLevel: string
+}
 
-
-const UpperButtons =({ routerPath, createButtonLabel, projectId }: { routerPath: string, createButtonLabel: string, projectId: string })  =>{
+const UpperButtons : React.FC<UpperButtonsProps> = ({ routerPath, createButtonLabel, projectId, permissionLevel }) =>{
     const router = useRouter();
 
     const handleCreate = () => {
@@ -61,7 +66,7 @@ const UpperButtons =({ routerPath, createButtonLabel, projectId }: { routerPath:
                     }}
                 />
             </div>
-
+            {permissionLevel === '뷰어' ? null : (
             <Button
                 variant="contained"
                 color="primary"
@@ -73,6 +78,7 @@ const UpperButtons =({ routerPath, createButtonLabel, projectId }: { routerPath:
             >
                 {createButtonLabel}
             </Button>
+            )}
         </Grid>
     )
 }
