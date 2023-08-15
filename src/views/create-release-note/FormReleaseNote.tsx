@@ -159,7 +159,6 @@ const FormReleaseNote = () => {
 
       window.history.back();
     } catch (error) {
-      // 에러가 발생하면 콘솔에 에러 출력
       console.error('릴리즈 노트 생성 중 문제가 발생했습니다: ', error);
     }
   };
