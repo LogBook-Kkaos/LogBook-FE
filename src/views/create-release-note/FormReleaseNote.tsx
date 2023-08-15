@@ -121,7 +121,7 @@ const FormReleaseNote = () => {
       alert('적어도 하나의 릴리즈 콘텐츠가 필요합니다!');
       return;
     }
-    
+
     try {
 
       const creatorId = await getMemberId({ projectId: projectId as string, email: sessionStorage.getItem('email') as string });
@@ -157,7 +157,7 @@ const FormReleaseNote = () => {
 
       console.log(`릴리즈 노트 생성 완료. ID: ${releaseNoteId}`);
 
-      router.push(`/projects/${projectId}/release_notes`);
+      window.history.back();
     } catch (error) {
       // 에러가 발생하면 콘솔에 에러 출력
       console.error('릴리즈 노트 생성 중 문제가 발생했습니다: ', error);
