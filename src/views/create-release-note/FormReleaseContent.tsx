@@ -6,13 +6,19 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
 import CategoryTag, { CategoryType } from 'src/views/create-release-note/CategoryTag';
+import { IconButton } from '@mui/material';
+
+
+import Delete from 'mdi-material-ui/Delete'
 
 export interface FormReleaseContentProps {
   index: number;
   methods: UseFormReturn<any>;
+  field: any;
+  removeContent: () => void;
 }
 
-const FormReleaseContent: React.FC<FormReleaseContentProps> = ({ index, methods}) => {
+const FormReleaseContent: React.FC<FormReleaseContentProps> = ({ index, methods, field, removeContent}) => {
   const { register, setValue, watch } = methods;
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('General');
 
@@ -41,10 +47,8 @@ const FormReleaseContent: React.FC<FormReleaseContentProps> = ({ index, methods}
   const handleTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
-    // Update category
     setSelectedCategory('General');
 
-    // Update form state
     setValue(`releaseContent.${index}.releaseSummary`, value, { shouldValidate: true });
   };
 
@@ -58,7 +62,7 @@ const FormReleaseContent: React.FC<FormReleaseContentProps> = ({ index, methods}
           label={`변경사항 ${index + 1}`}
           placeholder="변경사항을 작성해주세요..."
           sx={{ '& .MuiOutlinedInput-root': { alignItems: 'baseline' } }}
-          {...register(`releaseContent.${index}.releaseSummary`)}
+          {...register(`releaseContents.${index}.releaseSummary`)}
           onChange={handleTextFieldChange}
           InputProps={{
             startAdornment: (
@@ -74,11 +78,16 @@ const FormReleaseContent: React.FC<FormReleaseContentProps> = ({ index, methods}
       <Grid container item xs={12} spacing={1}>
         <Grid item xs={12} sm={6}>
           <TextField
-            {...register(`releaseContent.${index}.documentLink`)}
+            {...register(`releaseContents.${index}.documentLink`)}
             fullWidth
             placeholder="연관된 기술문서 링크를 입력해주세요"
           />
         </Grid>
+        <Grid item xs={12} sm={6}>
+          <IconButton onClick={removeContent} aria-label='삭제'>
+            <Delete />
+          </IconButton>
+          </Grid>
       </Grid>
     </Grid>
   );
