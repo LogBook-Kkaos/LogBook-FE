@@ -49,7 +49,7 @@ interface ReleaseContent {
 }
 
 interface TabReleaseProps {
-  projectId: string; 
+  projectId: string;
   permissionLevel: string;
 }
 
@@ -65,12 +65,12 @@ const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId, permissionLevel 
     const { releaseNoteId, version, releaseTitle, releaseContents, creator, creationDate } = releaseNote;
     const formattedDate = new Date(creationDate).toLocaleDateString();
     return (
-      <TableRow key = {index}>
+      <TableRow key={index}>
         <TableCell component='th' scope='row'>
-        {releaseNotes.length - index}
+          {releaseNotes.length - index}
         </TableCell>
         <TableCell align='left'>v {version}</TableCell>
-        <TableCell align='left' onClick={() => onReleaseNoteClicked(releaseNote.releaseNoteId)} sx={{cursor: "pointer"}}>
+        <TableCell align='left' onClick={() => onReleaseNoteClicked(releaseNote.releaseNoteId)} sx={{ cursor: "pointer" }}>
           <Typography variant="subtitle2" sx={{ marginBottom: 1 }}><strong>{releaseTitle}</strong></Typography>
           {releaseContents.map((item, index) => (
             <Box key={index} sx={{ marginBottom: 1 }}>
@@ -92,16 +92,16 @@ const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId, permissionLevel 
   const fetchReleaseNotes = async () => {
 
     try {
-    const response = await axios.get(`/api/projects/${projectId}/release_notes`,
-    { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('accessToken'),} }
-    );
-    const sortedResult = response.data.result.sort((a: ReleaseNote, b: ReleaseNote) => {
-      const dateA = new Date(a.creationDate);
-      const dateB = new Date(b.creationDate);
-      return dateB.getTime() - dateA.getTime();
-    });
+      const response = await axios.get(`/api/projects/${projectId}/release_notes`,
+        { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('accessToken'), } }
+      );
+      const sortedResult = response.data.result.sort((a: ReleaseNote, b: ReleaseNote) => {
+        const dateA = new Date(a.creationDate);
+        const dateB = new Date(b.creationDate);
+        return dateB.getTime() - dateA.getTime();
+      });
 
-    setReleaseNotes(sortedResult);
+      setReleaseNotes(sortedResult);
     } catch (error) {
       console.log(error);
     }
@@ -111,7 +111,7 @@ const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId, permissionLevel 
   const onReleaseNoteClicked = async (releaseNoteId: number) => {
     try {
       const response = await axios.get(`/api/projects/${projectId}/release_notes/${releaseNoteId}`,
-      { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('accessToken'),} }
+        { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('accessToken'), } }
       );
       setSelectedReleaseNote(response.data.result);
     } catch (error) {
@@ -130,28 +130,28 @@ const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId, permissionLevel 
 
   return (
     <Box>
-    <Grid container justifyContent="space-between" alignItems="center">
-      <Grid item xs={12}>
-        <UpperButtons createButtonLabel="릴리즈 노트 생성" routerPath="/create-release-note" projectId={projectId} permissionLevel={permissionLevel}/>
-        <TableContainer component={Paper} sx={{ maxHeight: 'calc(100vh - 400px)', position: 'relative', marginTop: '10px' }}>
-          <Table sx={{ minWidth: 650 }} aria-label='project detail table'>
-            <TableHead>
-              <TableRow>
-                <TableCell>번호</TableCell>
-                <TableCell align='left'>버전</TableCell>
-                <TableCell align='left'>변경사항</TableCell>
-                <TableCell align='left'>작성자</TableCell>
-                <TableCell align='left'>날짜</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {releaseNotes.map((releaseNote, index) => createRowFromReleaseNote(releaseNote, index))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+      <Grid container justifyContent="space-between" alignItems="center">
+        <Grid item xs={12}>
+          <UpperButtons createButtonLabel="릴리즈 노트 생성" routerPath="/create-release-note" projectId={projectId} permissionLevel={permissionLevel} />
+          <TableContainer component={Paper} sx={{ maxHeight: 'calc(100vh - 400px)', position: 'relative', marginTop: '10px' }}>
+            <Table sx={{ minWidth: 650 }} aria-label='project detail table'>
+              <TableHead>
+                <TableRow>
+                  <TableCell>번호</TableCell>
+                  <TableCell align='left'>버전</TableCell>
+                  <TableCell align='left'>변경사항</TableCell>
+                  <TableCell align='left'>작성자</TableCell>
+                  <TableCell align='left'>날짜</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {releaseNotes.map((releaseNote, index) => createRowFromReleaseNote(releaseNote, index))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
       </Grid>
-    </Grid>
-    {selectedReleaseNote && <ReleaseNoteDetailModal releaseNote={selectedReleaseNote} onClose={() => setSelectedReleaseNote(null)} />}
+      {selectedReleaseNote && <ReleaseNoteDetailModal releaseNote={selectedReleaseNote} onClose={() => setSelectedReleaseNote(null)} />}
     </Box>
   )
 }
