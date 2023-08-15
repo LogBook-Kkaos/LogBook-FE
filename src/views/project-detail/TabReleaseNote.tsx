@@ -1,3 +1,6 @@
+// ** React Imports
+import React, { useState } from 'react'
+
 // ** Next Imports
 import { useRouter } from 'next/router'
 
@@ -14,24 +17,34 @@ import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 
 // ** Custom Components Imports
-import CategoryTag, { Category } from 'src/views/project-detail/CategoryTag'
+import CategoryTag, { Category, CategoryType } from 'src/views/project-detail/CategoryTag'
 import UpperButtons from './UpperButtons'
+import axios from 'axios'
+import { useEffect } from 'react'
 
 const createReleaseNoteData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ReleaseContent[], creatorId: string, creationDate: string) => {
   return { releaseNoteId, version, releaseTitle, changeItems, creatorId, creationDate }
 }
 
-interface ReleaseContent {
-  category: Category,
-  releaseContent: string
+interface Creator {
+  creatorId: string;
+  userName: string;
 }
 
-const rows = [
-  createReleaseNoteData(4, 'v 1.2.1', 'BB 기능 추가 및 변경', [{ category: Category.Feature, releaseContent: 'bb 기능 - 기능 설명' }, { category: Category.Changed, releaseContent: '타입 변경' }], '유소연', '2023.06.30'),
-  createReleaseNoteData(3, 'v 1.1.2', 'OO 서비스 중단', [{ category: Category.Deprecated, releaseContent: '~API 중단' }], '이소현', '2023.06.29'),
-  createReleaseNoteData(2, 'v 1.1.1', 'AA 기능 수정 및 버그 해결', [{ category: Category.Fixed, releaseContent: '~ 연동 안되는 버그 수정' }, { category: Category.Changed, releaseContent: '~ 성능 개선' }], '이서빈', '2023.06.26'),
-  createReleaseNoteData(1, 'v 1.0.0', '문서 최초 생성', [{ category: Category.Feature, releaseContent: '신규 기능 추가 / AA 기능 제공' }], '장예경', '2023.06.20')
-]
+interface ReleaseNote {
+  releaseNoteId: number;
+  creator: Creator;
+  version: string;
+  releaseTitle: string;
+  releaseContents: ReleaseContent[];
+  creationDate: string;
+}
+
+interface ReleaseContent {
+  category: CategoryType,
+  releaseSummary: string,
+  documentLink?: string
+}
 
 interface TabReleaseProps {
   projectId: string; 
@@ -39,6 +52,61 @@ interface TabReleaseProps {
 
 
 const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId }) => {
+  const [releaseNotes, setReleaseNotes] = useState<ReleaseNote[]>([]);
+
+  const createRowFromReleaseNote = (releaseNote: ReleaseNote, index: number) => {
+    const { releaseNoteId, version, releaseTitle, releaseContents, creator, creationDate } = releaseNote;
+    const formattedDate = new Date(creationDate).toLocaleDateString();
+
+    return (
+      <TableRow key = {index}>
+        <TableCell component='th' scope='row'>
+        {releaseNotes.length - index}
+        </TableCell>
+        <TableCell align='left'>{version}</TableCell>
+        <TableCell align='left'>
+          <Typography variant="subtitle2" sx={{ marginBottom: 1 }}><strong>{releaseTitle}</strong></Typography>
+          {releaseContents.map((item, index) => (
+            <Box key={index} sx={{ marginBottom: 1 }}>
+              <CategoryTag category={item.category} />
+              <span>{item.releaseSummary}</span>
+            </Box>
+          ))}
+        </TableCell>
+        <TableCell align='left'>
+          {creator.userName}
+        </TableCell>
+        <TableCell align='left'>
+          {formattedDate}
+        </TableCell>
+      </TableRow>
+    )
+  }
+
+  const fetchReleaseNotes = async () => {
+
+    try {
+    const response = await axios.get(`/api/projects/${projectId}/release_notes`,
+    { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('accessToken'),} }
+    );
+    const sortedResult = response.data.result.sort((a: ReleaseNote, b: ReleaseNote) => {
+      const dateA = new Date(a.creationDate);
+      const dateB = new Date(b.creationDate);
+      return dateB.getTime() - dateA.getTime();
+    });
+
+    setReleaseNotes(sortedResult);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  useEffect(() => {
+    fetchReleaseNotes();
+  }, [])
+
+
 
   return (
     <Grid container justifyContent="space-between" alignItems="center">
@@ -56,34 +124,7 @@ const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map(row => (
-                <TableRow
-                  key={row.releaseNoteId}
-                  sx={{
-                    '&:last-of-type td, &:last-of-type th': {
-                      border: 0
-                    }
-                  }}
-                >
-                  <TableCell component='th' scope='row'>
-                    {row.releaseNoteId}
-                  </TableCell>
-                  <TableCell align='left'>{row.version}</TableCell>
-                  <TableCell align='left'>
-                    <Typography variant="subtitle2" sx={{ marginBottom: 1 }}><strong>{row.releaseTitle}</strong></Typography>
-                    {row.changeItems.map((item, index) => (
-                      <Box key={index} sx={{ marginBottom: 1 }}>
-                        <CategoryTag category={item.category} />
-                        {item.releaseContent}
-                      </Box>
-                    ))}
-                  </TableCell>
-                  <TableCell align='left'>
-                    {row.creatorId}
-                  </TableCell>
-                  <TableCell align='left'>{row.creationDate}</TableCell>
-                </TableRow>
-              ))}
+              {releaseNotes.map((releaseNote, index) => createRowFromReleaseNote(releaseNote, index))}
             </TableBody>
           </Table>
         </TableContainer>
