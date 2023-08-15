@@ -70,7 +70,7 @@ const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId, permissionLevel 
         {releaseNotes.length - index}
         </TableCell>
         <TableCell align='left'>v {version}</TableCell>
-        <TableCell align='left' onClick={() => onReleaseNoteClicked(releaseNote.releaseNoteId)}>
+        <TableCell align='left' onClick={() => onReleaseNoteClicked(releaseNote.releaseNoteId)} sx={{cursor: "pointer"}}>
           <Typography variant="subtitle2" sx={{ marginBottom: 1 }}><strong>{releaseTitle}</strong></Typography>
           {releaseContents.map((item, index) => (
             <Box key={index} sx={{ marginBottom: 1 }}>
