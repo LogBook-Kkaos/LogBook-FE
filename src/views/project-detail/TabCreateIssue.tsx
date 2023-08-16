@@ -52,7 +52,6 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
     const { control, register, handleSubmit, formState: { errors }, reset } = useForm();
 
     const [activeTab, setActiveTab] = useRecoilState(activeView);
-    const [selectVisible, setSelectVisible] = useState<boolean>(false);
     const [assignee, setAssignee] = useState<string>('');
     const [status, setStatus] = useState<Status>(Status.InProgress);
     const [assigneeAnchorEl, setAssigneeAnchorEl] = useState<null | HTMLElement>(null);
@@ -141,24 +140,11 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
                             />
                             {errors.issueTitle && <span>이슈 제목을 입력해주세요</span>}
                             <Box sx={{ display: 'flex' }}>
-                                <ButtonStyled variant='contained' sx={{ fontSize: '0.8rem' }}
-                                    onClick={handleCreateIssue}>
+                                <ButtonStyled type="submit" variant='contained' sx={{ fontSize: '0.8rem' }}>
                                     저장
-                                    <input
-                                        hidden
-                                        type='file'
-                                        accept='image/png, image/jpeg'
-                                        id='account-settings-upload-image'
-                                    />
                                 </ButtonStyled>
                                 <ButtonStyled variant='contained' sx={{ fontSize: '0.8rem', mr: 8 }}>
                                     삭제
-                                    <input
-                                        hidden
-                                        type='file'
-                                        accept='image/png, image/jpeg'
-                                        id='account-settings-upload-image'
-                                    />
                                 </ButtonStyled>
                             </Box>
                         </Box>
