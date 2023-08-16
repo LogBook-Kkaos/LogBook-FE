@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 
 // ** Next Imports
@@ -68,17 +69,13 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
 
     const [activeTab, setActiveTab] = useRecoilState(activeView);
     const [assignee, setAssignee] = useState<string | null>(null);
+    const [assigneeEmail, setAssigneeEmail] = useState<string | null>(null);
+    const [assigneeOptions, setAssigneeOptions] = useState([
+        { value: null, label: "담당자 없음", email: null },
+      ]);
     const [status, setStatus] = useState<Status>(Status.InProgress);
     const [assigneeAnchorEl, setAssigneeAnchorEl] = useState<null | HTMLElement>(null);
     const [statusAnchorEl, setStatusAnchorEl] = useState<null | HTMLElement>(null);
-
-    const assigneeOptions = [
-        { value: null, label: '담당자 없음'},
-        { value: '이서빈', label: '이서빈' },
-        { value: '이소현', label: '이소현' },
-        { value: '윤주은', label: '윤주은' },
-        { value: '장예경', label: '장예경' },
-    ];
 
     const statusOptions = [
         { value: Status.InProgress, label: Status.InProgress },
@@ -112,10 +109,31 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
     };
 
 
-    const handleSelectChange = (selectedValue: string | null) => {
-        setAssignee(selectedValue);
-        console.log(selectedValue);
+    const handleAssigneeChange = (selectedAssignee: string | null, selectedEmail: string | null) => {
+        setAssignee(selectedAssignee);
+        setAssigneeEmail(selectedEmail);
+        console.log(selectedEmail);
     };
+
+    const fetchProjectMembers = useCallback(async () => {
+        try {
+            const response = await axios.get(`/api/projects/${projectId}/members`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                },
+            });
+
+            const memberList = response.data.result.map((member: any) => ({
+                value: member.userName,
+                label: `${member.userName} (${member.email})`,
+                email: member.email,
+            }));
+
+            setAssigneeOptions((prev) => [...prev, ...memberList]);
+        } catch (error) {
+            console.log("Error fetching project members: ", error);
+        }
+    }, [projectId]);
 
 
     async function getMemberId(params: GetMemberIdParams):Promise<string> {
@@ -126,7 +144,7 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
               'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
             },
             params: {
-              email: email,
+              email: assigneeEmail,
             }
           }
           );
@@ -156,6 +174,10 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
         setActiveTab('issue');
     }
 
+    useEffect(() => {
+        fetchProjectMembers();
+    }, [fetchProjectMembers]);
+
     return (
         <Grid container justifyContent="flex-start" alignItems="center" >
             <Grid item xs={12} >
@@ -168,16 +190,18 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 5 }}>
                             <TextField
                                 sx={{ backgroundColor: 'white', ml: 8 }}
-                                {...register('issueTitle', { required: true })}
+                                {...register('issueTitle', { required: '이슈를 입력해주세요.' })}
                                 id="issue_title"
                                 label="이슈 제목"
                                 variant="outlined"
                                 fullWidth
+                                 
+              error={!!errors.issueTitle}
+              helperText={errors.issueTitle ? errors.issueTitle.message : ""}
                                 InputProps={{
                                     inputProps: { 'aria-label': '이슈 제목 입력창' }
                                 }}
                             />
-                            {errors.issueTitle && <span>이슈 제목을 입력해주세요</span>}
                             <Box sx={{ display: 'flex' }}>
                                 <ButtonStyled type="submit" variant='contained' sx={{ fontSize: '0.8rem' }}>
                                     저장
@@ -205,7 +229,7 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
                                     <MenuItem
                                         key={option.value}
                                         onClick={() => {
-                                            handleSelectChange(option.value);
+                                            handleAssigneeChange(option.value, option.email);
                                             handleAssigneeMenuClose();
                                         }}
                                     >
@@ -241,7 +265,7 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
                                     <Box sx={{ minWidth: 38, display: 'flex', justifyContent: 'left', p: '1.25rem' }}>
                                         <TextField
                                             sx={{ backgroundColor: 'white' }}
-                                            {...register('issueDescription', { required: true })}
+                                            {...register('issueDescription')}
                                             id="issue_content"
                                             label="이슈 내용 설명"
                                             multiline
