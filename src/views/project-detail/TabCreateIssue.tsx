@@ -52,12 +52,13 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
     const { control, register, handleSubmit, formState: { errors }, reset } = useForm();
 
     const [activeTab, setActiveTab] = useRecoilState(activeView);
-    const [assignee, setAssignee] = useState<string>('');
+    const [assignee, setAssignee] = useState<string | null>(null);
     const [status, setStatus] = useState<Status>(Status.InProgress);
     const [assigneeAnchorEl, setAssigneeAnchorEl] = useState<null | HTMLElement>(null);
     const [statusAnchorEl, setStatusAnchorEl] = useState<null | HTMLElement>(null);
 
     const assigneeOptions = [
+        { value: null, label: '담당자 없음'},
         { value: '이서빈', label: '이서빈' },
         { value: '이소현', label: '이소현' },
         { value: '윤주은', label: '윤주은' },
@@ -73,11 +74,6 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
     const handleStatusChange = (selectedOption: any) => {
         setStatus(selectedOption.value);
         console.log(selectedOption.value);
-    };
-
-
-    const handleCreateIssue = () => {
-        setActiveTab('issue');
     };
 
     const handleTabChange = (newTab: string) => {
@@ -101,7 +97,7 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
     };
 
 
-    const handleSelectChange = (selectedValue: string) => {
+    const handleSelectChange = (selectedValue: string | null) => {
         setAssignee(selectedValue);
         console.log(selectedValue);
     };
