@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 
+// ** Next Imports
+import { useRouter } from 'next/router'
+
+// ** HTTP Client Imports
+import axios from 'axios';
+
 // ** MUI Imports
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -36,6 +42,11 @@ const ButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
     width: 80,
 }))
 
+interface GetMemberIdParams {
+    projectId: string;
+    email: string;
+  }
+
 interface onIssueCreateProps {
     onIssueCreate: any
 }
@@ -49,7 +60,11 @@ interface Issue {
 
 const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
 
+    const router = useRouter();
+
     const { control, register, handleSubmit, formState: { errors }, reset } = useForm();
+
+    const projectId = router.query.projectId;
 
     const [activeTab, setActiveTab] = useRecoilState(activeView);
     const [assignee, setAssignee] = useState<string | null>(null);
@@ -103,13 +118,41 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
     };
 
 
-    const onSubmit = (data: FieldValues) => {
-        console.log({
+    async function getMemberId(params: GetMemberIdParams):Promise<string> {
+        const { projectId, email } = params;
+        const response = await axios
+          .get(`/api/projects/${projectId}/members/info`, {
+            headers: {
+              'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+            },
+            params: {
+              email: email,
+            }
+          }
+          );
+        const { result: memberId } = response.data;
+    
+        return memberId;
+    
+    
+      }
+
+
+    const onSubmit = async (data: FieldValues) => {
+
+        const assigneeId = await getMemberId({ projectId: projectId as string, email: sessionStorage.getItem('email') as string });
+      
+        const issueData  = {
             issueTitle: data.issueTitle,
             issueDescription: data.issueDescription,
-            assignee: assignee,
+            assignee: {
+                assigneeId: assigneeId,
+                userName: assignee,
+            },
             status: status,
-        })
+        }
+
+        console.log(issueData);
         setActiveTab('issue');
     }
 
