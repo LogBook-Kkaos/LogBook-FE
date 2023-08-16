@@ -340,7 +340,7 @@ const statusStringToType = (statusString: string): Status => {
                             {issueDetail?.issueDescription}
                         </Typography>
 
-                        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'right' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', width: '15%' }}>
                         <IconButton onClick={handleStatusTagClick} style={{ borderRadius: 10, padding: 8 }}>
                             <StatusTag status={issueDetail?.status} />
                         </IconButton>
@@ -382,7 +382,7 @@ const statusStringToType = (statusString: string): Status => {
                                     key={`${option.value}-${option.email}`}
                                     onClick={() => {
                                         handleAssigneeChange(option.value, option.email, issueDetail.issueId);
-                                        handleAssigneeMenuClose();
+                                        handleAssigneeMenuClose;
                                     }}
                                 >
                                     {option.label}
