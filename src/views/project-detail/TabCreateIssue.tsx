@@ -19,11 +19,11 @@ import Button, { ButtonProps } from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
 import ArrowLeft from 'mdi-material-ui/ArrowLeft'
 import TextField from '@mui/material/TextField';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
+import { DatePicker, LocalizationProvider } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { ThemeProvider, createMuiTheme } from '@mui/material/styles';
 
 // ** Custom Components Imports
 import StatusTag, { Status } from "./StatusTag"
@@ -46,7 +46,7 @@ const ButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
 interface GetMemberIdParams {
     projectId: string;
     email: string;
-  }
+}
 
 interface onIssueCreateProps {
     onIssueCreate: any
@@ -72,10 +72,12 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
     const [assigneeEmail, setAssigneeEmail] = useState<string | null>(null);
     const [assigneeOptions, setAssigneeOptions] = useState([
         { value: null, label: "담당자 없음", email: null },
-      ]);
+    ]);
     const [status, setStatus] = useState<Status>(Status.InProgress);
     const [assigneeAnchorEl, setAssigneeAnchorEl] = useState<null | HTMLElement>(null);
     const [statusAnchorEl, setStatusAnchorEl] = useState<null | HTMLElement>(null);
+    const [startDate, setStartDate] = useState<Date | null>(new Date());
+    const [endDate, setEndDate] = useState<Date | null>(null);
 
     const statusOptions = [
         { value: Status.InProgress, label: Status.InProgress },
@@ -115,6 +117,15 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
         console.log(selectedEmail);
     };
 
+    const handleStartDateChange = (date: Date | null) => {
+        setStartDate(date);
+    };
+
+    const handleEndDateChange = (date: Date | null) => {
+        setEndDate(date);
+    };
+
+
     const fetchProjectMembers = useCallback(async () => {
         try {
             const response = await axios.get(`/api/projects/${projectId}/members`, {
@@ -136,31 +147,31 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
     }, [projectId]);
 
 
-    async function getMemberId(params: GetMemberIdParams):Promise<string> {
+    async function getMemberId(params: GetMemberIdParams): Promise<string> {
         const { projectId, email } = params;
         const response = await axios
-          .get(`/api/projects/${projectId}/members/info`, {
-            headers: {
-              'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
-            },
-            params: {
-              email: email
+            .get(`/api/projects/${projectId}/members/info`, {
+                headers: {
+                    'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+                },
+                params: {
+                    email: email
+                }
             }
-          }
-          );
+            );
         const { result: memberId } = response.data;
-    
+
         return memberId;
-    
-    
-      }
+
+
+    }
 
 
     const onSubmit = async (data: FieldValues) => {
 
-        const assigneeId = await getMemberId({ projectId: projectId as string, email: assigneeEmail as string});
-      
-        const issueData  = {
+        const assigneeId = await getMemberId({ projectId: projectId as string, email: assigneeEmail as string });
+
+        const issueData = {
             issueTitle: data.issueTitle,
             issueDescription: data.issueDescription,
             assignee: {
@@ -168,10 +179,31 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
                 userName: assignee,
             },
             status: status,
+            startDate: startDate,
+            endDate: endDate,
         }
 
+
+
         console.log(issueData);
-        setActiveTab('issue');
+
+        try {
+            const response = await axios.post(`/api/projects/${projectId}/issues`, issueData, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                },
+            });
+
+            console.log(response);
+
+            onIssueCreate(response.data.result);
+
+            reset();
+
+            setActiveTab('issue');
+        } catch (error) {
+            console.log("Error creating issue: ", error);
+        }
     }
 
     useEffect(() => {
@@ -195,9 +227,9 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
                                 label="이슈 제목"
                                 variant="outlined"
                                 fullWidth
-                                 
-              error={!!errors.issueTitle}
-              helperText={errors.issueTitle ? errors.issueTitle.message : ""}
+
+                                error={!!errors.issueTitle}
+                                helperText={errors.issueTitle ? errors.issueTitle.message : ""}
                                 InputProps={{
                                     inputProps: { 'aria-label': '이슈 제목 입력창' }
                                 }}
@@ -257,6 +289,36 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
                                     </MenuItem>
                                 ))}
                             </Menu>
+                            <ThemeProvider
+                                theme={createMuiTheme({
+                                    palette: {
+                                        primary: {
+                                            main: '#1976d2',
+                                        },
+                                    },
+                                })}
+
+                            >
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DatePicker
+                                        label="시작 날짜"
+                                        value={startDate}
+                                        inputFormat='yyyy-MM-dd'
+                                        mask='____-__-__'
+                                        onChange={handleStartDateChange}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                    <DatePicker
+                                        label="종료 날짜"
+                                        value={endDate}
+                                        inputFormat='yyyy-MM-dd'
+                                        mask='____-__-__'
+                                        onChange={handleEndDateChange}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                </LocalizationProvider>
+                            </ThemeProvider>
+
                         </Box>
 
                         <CardContent sx={{ display: 'flex', justifyContent: 'center', gap: '0rem', alignItems: 'stretch' }}>
