@@ -140,6 +140,8 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
                 email: member.email,
             }));
 
+            
+            setAssignee(memberList[0].value);
             setAssigneeOptions((prev) => [...prev, ...memberList]);
         } catch (error) {
             console.log("Error fetching project members: ", error);
@@ -195,8 +197,6 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
             });
 
             console.log(response);
-
-            onIssueCreate(response.data.result);
 
             reset();
 
@@ -259,7 +259,7 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
                             >
                                 {assigneeOptions.map((option) => (
                                     <MenuItem
-                                        key={option.value}
+                                        key={`${option.value}-${option.email}`}
                                         onClick={() => {
                                             handleAssigneeChange(option.value, option.email);
                                             handleAssigneeMenuClose();
