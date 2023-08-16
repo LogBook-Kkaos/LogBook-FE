@@ -13,6 +13,7 @@ import Avatar from '@mui/material/Avatar'
 import ArrowLeft from 'mdi-material-ui/ArrowLeft'
 import TextField from '@mui/material/TextField';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
@@ -54,8 +55,10 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
     const [selectVisible, setSelectVisible] = useState<boolean>(false);
     const [assignee, setAssignee] = useState<string>('');
     const [status, setStatus] = useState<Status>(Status.InProgress);
+    const [assigneeAnchorEl, setAssigneeAnchorEl] = useState<null | HTMLElement>(null);
+    const [statusAnchorEl, setStatusAnchorEl] = useState<null | HTMLElement>(null);
 
-    const options = [
+    const assigneeOptions = [
         { value: '이서빈', label: '이서빈' },
         { value: '이소현', label: '이소현' },
         { value: '윤주은', label: '윤주은' },
@@ -63,13 +66,14 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
     ];
 
     const statusOptions = [
-        { value: Status.InProgress, label: "진행 중" },
-        { value: Status.NotStarted, label: "아직 시작되지 않음" },
-        { value: Status.Completed, label: "완료됨" },
+        { value: Status.InProgress, label: Status.InProgress },
+        { value: Status.NotStarted, label: Status.NotStarted },
+        { value: Status.Completed, label: Status.Completed },
     ];
 
     const handleStatusChange = (selectedOption: any) => {
         setStatus(selectedOption.value);
+        console.log(selectedOption.value);
     };
 
 
@@ -81,14 +85,28 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
         setActiveTab(newTab);
     };
 
-    const handleAvatarClick = () => {
-        setSelectVisible(true);
+    const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAssigneeAnchorEl(event.currentTarget);
     };
 
-    const handleSelectChange = (selectedOption: any) => {
-        setAssignee(selectedOption.value);
-        console.log(selectedOption.value)
+    const handleAssigneeMenuClose = () => {
+        setAssigneeAnchorEl(null);
     };
+
+    const handleStatusTagClick = (event: React.MouseEvent<HTMLElement>) => {
+        setStatusAnchorEl(event.currentTarget);
+    };
+
+    const handleStatusMenuClose = () => {
+        setStatusAnchorEl(null);
+    };
+
+
+    const handleSelectChange = (selectedValue: string) => {
+        setAssignee(selectedValue);
+        console.log(selectedValue);
+    };
+
 
     const onSubmit = (data: FieldValues) => {
         console.log({
@@ -145,55 +163,51 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
                             </Box>
                         </Box>
                         <Box sx={{ ml: 10, mt: 4, gap: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            <Avatar src='/images/avatars/8.png' alt={assignee || '없음'}
-                                onClick={handleAvatarClick} />
-                            <Box
-                                sx={{
-                                    position: 'relative',
-                                    width: "150px",
-                                    mt: 1,
-                                    py: 1,
-                                    zIndex: 5000
-                                }}
+                            <IconButton style={{ borderRadius: 10, padding: 8 }}>
+                                <Avatar
+                                    src="/images/avatars/8.png"
+                                    alt={assignee || "없음"}
+                                    onClick={handleAvatarClick}
+                                    sx={{ cursor: "pointer" }}
+                                />
+                            </IconButton>
+                            <Menu
+                                anchorEl={assigneeAnchorEl}
+                                open={Boolean(assigneeAnchorEl)}
+                                onClose={handleAssigneeMenuClose}
                             >
-                                <FormControl sx={{ minWidth: 120, mt: 1 }}>
-                                    <InputLabel id="assignee-select-label">담당자</InputLabel>
-                                    <Select
-                                        labelId="assignee-select-label"
-                                        open={selectVisible}
-                                        onClose={() => setSelectVisible(false)}
-                                        onOpen={() => setSelectVisible(true)}
-                                        value={assignee}
-                                        onChange={(event: SelectChangeEvent) => handleSelectChange(event.target.value as string)}
+                                {assigneeOptions.map((option) => (
+                                    <MenuItem
+                                        key={option.value}
+                                        onClick={() => {
+                                            handleSelectChange(option.value);
+                                            handleAssigneeMenuClose();
+                                        }}
                                     >
-                                        {options.map((option) => (
-                                            <MenuItem key={option.value} value={option.value}>
-                                                {option.label}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-
-
-                            </Box>
-                            <FormControl sx={{ minWidth: 120, mt: 2 }}>
-                                <InputLabel id="status-select-label">이슈 상태</InputLabel>
-                                <Select
-                                    labelId="status-select-label"
-                                    value={status}
-                                    onChange={(event: SelectChangeEvent) => handleStatusChange(event.target.value as Status)}
-                                >
-                                    {statusOptions.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-
-                            <Box sx={{ mt: 2 }}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </Menu>
+                            <IconButton onClick={handleStatusTagClick}>
                                 <StatusTag status={status} />
-                            </Box>
+                            </IconButton>
+                            <Menu
+                                anchorEl={statusAnchorEl}
+                                open={Boolean(statusAnchorEl)}
+                                onClose={handleStatusMenuClose}
+                            >
+                                {statusOptions.map((option) => (
+                                    <MenuItem
+                                        key={option.value}
+                                        onClick={() => {
+                                            handleStatusChange(option);
+                                            handleStatusMenuClose();
+                                        }}
+                                    >
+                                        <StatusTag status={option.label} />
+                                    </MenuItem>
+                                ))}
+                            </Menu>
                         </Box>
 
                         <CardContent sx={{ display: 'flex', justifyContent: 'center', gap: '0rem', alignItems: 'stretch' }}>

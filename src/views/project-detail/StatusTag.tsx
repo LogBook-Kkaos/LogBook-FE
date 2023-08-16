@@ -6,20 +6,20 @@ import Box from "@mui/material/Box";
 import Typography from '@mui/material/Typography'
 
 export const Status = {
-  NotStarted: '시작 전',
+  NotStarted: '할일',
   InProgress: '진행중',
   Completed: '완료'
 } as const;
 export type Status = typeof Status[keyof typeof Status]
 
 const statusColors = {
-  [Status.NotStarted]: '#f44336',
+  [Status.NotStarted]: '#CECECE',
   [Status.InProgress]: '#BBFFF3',
   [Status.Completed]: '#C7E3FE',
 }
 
 const statusTextColors = {
-  [Status.NotStarted]: '#41A3FF',
+  [Status.NotStarted]: '#797979',
   [Status.InProgress]: '#05D7B1',
   [Status.Completed]: '#41A3FF',
 }
