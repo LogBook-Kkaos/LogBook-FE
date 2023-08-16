@@ -144,7 +144,7 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
               'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
             },
             params: {
-              email: assigneeEmail,
+              email: email
             }
           }
           );
@@ -158,7 +158,7 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
 
     const onSubmit = async (data: FieldValues) => {
 
-        const assigneeId = await getMemberId({ projectId: projectId as string, email: sessionStorage.getItem('email') as string });
+        const assigneeId = await getMemberId({ projectId: projectId as string, email: assigneeEmail as string});
       
         const issueData  = {
             issueTitle: data.issueTitle,
