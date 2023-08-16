@@ -22,7 +22,7 @@ const FormReleaseContent: React.FC<FormReleaseContentProps> = ({ index, methods,
   const { register, setValue, watch } = methods;
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('General');
 
-  const changeText = watch(`releaseContent.${index}.releaseSummary`, '');
+  const changeText = watch(`releaseContents.${index}.releaseSummary`, '');
 
   useEffect(() => {
     const assignCategory = (text: string) => {
@@ -40,7 +40,7 @@ const FormReleaseContent: React.FC<FormReleaseContentProps> = ({ index, methods,
     };
 
     assignCategory(changeText);
-    setValue(`releaseContent.${index}.category`, selectedCategory);
+    setValue(`releaseContents.${index}.category`, selectedCategory);
   }, [changeText, index, selectedCategory, setValue]);
   
 
@@ -49,7 +49,7 @@ const FormReleaseContent: React.FC<FormReleaseContentProps> = ({ index, methods,
 
     setSelectedCategory('General');
 
-    setValue(`releaseContent.${index}.releaseSummary`, value, { shouldValidate: true });
+    setValue(`releaseContents.${index}.releaseSummary`, value, { shouldValidate: true });
   };
 
   return (
