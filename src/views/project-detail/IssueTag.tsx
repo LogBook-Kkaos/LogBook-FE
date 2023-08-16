@@ -17,15 +17,18 @@ import Cog from 'mdi-material-ui/CogOutline'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import PlusThick from 'mdi-material-ui/PlusThick'
-import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { DatePicker, LocalizationProvider } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+
 
 // ** Custom Components Imports
 import StatusTag, { Status } from 'src/views/project-detail/StatusTag';
+import TabIssueDetail from 'src/views/project-detail/TabIssueDetail';
 
 // ** Recoil Imports
 import { useRecoilState } from 'recoil';
@@ -51,7 +54,6 @@ interface IssueTagProps {
 
 const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
   const [activeTab, setActiveTab] = useRecoilState(activeView);
-  const [selectedValue, setSelectedValue] = useState<string>('');
 
   const router = useRouter();
   const projectId = router.query.projectId;
@@ -74,8 +76,13 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
     { value: Status.Completed, label: Status.Completed },
   ];
 
-  const handleTabChange = (newTab: string) => {
-    setActiveTab(newTab);
+  const handleTabChange = (newTab: string, issueId?: string) => {
+    if (newTab === 'issueDetail' && issueId) {
+      sessionStorage.setItem('issueId', issueId);
+      setActiveTab(newTab);
+    } else {
+      setActiveTab(newTab);
+    }
   };
 
   const handleAvatarClick = (event: React.MouseEvent<HTMLElement>, issueId: string) => {
@@ -239,18 +246,18 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
       {issues.map((item: IssueDataType, index: number) => {
         return (
           <Card key={index}
-          sx={{ 
-            position: 'relative', 
-            mb: 2,
-            transition: '0.3s',
-            boxShadow: 1,
-            '&:hover': {
-              boxShadow: 4,
-              transform: 'scale(1.02)',
-            },
-          }}>
-            <CardContent 
-          onClick={() => handleTabChange('issueDetail')}>
+            sx={{
+              position: 'relative',
+              mb: 2,
+              transition: '0.3s',
+              boxShadow: 1,
+              '&:hover': {
+                boxShadow: 4,
+                transform: 'scale(1.02)',
+              },
+            }}>
+            <CardContent
+              onClick={() => handleTabChange('issueDetail', item.issueId)}>
               <Box
                 sx={{
                   mt: 2,
@@ -318,13 +325,14 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
 
               </Box>
             </CardContent>
-          </Card>)
+          </Card>
+        )
       })}
-      <Box sx={{ display: 'flex', flexDirection: 'row'}}
+      <Box sx={{ display: 'flex', flexDirection: 'row' }}
         onClick={() => handleTabChange('createIssue')} width='100%'>
         <IconButton style={{ borderRadius: 10, width: '100%', justifyContent: 'left' }} >
           <PlusThick />
-          <Typography sx={{ml: 3}}>이슈 추가</Typography>
+          <Typography sx={{ ml: 3 }}>이슈 추가</Typography>
         </IconButton>
       </Box>
     </Card>
