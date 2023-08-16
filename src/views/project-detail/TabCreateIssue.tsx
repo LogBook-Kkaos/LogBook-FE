@@ -31,6 +31,7 @@ import StatusTag, { Status } from "./StatusTag"
 // ** Recoil Imports
 import { useRecoilState } from 'recoil';
 import { activeView } from 'src/recoil/issue/atom';
+import { Typography } from '@mui/material';
 
 
 const CardWrapper = styled(Box)<BoxProps>({
@@ -140,8 +141,8 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
                 email: member.email,
             }));
 
-            
-            setAssignee(memberList[0].value);
+
+            setAssigneeOptions([{ value: null, label: "담당자 없음", email: null }]);
             setAssigneeOptions((prev) => [...prev, ...memberList]);
         } catch (error) {
             console.log("Error fetching project members: ", error);
@@ -245,13 +246,17 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
                         </Box>
                         <Box sx={{ ml: 10, mt: 4, gap: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', alignItems: 'center' }}>
                             <IconButton style={{ borderRadius: 10, padding: 8 }}>
-                                <Avatar
-                                    src="/images/avatars/8.png"
-                                    alt={assignee || "없음"}
-                                    onClick={handleAvatarClick}
-                                    sx={{ cursor: "pointer" }}
-                                />
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <Avatar
+                                        src="/images/avatars/8.png"
+                                        alt={assignee || "없음"}
+                                        onClick={handleAvatarClick}
+                                        sx={{ cursor: "pointer" }}
+                                    />
+                                    <Typography sx={{ mt: 1, fontSize: '12px', color: 'gray' }}>{assignee || "담당자 없음"}</Typography>
+                                </Box>
                             </IconButton>
+
                             <Menu
                                 anchorEl={assigneeAnchorEl}
                                 open={Boolean(assigneeAnchorEl)}
@@ -269,7 +274,7 @@ const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
                                     </MenuItem>
                                 ))}
                             </Menu>
-                            <IconButton onClick={handleStatusTagClick}>
+                            <IconButton onClick={handleStatusTagClick} style={{ borderRadius: 10, padding: 8 }}>
                                 <StatusTag status={status} />
                             </IconButton>
                             <Menu
