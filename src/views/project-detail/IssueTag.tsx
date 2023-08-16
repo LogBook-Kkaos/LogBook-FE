@@ -79,19 +79,28 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
   };
 
   const handleAvatarClick = (event: React.MouseEvent<HTMLElement>, issueId: string) => {
+    event.stopPropagation();
     setAssigneeAnchorEls({ ...assigneeAnchorEls, [issueId]: event.currentTarget });
   };
 
-  const handleAssigneeMenuClose = (issueId: string) => {
+  const handleAssigneeMenuClose = (
+    event: React.MouseEvent<HTMLElement> | {},
+    issueId: string
+  ) => {
+    event instanceof MouseEvent && event.stopPropagation();
     setAssigneeAnchorEls({ ...assigneeAnchorEls, [issueId]: null });
   };
-
   const handleStatusTagClick = (event: React.MouseEvent<HTMLElement>, issueId: string) => {
+    event.stopPropagation();
     setStatusAnchorEls({ ...statusAnchorEls, [issueId]: event.currentTarget });
   };
 
-  const handleStatusMenuClose = (issueId: string) => {
-    setStatusAnchorEls({ ...statusAnchorEls, [issueId]: null });
+  const handleStatusMenuClose = (
+    event: React.MouseEvent<HTMLElement> | {},
+    issueId: string
+  ) => {
+    event instanceof MouseEvent && event.stopPropagation();
+    setAssigneeAnchorEls({ ...statusAnchorEls, [issueId]: null });
   };
 
 
@@ -99,7 +108,6 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
   const handleAssigneeChange = async (selectedAssignee: string | null, selectedEmail: string | null, issueId: string) => {
     setAssignee(selectedAssignee);
     setAssigneeEmail(selectedEmail);
-    console.log(issueId);
     if (issueId && selectedEmail) {
       const assigneeId = getMemberId({ projectId: projectId as string, email: selectedEmail });
       await updateIssueAssignee(issueId, await assigneeId);
@@ -110,7 +118,6 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
 
   const handleStatusChange = async (selectedOption: any, issueId: string) => {
     setStatus(selectedOption.value);
-    console.log(selectedOption.value);
     if (issueId) {
       await updateIssueStatus(issueId, selectedOption.value);
       fetchAllIssues();
@@ -232,8 +239,18 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
       {issues.map((item: IssueDataType, index: number) => {
         return (
           <Card key={index}
-            sx={{ position: 'relative', mb: 2 }}>
-            <CardContent>
+          sx={{ 
+            position: 'relative', 
+            mb: 2,
+            transition: '0.3s',
+            boxShadow: 1,
+            '&:hover': {
+              boxShadow: 4,
+              transform: 'scale(1.02)',
+            },
+          }}>
+            <CardContent 
+          onClick={() => handleTabChange('issueDetail')}>
               <Box
                 sx={{
                   mt: 2,
@@ -244,7 +261,6 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
                   justifyContent: 'space-between',
                   cursor: 'pointer'
                 }}
-                onClick={() => handleTabChange('issueDetail')}
               >
                 <Box sx={{ mr: 2, mb: 1, display: 'flex', flexDirection: 'column' }}>
                   <Typography >{item.issueTitle}</Typography>
@@ -257,14 +273,14 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
                 <Menu
                   anchorEl={statusAnchorEls[item.issueId]}
                   open={Boolean(statusAnchorEls[item.issueId])}
-                  onClose={() => handleStatusMenuClose(item.issueId)}
+                  onClose={(event) => handleStatusMenuClose(event, item.issueId)}
                 >
                   {statusOptions.map((option) => (
                     <MenuItem
                       key={option.value}
-                      onClick={() => {
+                      onClick={(event) => {
                         handleStatusChange(option, item.issueId);
-                        handleStatusMenuClose(item.issueId);
+                        handleStatusMenuClose(event, item.issueId);
                       }}
                     >
                       <StatusTag status={option.label} />
@@ -285,14 +301,14 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
                 <Menu
                   anchorEl={assigneeAnchorEls[item.issueId]}
                   open={Boolean(assigneeAnchorEls[item.issueId])}
-                  onClose={() => handleAssigneeMenuClose(item.issueId)}
+                  onClose={(event) => handleAssigneeMenuClose(event, item.issueId)}
                 >
                   {assigneeOptions.map((option) => (
                     <MenuItem
                       key={`${option.value}-${option.email}`}
-                      onClick={() => {
+                      onClick={(event) => {
                         handleAssigneeChange(option.value, option.email, item.issueId);
-                        handleAssigneeMenuClose(item.issueId);
+                        handleAssigneeMenuClose(event, item.issueId);
                       }}
                     >
                       {option.label}
@@ -304,14 +320,12 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
             </CardContent>
           </Card>)
       })}
-      <Box sx={{ display: 'flex', flexDirection: 'row' }}
-        onClick={() => handleTabChange('createIssue')}>
-        <IconButton style={{ borderRadius: 10 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row'}}
+        onClick={() => handleTabChange('createIssue')} width='100%'>
+        <IconButton style={{ borderRadius: 10, width: '100%', justifyContent: 'left' }} >
           <PlusThick />
+          <Typography sx={{ml: 3}}>이슈 추가</Typography>
         </IconButton>
-        <Box sx={{ paddingTop: 2, display: 'flex', flexDirection: 'column' }}>
-          <Typography >이슈 추가</Typography>
-        </Box>
       </Box>
     </Card>
 
