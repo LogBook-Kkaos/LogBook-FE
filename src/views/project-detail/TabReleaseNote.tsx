@@ -24,33 +24,29 @@ import ReleaseNoteDetailModal from './ReleaseNoteDetailModal'
 import axios from 'axios'
 import { useEffect } from 'react'
 
-const createReleaseNoteData = (releaseNoteId: number, version: string, releaseTitle: string, changeItems: ReleaseContent[], creatorId: string, creationDate: string) => {
-  return { releaseNoteId, version, releaseTitle, changeItems, creatorId, creationDate }
-}
-
 interface Creator {
-  creatorId: string;
-  userName: string;
+  creatorId: string,
+  userName: string,
 }
 
 export interface ReleaseNote {
-  releaseNoteId: number;
-  creator: Creator;
-  version: string;
-  releaseTitle: string;
-  releaseContents: ReleaseContent[];
-  creationDate: string;
+  releaseNoteId: number,
+  creator: Creator,
+  version: string,
+  releaseTitle: string,
+  releaseContents: ReleaseContent[],
+  creationDate: string,
 }
 
 interface ReleaseContent {
   category: CategoryType,
   releaseSummary: string,
-  documentLink?: string
+  documentLink?: string,
 }
 
 interface TabReleaseProps {
-  projectId: string;
-  permissionLevel: string;
+  projectId: string,
+  permissionLevel: string,
 }
 
 function handleTitleClick(releaseNote: ReleaseNote) {
