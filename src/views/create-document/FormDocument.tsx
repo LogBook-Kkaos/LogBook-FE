@@ -11,6 +11,8 @@ import {
 import { stateToHTML } from "draft-js-export-html"; 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import dynamic from 'next/dynamic';
+import { ComponentType } from 'react';
+import { EditorProps } from "react-draft-wysiwyg";
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -25,7 +27,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 
-const DynamicEditor = dynamic(() => import('react-draft-wysiwyg').then((module) => module.Editor), {
+interface DynamicEditorProps extends EditorProps {}
+
+const DynamicEditor = dynamic<DynamicEditorProps>(() => import('react-draft-wysiwyg').then((module) => module.Editor as ComponentType<DynamicEditorProps>), {
   ssr: false
 });
 
