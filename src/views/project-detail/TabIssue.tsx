@@ -1,28 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // ** MUI Imports
-import Box, { BoxProps } from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid';
-import { styled } from '@mui/material/styles';
+import Box, { BoxProps } from '@mui/material/Box'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import Grid from '@mui/material/Grid'
+import { styled } from '@mui/material/styles'
 
 // ** Custom Components Imports
-import IssueTag from './IssueTag';
+import CardIssue from './CardIssue'
 
 const CardWrapper = styled(Box)<BoxProps>({
     width: '33%',
     height: 500
 })
-interface IssueTagProps {
-    onIssueCreate: any,
-    issueData: any
-}
 
-const TabIssue = ({ onIssueCreate, issueData }: IssueTagProps) => {
-    const handleIssueCreate = (issueTitle: string) => {
-        onIssueCreate(issueTitle);
-    };
+const TabIssue = () => {
+    const [flag, setFlag] = useState(false)
+
+    const handleChangeFlag = () => {
+        setFlag(!flag)
+    }
 
     return (
         <Grid container justifyContent="space-between" alignItems="center">
@@ -30,13 +28,13 @@ const TabIssue = ({ onIssueCreate, issueData }: IssueTagProps) => {
                 <Card sx={{ maxHeight: 'calc(100vh - 350px)', display: 'flex', flexDirection: 'column', overflow: 'auto', }}>
                     <CardContent sx={{ display: 'flex', justifyContent: 'space-between', gap: '0rem', alignItems: 'stretch' }}>
                         <CardWrapper>
-                            <IssueTag onIssueCreate={handleIssueCreate} issueData={issueData} />
+                            <CardIssue cardTitle='할일' onChange={handleChangeFlag} flag={flag}/>
                         </CardWrapper>
                         <CardWrapper>
-                            <IssueTag onIssueCreate={handleIssueCreate} issueData={issueData} />
+                            <CardIssue cardTitle='진행중' onChange={handleChangeFlag} flag={flag}/>
                         </CardWrapper>
                         <CardWrapper>
-                            <IssueTag onIssueCreate={handleIssueCreate} issueData={issueData} />
+                            <CardIssue cardTitle='완료' onChange={handleChangeFlag} flag={flag}/>
                         </CardWrapper>
                     </CardContent>
                 </Card>

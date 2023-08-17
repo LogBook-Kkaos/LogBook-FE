@@ -162,7 +162,7 @@ const TabReleaseNote: React.FC<TabReleaseProps> = ({ projectId, permissionLevel 
 
   useEffect(() => {
     fetchReleaseNotes();
-  }, [])
+  }, [projectId])
 
   //style component
   const IconButtonStyle = {
