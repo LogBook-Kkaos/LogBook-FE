@@ -41,7 +41,7 @@ interface GetMemberIdParams {
 }
 
 interface TabIssueDetailProps {
-    issueId: string,
+    issueId?: string,
 }
 
 const CardWrapper = styled(Box)<BoxProps>({

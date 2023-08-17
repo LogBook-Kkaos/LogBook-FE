@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import Select from 'react-select';
 
 // ** Next Imports
 import { useRouter } from 'next/router';
@@ -13,55 +12,45 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
-import Cog from 'mdi-material-ui/CogOutline'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import PlusThick from 'mdi-material-ui/PlusThick'
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-
+import MenuItem from '@mui/material/MenuItem'
+import Menu from '@mui/material/Menu'
 
 // ** Custom Components Imports
-import StatusTag, { Status } from 'src/views/project-detail/StatusTag';
-import TabIssueDetail from 'src/views/project-detail/TabIssueDetail';
+import StatusTag, { Status } from 'src/views/project-detail/StatusTag'
 
 // ** Recoil Imports
-import { useRecoilState } from 'recoil';
-import { activeView } from 'src/recoil/issue/atom';
+import { useRecoilState } from 'recoil'
+import { activeView } from 'src/recoil/issue/atom'
 
 interface GetMemberIdParams {
-  projectId: string;
-  email: string;
+  projectId: string
+  email: string
 }
 
-interface IssueDataType {
-  issueId: string,
-  issueTitle: string,
-  assigneeName: string | null,
-  assigneeEmail: string | null
-  status: Status;
+interface IssueInfo {
+  issueId: string
+  issueTitle: string
+  assigneeName?: string | null
+  assigneeEmail?: string | null
+  status: Status
 }
 
-interface IssueTagProps {
-  onIssueCreate: any,
-  issueData: any
+interface CardIssueProps {
+  cardTitle: string
 }
 
-const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
+const CardIssue = ({ cardTitle }: CardIssueProps) => {
   const [activeTab, setActiveTab] = useRecoilState(activeView);
 
-  const router = useRouter();
-  const projectId = router.query.projectId;
+  const router = useRouter()
+  const projectId = router.query.projectId
 
-  const [issues, setIssues] = useState<any[]>([]);
-
-  const [assignee, setAssignee] = useState<string | null>(null);
-  const [assigneeEmail, setAssigneeEmail] = useState<string | null>(null);
+  const [issues, setIssues] = useState<IssueInfo[]>([])
+  const [assignee, setAssignee] = useState<string | null>(null)
+  const [assigneeEmail, setAssigneeEmail] = useState<string | null>(null)
   const [assigneeOptions, setAssigneeOptions] = useState([
     { value: null, label: "담당자 없음", email: null },
   ]);
@@ -110,7 +99,27 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
     setAssigneeAnchorEls({ ...statusAnchorEls, [issueId]: null });
   };
 
+  const fetchAllIssues = async () => {
+    const params = { status: cardTitle };
+    const IssueResponse = await axios.get(`/api/projects/${projectId}/issues/filter`, {
+      headers: { 'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}` },
+      params: params
+    });
 
+    const formattedIssues = IssueResponse.data.result.map((issue: any) => ({
+      issueId: issue.issueId,
+      issueTitle: issue.issueTitle,
+      assigneeName: issue.assignee?.userName,
+      assigneeEmail: issue.assignee?.email,
+      status: issue.status
+    }));
+
+    setIssues(formattedIssues);
+  };
+
+  useEffect(() => {
+    fetchAllIssues();
+  }, [projectId, cardTitle]);
 
   const handleAssigneeChange = async (selectedAssignee: string | null, selectedEmail: string | null, issueId: string) => {
     setAssignee(selectedAssignee);
@@ -121,7 +130,6 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
       fetchAllIssues();
     };
   }
-
 
   const handleStatusChange = async (selectedOption: any, issueId: string) => {
     setStatus(selectedOption.value);
@@ -173,28 +181,6 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
 
   }
 
-  const fetchAllIssues = async () => {
-    const response = await axios.get(`/api/projects/${projectId}/issues`,
-      {
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}` }
-      }
-    );
-
-    const formattedIssues = response.data.result.map((issue: any) => ({
-      issueId: issue.issueId,
-      issueTitle: issue.issueTitle,
-      assigneeName: issue.assignee?.userName,
-      assigneeEmail: issue.assignee?.email,
-      status: issue.status
-    }));
-    setIssues(formattedIssues);
-    console.log(response.data.result);
-  };
-
-  useEffect(() => {
-    fetchAllIssues();
-  }, []);
-
   useEffect(() => {
     fetchProjectMembers();
   }, [fetchProjectMembers]);
@@ -233,19 +219,20 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
   }
 
 
-  return (<>
+  return (
+  <>
     <Card sx={{ p: 3, m: 2, backgroundColor: "#e0f2ff" }}>
       <CardHeader
-        title='할 일'
+        title={cardTitle}
         sx={{ pt: 2.5, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.6 } }}
         titleTypographyProps={{
           variant: 'h6',
           sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' }
         }}
       />
-      {issues.map((item: IssueDataType, index: number) => {
+      {issues.map((item: IssueInfo, index: number) => {
         return (
-          <Card key={index}
+          <Card key={item.issueId}
             sx={{
               position: 'relative',
               mb: 2,
@@ -256,8 +243,7 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
                 transform: 'scale(1.02)',
               },
             }}>
-            <CardContent
-              onClick={() => handleTabChange('issueDetail', item.issueId)}>
+            <CardContent>
               <Box
                 sx={{
                   mt: 2,
@@ -269,7 +255,9 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
                   cursor: 'pointer'
                 }}
               >
-                <Box sx={{ mr: 2, mb: 1, display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ mr: 2, mb: 1, display: 'flex', flexDirection: 'column' }}
+                  onClick={() => handleTabChange('issueDetail', item.issueId)}
+                >
                   <Typography >{item.issueTitle}</Typography>
                 </Box>
               </Box>
@@ -341,4 +329,4 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
   )
 }
 
-export default IssueTag
+export default CardIssue

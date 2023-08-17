@@ -31,8 +31,8 @@ import FileRefreshOutline from 'mdi-material-ui/FileRefreshOutline'
 import TabReleaseNote from 'src/views/project-detail/TabReleaseNote'
 import TabDocument from 'src/views/project-detail/TabDocument'
 import TabIssue from 'src/views/project-detail/TabIssue'
-import TabIssueDetail from 'src/views/project-detail/TabIssueDetail'
-import TabCreateIssue from 'src/views/project-detail/TabCreateIssue'
+import IssueDetail from 'src/views/project-detail/IssueDetail'
+import CreateIssue from 'src/views/project-detail/CreateIssue'
 import SettingPopup from 'src/views/project-detail/SettingPopup'
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
@@ -127,10 +127,6 @@ const ProjectDetail = () => {
     marginLeft: 16
   };
 
-  const handleIssueCreate = (issueTitle: string) => {
-    setIssueData([...issueData, { title: issueTitle, name: '이서빈' }]);
-  };
-
   return (
 
     <Grid container spacing={6}>
@@ -189,9 +185,9 @@ const ProjectDetail = () => {
             </TabList>
           </Box>
           <TabPanel sx={{ p: 0 }} value='issue'>
-            {activeIssueTab === 'issue' && <TabIssue onIssueCreate={handleIssueCreate} issueData={issueData} />}
-            {activeIssueTab === 'issueDetail' && <TabIssueDetail />}
-            {activeIssueTab === 'createIssue' && <TabCreateIssue onIssueCreate={handleIssueCreate} />}
+            {activeIssueTab === 'issue' && <TabIssue />}
+            {activeIssueTab === 'issueDetail' && <IssueDetail />}
+            {activeIssueTab === 'createIssue' && <CreateIssue />}
           </TabPanel>
           <TabPanel sx={{ p: 0 }} value='release-note'>
             {projectId && <TabReleaseNote projectId={projectId as string} permissionLevel={permissionLevel}/>}

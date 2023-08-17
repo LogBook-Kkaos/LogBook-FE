@@ -49,18 +49,7 @@ interface GetMemberIdParams {
     email: string;
 }
 
-interface onIssueCreateProps {
-    onIssueCreate: any
-}
-
-interface Issue {
-    issueTitle: string,
-    issueDescription: string,
-    assignee: string,
-    status: Status,
-}
-
-const TabCreateIssue = ({ onIssueCreate }: onIssueCreateProps) => {
+const TabCreateIssue = () => {
 
     const router = useRouter();
 
