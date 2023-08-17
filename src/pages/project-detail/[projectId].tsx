@@ -22,7 +22,7 @@ import { styled } from '@mui/material/styles'
 import MuiTab, { TabProps } from '@mui/material/Tab'
 
 // ** Icons Imports
-import Cog from 'mdi-material-ui/cog'
+import Cog from 'mdi-material-ui/Cog'
 import LightbulbOnOutline from 'mdi-material-ui/LightbulbOnOutline'
 import NoteAlertOutline from 'mdi-material-ui/NoteAlertOutline'
 import FileRefreshOutline from 'mdi-material-ui/FileRefreshOutline'

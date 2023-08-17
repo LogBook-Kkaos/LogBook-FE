@@ -13,8 +13,8 @@ import InputAdornment from '@mui/material/InputAdornment'
 
 
 // ** Icons Imports
-import Sort from 'mdi-material-ui/sort'
-import Filter from 'mdi-material-ui/filter'
+import Sort from 'mdi-material-ui/Sort'
+import Filter from 'mdi-material-ui/Filter'
 import Magnify from 'mdi-material-ui/Magnify'
 
 interface UpperButtonsProps {
