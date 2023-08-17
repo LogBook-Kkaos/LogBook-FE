@@ -14,7 +14,9 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import MuiDivider, { DividerProps } from '@mui/material/Divider'
 import LinearProgress from '@mui/material/LinearProgress'
+import Grid from '@mui/material/Grid'
 
+import StatusTag, {Status} from 'src/views/project-detail/StatusTag'
 interface MyIssueProps {
   projectId: string
   headers: any
@@ -24,9 +26,9 @@ interface MyIssueProps {
 interface MyIssueInfo {
   issueId: string
   issueTitle: string
-  startDate: Date
-  endDate: Date
-  status: string
+  startDate: string
+  endDate: string
+  status: Status
 }
 
 // Styled Divider component
@@ -72,11 +74,11 @@ const MyIssue: React.FC<MyIssueProps> = ({ projectId, headers, userName }) => {
           return 0;
         });
 
-        const formattedMyIssues = sortedIssues.map((item: any) => ({
+        const formattedMyIssues = sortedIssues.slice(0, 3).map((item: any) => ({
           issueId: item.issueId,
           issueTitle: item.issueTitle,
-          startDate: item.startDate,
-          endDate: item.endDate,
+          startDate: item.startDate ? new Date(item.startDate).toISOString().split('T')[0] : '',
+          endDate: item.endDate ? new Date(item.endDate).toISOString().split('T')[0] : '',
           status: item.status
         }));
         
@@ -115,29 +117,31 @@ const MyIssue: React.FC<MyIssueProps> = ({ projectId, headers, userName }) => {
         <CardContent sx={{ pb: theme => `${theme.spacing(5.5)} !important` }}>
           {myIssues.map((item: MyIssueInfo, index: number) => {
             return (
-              <Box
+              <Grid
                 key={item.issueId}
-                sx={{ display: 'flex', alignItems: 'center', mb: index !== myIssues.length - 1 ? 6 : 0 }}
+                container
+                alignItems="center"
+                justifyContent="space-between"
+                sx={{
+                  mb: index !== myIssues.length - 1 ? 6 : 0,
+                  borderBottom: index !== myIssues.length - 1 ? '1px solid rgba(0, 0, 0, 0.12)' : 'none',
+                  paddingBottom: index !== myIssues.length - 1 ? 6 : 0
+                }}
               >
-                <Box sx={{ minWidth: 38, display: 'flex', justifyContent: 'center' }}>
-                <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{item.issueTitle}</Typography>
-                </Box>
-                <Box
-                  sx={{
-                    ml: 4,
-                    width: '100%',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>
-                      {item.startDate.toLocaleDateString()}~{item.endDate.toLocaleDateString()}
+                <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <StatusTag status={item.status} />
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography sx={{ fontWeight: 600, fontSize: '0.875rem', ml: 2 }}>
+                    {item.issueTitle}
                   </Typography>
-                  <Typography variant='caption'>{item.status}</Typography>
-                </Box>
-              </Box>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography sx={{ fontWeight: 600, fontSize: '0.875rem', textAlign: 'right' }}>
+                    {item.startDate} ~ {item.endDate}
+                  </Typography>
+                </Grid>
+              </Grid>
             )
           })}
           <Divider flexItem/>

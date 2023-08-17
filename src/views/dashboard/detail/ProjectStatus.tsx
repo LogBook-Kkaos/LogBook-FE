@@ -93,10 +93,10 @@ const ProjectStatus : React.FC<ProjectStatusProps> = ({ projectId, headers }) =>
               }}
           >
            <div>
-            <PieChart width={400} height={400}>
+            <PieChart width={400} height={300}>
               <Pie
                   data={graphData}
-                  dataKey="value"
+                  dataKey={(data) => (Math.floor(data.value * 100))/10}
                   cx="50%"
                   cy="50%"
                   outerRadius={80}
