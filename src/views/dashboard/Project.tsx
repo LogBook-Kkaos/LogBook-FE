@@ -23,7 +23,7 @@ import ProjectStatus from './detail/ProjectStatus';
 // ** Styled Components
 const CardWrapper = styled(Box)<BoxProps>({
   width: '33%',
-  height:500
+  height: 400
 })
 
 interface ProjectInfo {
