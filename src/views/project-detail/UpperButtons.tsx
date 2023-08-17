@@ -11,6 +11,7 @@ import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 
 
+
 // ** Icons Imports
 import Sort from 'mdi-material-ui/sort'
 import Filter from 'mdi-material-ui/filter'
@@ -26,12 +27,16 @@ interface UpperButtonsProps {
 const UpperButtons : React.FC<UpperButtonsProps> = ({ routerPath, createButtonLabel, projectId, permissionLevel }) =>{
     const router = useRouter();
 
+    const [keyword, setKeyword] = useState('');
+
     const handleCreate = () => {
         router.push({
             pathname: routerPath,
             query: { projectId: projectId }
         });
       }
+    
+
 
     
     //style component
@@ -64,7 +69,20 @@ const UpperButtons : React.FC<UpperButtonsProps> = ({ routerPath, createButtonLa
                             </InputAdornment>
                         )
                     }}
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
                 />
+                <Button
+                variant="contained"
+                color="primary"
+                sx={{
+                    mr:4,
+                    borderRadius: 1,
+                }}
+                
+            >
+                검색
+            </Button>
             </div>
             {permissionLevel === '뷰어' ? null : (
             <Button

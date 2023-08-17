@@ -46,6 +46,9 @@
     "cypress:run": "cypress run"
   },
   "dependencies": {
+    "@draft-js-plugins/buttons": "^4.3.3",
+    "@draft-js-plugins/editor": "^4.1.4",
+    "@draft-js-plugins/static-toolbar": "^4.1.4",
     "@emotion/cache": "^11.6.0",
     "@emotion/react": "^11.7.0",
     "@emotion/server": "^11.4.0",
