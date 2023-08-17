@@ -31,7 +31,8 @@ const ImgStyled = styled('img')(({ theme }) => ({
 const ButtonStyled = styled(Button)<ButtonProps & { component?: ElementType; htmlFor?: string }>(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     width: '100%',
-    textAlign: 'center'
+    textAlign: 'center',
+    marginTop: theme.spacing(4)
   }
 }))
 

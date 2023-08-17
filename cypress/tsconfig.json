@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "baseUrl": "../node_modules",
+      "isolatedModules": true,
+      "lib": [
+        "es5",
+        "dom"
+      ],
+      "module": "commonjs",
+      "jsx": "preserve",
+      "esModuleInterop": true,
+      "strict": true,
+      "sourceMap": true,
+      "target": "es5",
+      "types": ["cypress", "@testing-library/cypress"]
+    },
+    "include": [
+      "./**/*.ts"
+    ]
+  }
+  

@@ -4,6 +4,9 @@ import { useState, SyntheticEvent, Fragment } from 'react'
 // ** Next Import
 import { useRouter } from 'next/router'
 
+// ** HTTP Client
+import axios from 'axios'
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
@@ -23,6 +26,11 @@ import AccountOutline from 'mdi-material-ui/AccountOutline'
 import MessageOutline from 'mdi-material-ui/MessageOutline'
 import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
 
+// ** Recoil Imports
+import { useRecoilValue } from 'recoil'
+import { loginUserState } from 'src/recoil/user/atoms'
+import { Session } from 'inspector'
+
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
   width: 8,
@@ -35,6 +43,7 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
 const UserDropdown = () => {
   // ** States
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
+  const loginUser = useRecoilValue(loginUserState)
 
   // ** Hooks
   const router = useRouter()
@@ -48,6 +57,35 @@ const UserDropdown = () => {
       router.push(url)
     }
     setAnchorEl(null)
+  }
+
+  const handleLogout = async () => {
+
+    const refreshToken = sessionStorage.getItem('refreshToken');
+
+    if (refreshToken) {
+      const response = await axios.delete('/api/users/logout', {
+        headers: {
+          'Authorization': `Bearer ${refreshToken}`
+        }
+      });
+  
+      if (response.status === 200) {
+        const keysToRemove = [
+          'accessToken',
+          'refreshToken',
+          'email',
+          'userName',
+          'department'
+        ];
+  
+        keysToRemove.forEach((key) => {
+          sessionStorage.removeItem(key);
+        });
+  
+        router.push('/pages/login');
+      }
+    }
   }
 
   const styles = {
@@ -67,6 +105,7 @@ const UserDropdown = () => {
   return (
     <Fragment>
       <Badge
+        data-testid='user-avatar'
         overlap='circular'
         onClick={handleDropdownOpen}
         sx={{ ml: 2, cursor: 'pointer' }}
@@ -98,9 +137,10 @@ const UserDropdown = () => {
               <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 600 }}>John Doe</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{loginUser.userName}</Typography>
+              <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>{loginUser.email}</Typography>
               <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
-                Admin
+                {loginUser.department}
               </Typography>
             </Box>
           </Box>
@@ -144,7 +184,7 @@ const UserDropdown = () => {
           </Box>
         </MenuItem> */}
         <Divider />
-        <MenuItem sx={{ py: 2 }} onClick={() => handleDropdownClose('/pages/login')}>
+        <MenuItem sx={{ py: 2 }} onClick={handleLogout} data-testid="logout-button">
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>

@@ -9,16 +9,18 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 // ** Layout Imports
 // !Do not remove this Layout import
 import VerticalLayout from 'src/@core/layouts/VerticalLayout'
+import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Navigation Imports
 import VerticalNavItems from 'src/navigation/vertical'
 
 // ** Component Import
-import UpgradeToProButton from './components/UpgradeToProButton'
 import VerticalAppBarContent from './components/vertical/AppBarContent'
 
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
+
+import { useRouter } from 'next/router'
 
 interface Props {
   children: ReactNode
@@ -38,41 +40,35 @@ const UserLayout = ({ children }: Props) => {
    */
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
 
-  const UpgradeToProImg = () => {
-    return (
-      <Box sx={{ mx: 'auto' }}>
-        {/* <a
-          target='_blank'
-          rel='noreferrer'
-          href='https://themeselection.com/products/materio-mui-react-nextjs-admin-template/'
-        >
-          <img width={230} alt='upgrade to premium' src={`/images/misc/upgrade-banner-${settings.mode}.png`} />
-        </a> */}
-      </Box>
-    )
-  }
+  const router = useRouter()
+
+  const isHome = router.pathname === '/'
 
   return (
-    <VerticalLayout
-      hidden={hidden}
-      settings={settings}
-      saveSettings={saveSettings}
-      verticalNavItems={VerticalNavItems()} // Navigation Items
-      afterVerticalNavMenuContent={UpgradeToProImg}
-      verticalAppBarContent={(
-        props // AppBar Content
-      ) => (
-        <VerticalAppBarContent
+    <>
+      {isHome ? (
+        <BlankLayout>{children}</BlankLayout>
+      ) : (
+        <VerticalLayout
           hidden={hidden}
           settings={settings}
           saveSettings={saveSettings}
-          toggleNavVisibility={props.toggleNavVisibility}
-        />
+          verticalNavItems={VerticalNavItems()} 
+          verticalAppBarContent={(
+            props // AppBar Content
+          ) => (
+            <VerticalAppBarContent
+              hidden={hidden}
+              settings={settings}
+              saveSettings={saveSettings}
+              toggleNavVisibility={props.toggleNavVisibility}
+            />
+          )}
+        >
+          {children}
+        </VerticalLayout>
       )}
-    >
-      {children}
-      <UpgradeToProButton />
-    </VerticalLayout>
+    </>
   )
 }
 
