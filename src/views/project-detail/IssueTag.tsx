@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Select from 'react-select';
+
+// ** Next Imports
+import { useRouter } from 'next/router';
+
+// ** HTTP Client Imports
+import axios from 'axios';
 
 // ** MUI Imports
 import Avatar from '@mui/material/Avatar'
@@ -11,14 +17,34 @@ import Cog from 'mdi-material-ui/CogOutline'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import PlusThick from 'mdi-material-ui/PlusThick'
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+
+
+// ** Custom Components Imports
+import StatusTag, { Status } from 'src/views/project-detail/StatusTag';
+import TabIssueDetail from 'src/views/project-detail/TabIssueDetail';
 
 // ** Recoil Imports
 import { useRecoilState } from 'recoil';
 import { activeView } from 'src/recoil/issue/atom';
 
-interface DataType {
-  title: string
-  name: string
+interface GetMemberIdParams {
+  projectId: string;
+  email: string;
+}
+
+interface IssueDataType {
+  issueId: string,
+  issueTitle: string,
+  assigneeName: string | null,
+  assigneeEmail: string | null
+  status: Status;
 }
 
 interface IssueTagProps {
@@ -28,35 +54,184 @@ interface IssueTagProps {
 
 const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
   const [activeTab, setActiveTab] = useRecoilState(activeView);
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-  const [selectVisible, setSelectVisible] = useState<boolean>(false);
-  const [selectedValue, setSelectedValue] = useState<string>('');
 
-  const handleTabChange = (newTab: string) => {
-    setActiveTab(newTab);
-  };
+  const router = useRouter();
+  const projectId = router.query.projectId;
 
-  const handleAvatarClick = (index: number) => {
-    if (expandedIndex === index) {
-      setExpandedIndex(null);
-      setSelectVisible(false);
+  const [issues, setIssues] = useState<any[]>([]);
+
+  const [assignee, setAssignee] = useState<string | null>(null);
+  const [assigneeEmail, setAssigneeEmail] = useState<string | null>(null);
+  const [assigneeOptions, setAssigneeOptions] = useState([
+    { value: null, label: "담당자 없음", email: null },
+  ]);
+  const [status, setStatus] = useState<Status>(Status.InProgress);
+  const [assigneeAnchorEls, setAssigneeAnchorEls] = useState<{ [issueId: string]: HTMLElement | null }>({});
+  const [statusAnchorEls, setStatusAnchorEls] = useState<{ [issueId: string]: HTMLElement | null }>({});
+
+
+  const statusOptions = [
+    { value: Status.InProgress, label: Status.InProgress },
+    { value: Status.NotStarted, label: Status.NotStarted },
+    { value: Status.Completed, label: Status.Completed },
+  ];
+
+  const handleTabChange = (newTab: string, issueId?: string) => {
+    if (newTab === 'issueDetail' && issueId) {
+      sessionStorage.setItem('issueId', issueId);
+      setActiveTab(newTab);
     } else {
-      setExpandedIndex(index);
-      setSelectVisible(true);
+      setActiveTab(newTab);
     }
   };
 
-  const handleSelectChange = (selectedOption: any) => {
-    setSelectedValue(selectedOption.value);
-    console.log(selectedOption.value)
+  const handleAvatarClick = (event: React.MouseEvent<HTMLElement>, issueId: string) => {
+    event.stopPropagation();
+    setAssigneeAnchorEls({ ...assigneeAnchorEls, [issueId]: event.currentTarget });
   };
 
-  const options = [
-    { value: '이서빈', label: '이서빈' },
-    { value: '이소현', label: '이소현' },
-    { value: '윤주은', label: '윤주은' },
-    { value: '장예경', label: '장예경' },
-  ];
+  const handleAssigneeMenuClose = (
+    event: React.MouseEvent<HTMLElement> | {},
+    issueId: string
+  ) => {
+    event instanceof MouseEvent && event.stopPropagation();
+    setAssigneeAnchorEls({ ...assigneeAnchorEls, [issueId]: null });
+  };
+  const handleStatusTagClick = (event: React.MouseEvent<HTMLElement>, issueId: string) => {
+    event.stopPropagation();
+    setStatusAnchorEls({ ...statusAnchorEls, [issueId]: event.currentTarget });
+  };
+
+  const handleStatusMenuClose = (
+    event: React.MouseEvent<HTMLElement> | {},
+    issueId: string
+  ) => {
+    event instanceof MouseEvent && event.stopPropagation();
+    setAssigneeAnchorEls({ ...statusAnchorEls, [issueId]: null });
+  };
+
+
+
+  const handleAssigneeChange = async (selectedAssignee: string | null, selectedEmail: string | null, issueId: string) => {
+    setAssignee(selectedAssignee);
+    setAssigneeEmail(selectedEmail);
+    if (issueId && selectedEmail) {
+      const assigneeId = getMemberId({ projectId: projectId as string, email: selectedEmail });
+      await updateIssueAssignee(issueId, await assigneeId);
+      fetchAllIssues();
+    };
+  }
+
+
+  const handleStatusChange = async (selectedOption: any, issueId: string) => {
+    setStatus(selectedOption.value);
+    if (issueId) {
+      await updateIssueStatus(issueId, selectedOption.value);
+      fetchAllIssues();
+    }
+  };
+
+  const fetchProjectMembers = useCallback(async () => {
+    try {
+      const response = await axios.get(`/api/projects/${projectId}/members`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+        },
+      });
+
+      const memberList = response.data.result.map((member: any) => ({
+        value: member.userName,
+        label: `${member.userName} (${member.email})`,
+        email: member.email,
+      }));
+
+
+      setAssigneeOptions([{ value: null, label: "담당자 없음", email: null }]);
+      setAssigneeOptions((prev) => [...prev, ...memberList]);
+    } catch (error) {
+      console.log("Error fetching project members: ", error);
+    }
+  }, [projectId]);
+
+
+  async function getMemberId(params: GetMemberIdParams): Promise<string> {
+    const { projectId, email } = params;
+    const response = await axios
+      .get(`/api/projects/${projectId}/members/info`, {
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+        },
+        params: {
+          email: email
+        }
+      }
+      );
+    const { result: memberId } = response.data;
+
+    return memberId;
+
+
+  }
+
+  const fetchAllIssues = async () => {
+    const response = await axios.get(`/api/projects/${projectId}/issues`,
+      {
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}` }
+      }
+    );
+
+    const formattedIssues = response.data.result.map((issue: any) => ({
+      issueId: issue.issueId,
+      issueTitle: issue.issueTitle,
+      assigneeName: issue.assignee?.userName,
+      assigneeEmail: issue.assignee?.email,
+      status: issue.status
+    }));
+    setIssues(formattedIssues);
+    console.log(response.data.result);
+  };
+
+  useEffect(() => {
+    fetchAllIssues();
+  }, []);
+
+  useEffect(() => {
+    fetchProjectMembers();
+  }, [fetchProjectMembers]);
+
+  async function updateIssueAssignee(issueId: string, memberId: string) {
+
+    console.log(`Updating assignee for issueId: ${issueId}, memberId: ${memberId}`);
+    await axios.put(`/api/projects/${projectId}/issues/${issueId}/assignee`,
+      {
+        assigneeId: memberId
+      },
+      {
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}` }
+      }
+    ).then((response) => {
+      console.log(response.data.result);
+    }).catch((error) => {
+      console.log(error);
+    });
+
+  }
+
+  async function updateIssueStatus(issueId: string, status: Status) {
+    const response = await axios.put(`/api/projects/${projectId}/issues/${issueId}/status`,
+      {
+        status: status
+      },
+      {
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}` }
+      }
+    ).then((response) => {
+      console.log(response.data.result);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
 
   return (<>
     <Card sx={{ p: 3, m: 2, backgroundColor: "#e0f2ff" }}>
@@ -68,12 +243,21 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
           sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' }
         }}
       />
-      {issueData.map((item: DataType, index: number) => {
+      {issues.map((item: IssueDataType, index: number) => {
         return (
           <Card key={index}
-            sx={{ position: 'relative', mb: 2 }}
-            onClick={() => handleTabChange('issueDetail')}>
-            <CardContent>
+            sx={{
+              position: 'relative',
+              mb: 2,
+              transition: '0.3s',
+              boxShadow: 1,
+              '&:hover': {
+                boxShadow: 4,
+                transform: 'scale(1.02)',
+              },
+            }}>
+            <CardContent
+              onClick={() => handleTabChange('issueDetail', item.issueId)}>
               <Box
                 sx={{
                   mt: 2,
@@ -81,71 +265,78 @@ const IssueTag = ({ onIssueCreate, issueData }: IssueTagProps) => {
                   display: 'flex',
                   flexWrap: 'wrap',
                   alignItems: 'center',
-                  justifyContent: 'space-between'
+                  justifyContent: 'space-between',
+                  cursor: 'pointer'
                 }}
               >
                 <Box sx={{ mr: 2, mb: 1, display: 'flex', flexDirection: 'column' }}>
-                  <Typography >{item.title}</Typography>
+                  <Typography >{item.issueTitle}</Typography>
                 </Box>
-                <IconButton style={{ borderRadius: 10, padding: 8 }}>
-                  <Cog />
-                </IconButton>
               </Box>
-              <Box
-                sx={{
-                  gap: 2,
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                  position: 'relative'
-                }}
-              >
-                <Avatar
-                  src='/images/avatars/8.png'
-                  alt={selectedValue || '없음'}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleAvatarClick(index);
-                  }}
-                  sx={{ cursor: 'pointer' }}
-                />
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <IconButton onClick={(e) => handleStatusTagClick(e, item.issueId)} style={{ borderRadius: 10, padding: 8 }}>
+                  <StatusTag status={item.status} />
+                </IconButton>
+                <Menu
+                  anchorEl={statusAnchorEls[item.issueId]}
+                  open={Boolean(statusAnchorEls[item.issueId])}
+                  onClose={(event) => handleStatusMenuClose(event, item.issueId)}
+                >
+                  {statusOptions.map((option) => (
+                    <MenuItem
+                      key={option.value}
+                      onClick={(event) => {
+                        handleStatusChange(option, item.issueId);
+                        handleStatusMenuClose(event, item.issueId);
+                      }}
+                    >
+                      <StatusTag status={option.label} />
+                    </MenuItem>
+                  ))}
+                </Menu>
+                <IconButton onClick={(e) => handleAvatarClick(e, item.issueId)} style={{ borderRadius: 10, padding: 8 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                    onClick={(e) => handleAvatarClick(e, item.issueId)}>
+                    <Avatar
+                      src="/images/avatars/8.png"
+                      alt={item.assigneeName || "없음"}
+                      sx={{ cursor: "pointer" }}
+                    />
+                    <Typography sx={{ mt: 1, fontSize: '12px', color: 'gray' }}>{item.assigneeName || "담당자 없음"}</Typography>
+                  </Box>
+                </IconButton>
+                <Menu
+                  anchorEl={assigneeAnchorEls[item.issueId]}
+                  open={Boolean(assigneeAnchorEls[item.issueId])}
+                  onClose={(event) => handleAssigneeMenuClose(event, item.issueId)}
+                >
+                  {assigneeOptions.map((option) => (
+                    <MenuItem
+                      key={`${option.value}-${option.email}`}
+                      onClick={(event) => {
+                        handleAssigneeChange(option.value, option.email, item.issueId);
+                        handleAssigneeMenuClose(event, item.issueId);
+                      }}
+                    >
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Menu>
+
               </Box>
             </CardContent>
-          </Card>)
+          </Card>
+        )
       })}
       <Box sx={{ display: 'flex', flexDirection: 'row' }}
-        onClick={() => handleTabChange('createIssue')}>
-        <IconButton style={{ borderRadius: 10 }}>
+        onClick={() => handleTabChange('createIssue')} width='100%'>
+        <IconButton style={{ borderRadius: 10, width: '100%', justifyContent: 'left' }} >
           <PlusThick />
+          <Typography sx={{ ml: 3 }}>이슈 추가</Typography>
         </IconButton>
-        <Box sx={{ paddingTop: 2, display: 'flex', flexDirection: 'column' }}>
-          <Typography >이슈 추가</Typography>
-        </Box>
       </Box>
     </Card>
-    {expandedIndex !== null &&
-      selectVisible && (
-        <Box
-          sx={{
-            position: 'relative',
-            top: 'calc(-25% + 0px)',
-            left: '140px',
-            width: "150px",
-            mt: 1,
-            py: 1,
-            backgroundColor: '#fff',
-            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
-            zIndex: 5000
-          }}
-        >
-          <Select options={options}
-            menuIsOpen
-            onMenuClose={() => setSelectVisible(false)}
-            onChange={handleSelectChange}
-          />
-        </Box>
-      )}
+
   </>
   )
 }
