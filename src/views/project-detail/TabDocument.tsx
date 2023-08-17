@@ -39,8 +39,6 @@ const TabDocument: React.FC<TabDocumentProps> = ({ projectId, permissionLevel })
   
   const headers = { Authorization: `Bearer ${accessToken}` }
 
-  const [searchKeyword, setSearchKeyword] = useState('');
-
 
   useEffect(() => {
     const fetchDocumentInfo = async () => {
@@ -144,7 +142,7 @@ const TabDocument: React.FC<TabDocumentProps> = ({ projectId, permissionLevel })
                 }}
                 onClick={handleCreate}
             >
-                기술문서 검색
+                기술문서 생성
             </Button>
             )}
         </Grid>
