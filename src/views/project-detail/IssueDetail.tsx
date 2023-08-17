@@ -40,7 +40,7 @@ interface GetMemberIdParams {
     email: string;
 }
 
-interface TabIssueDetailProps {
+interface IssueDetailProps {
     issueId?: string,
 }
 
@@ -54,7 +54,7 @@ const ButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
     width: 80,
 }))
 
-const TabIssueDetail: React.FC<TabIssueDetailProps> = ({ issueId }) => {
+const IssueDetail: React.FC<IssueDetailProps> = ({ issueId }) => {
 
     const [activeTab, setActiveTab] = useRecoilState(activeView);
 
@@ -444,4 +444,4 @@ const statusStringToType = (statusString: string): Status => {
     )
 }
 
-export default TabIssueDetail
+export default IssueDetail

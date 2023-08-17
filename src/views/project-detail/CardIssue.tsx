@@ -40,11 +40,13 @@ interface IssueInfo {
 
 interface CardIssueProps {
   cardTitle: string
+  onChange: () => void
+  flag: boolean
 }
 
-const CardIssue = ({ cardTitle }: CardIssueProps) => {
-  const [activeTab, setActiveTab] = useRecoilState(activeView);
-
+const CardIssue = ({ cardTitle, onChange, flag }: CardIssueProps) => {
+  const [cardFlag, setCardFlag] = useState(flag)
+  const [activeTab, setActiveTab] = useRecoilState(activeView)
   const router = useRouter()
   const projectId = router.query.projectId
 
@@ -64,6 +66,11 @@ const CardIssue = ({ cardTitle }: CardIssueProps) => {
     { value: Status.NotStarted, label: Status.NotStarted },
     { value: Status.Completed, label: Status.Completed },
   ];
+
+  const handleChangeData = () => {
+    setCardFlag(!cardFlag)
+    onChange()
+  }
 
   const handleTabChange = (newTab: string, issueId?: string) => {
     if (newTab === 'issueDetail' && issueId) {
@@ -86,6 +93,7 @@ const CardIssue = ({ cardTitle }: CardIssueProps) => {
     event instanceof MouseEvent && event.stopPropagation();
     setAssigneeAnchorEls({ ...assigneeAnchorEls, [issueId]: null });
   };
+  
   const handleStatusTagClick = (event: React.MouseEvent<HTMLElement>, issueId: string) => {
     event.stopPropagation();
     setStatusAnchorEls({ ...statusAnchorEls, [issueId]: event.currentTarget });
@@ -119,7 +127,7 @@ const CardIssue = ({ cardTitle }: CardIssueProps) => {
 
   useEffect(() => {
     fetchAllIssues();
-  }, [projectId, cardTitle]);
+  }, [projectId, cardTitle, flag]);
 
   const handleAssigneeChange = async (selectedAssignee: string | null, selectedEmail: string | null, issueId: string) => {
     setAssignee(selectedAssignee);
@@ -127,6 +135,7 @@ const CardIssue = ({ cardTitle }: CardIssueProps) => {
     if (issueId && selectedEmail) {
       const assigneeId = getMemberId({ projectId: projectId as string, email: selectedEmail });
       await updateIssueAssignee(issueId, await assigneeId);
+      handleChangeData();
       fetchAllIssues();
     };
   }
@@ -135,6 +144,7 @@ const CardIssue = ({ cardTitle }: CardIssueProps) => {
     setStatus(selectedOption.value);
     if (issueId) {
       await updateIssueStatus(issueId, selectedOption.value);
+      handleChangeData();
       fetchAllIssues();
     }
   };

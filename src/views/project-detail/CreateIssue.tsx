@@ -49,7 +49,7 @@ interface GetMemberIdParams {
     email: string;
 }
 
-const TabCreateIssue = () => {
+const CreateIssue = () => {
 
     const router = useRouter();
 
@@ -343,4 +343,4 @@ const TabCreateIssue = () => {
     )
 }
 
-export default TabCreateIssue
+export default CreateIssue
