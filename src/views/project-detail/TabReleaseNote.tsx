@@ -27,8 +27,8 @@ import CategoryTag, { Category, CategoryType } from 'src/views/project-detail/Ca
 import ReleaseNoteDetailModal from './ReleaseNoteDetailModal'
 
 // ** Icons Imports
-import Sort from 'mdi-material-ui/sort'
-import Filter from 'mdi-material-ui/filter'
+import Sort from 'mdi-material-ui/Sort'
+import Filter from 'mdi-material-ui/Filter'
 import Magnify from 'mdi-material-ui/Magnify'
 
 

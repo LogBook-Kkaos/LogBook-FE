@@ -1,5 +1,5 @@
 // ** React Imports
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
 
 // ** HTTP Client
@@ -15,10 +15,14 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import { styled } from '@mui/material/styles'
+import IconButton from '@mui/material/IconButton'
 
+import AddProjectPopup from '../add-project/AddProjectPopup'
 import LatestRelease from './detail/LatestRelease';
 import MyIssue from './detail/MyIssue';
 import ProjectStatus from './detail/ProjectStatus';
+
+import Plus from 'mdi-material-ui/Plus'
 
 // ** Styled Components
 const CardWrapper = styled(Box)<BoxProps>({
@@ -40,6 +44,12 @@ const Project = () => {
   const headers = { Authorization: `Bearer ${accessToken}` }
   const [ projects,setProjects ] = useState<ProjectInfo[]>([])
 
+  const [isOpen, setIsOpen] = useState(false)
+
+    const handlePopupToggle = useCallback(() => {
+        setIsOpen(!isOpen);
+    }, [isOpen]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,9 +69,42 @@ const Project = () => {
     router.push(`/project-detail/${projectId}`);
   }
 
+  const IconButtonStyle = {
+    border: '1px solid rgba(0, 0, 0, 0.23)',
+    borderRadius: 10,
+    padding: 8,
+    marginLeft: 5
+  };
+
   return (
     <>
-      {projects.map((project) => (
+      {projects.length === 0 ? (
+        <>
+        <Card sx={{height:150, width:'100%'}}>
+          <CardContent
+            sx={{
+              justifyContent: 'space-between',
+              gap: '0rem',
+            }}
+          >
+            <Typography variant="h6">내가 참여한 프로젝트가 없습니다.</Typography>
+            <Box sx={{display:'flex', alignItems:'center', mt:5}}>
+              <IconButton 
+                onClick={handlePopupToggle}
+                style={IconButtonStyle}
+              >
+                <Plus />
+              </IconButton>
+              <Typography variant="body1" sx={{ml:3}}>프로젝트 요약정보를 확인하려면 새로운 프로젝트를 생성하세요!</Typography>          
+            </Box>
+          </CardContent>
+        </Card>
+        <AddProjectPopup
+          isOpen={isOpen}
+          onClose={handlePopupToggle}
+          />
+        </>
+      ) : (projects.map((project) => (
         <Card
           key={project.projectId}
           sx={{ display: 'flex', flexDirection: 'column', marginBottom: '1rem' }}
@@ -106,7 +149,8 @@ const Project = () => {
             </CardWrapper>
           </CardContent>
         </Card>
-      ))}
+      ))
+      )}
     </>
   );
 }
